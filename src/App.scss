@@ -1,0 +1,35 @@
+//imported font
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+//defined colors
+$text: #08080B;
+$ltext: #717171;
+$background: #F7F8FA;
+$accent: #fab437;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Roboto;
+}
+html,
+body {
+  scroll-behavior: smooth !important;
+  
+}
+body{
+  background-color: $background;
+  overflow-x: hidden;
+}
+html{
+  scrollbar-width: thin;
+  scrollbar-color: $text;
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: $text;
+  border-radius: 10px;
+}

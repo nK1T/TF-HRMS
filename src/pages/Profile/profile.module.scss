@@ -1,0 +1,136 @@
+@import "../../App.scss";
+
+.container {
+  .header {
+    z-index: 1;
+    position: sticky;
+    top:  60px;
+    display: flex;
+    height: 40px;
+    background-color: $text;
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      list-style: none;
+      padding-inline-start: 10px;
+      .selected {
+        border-bottom: 3px solid $accent !important;
+      }
+      .link {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        cursor: pointer;
+        padding-block: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        border-bottom: 3px solid transparent;
+        color: $background;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+.formContainer {
+  margin: auto;
+  .pending, .reupload{
+    font-size: .8rem;
+    margin: 10px 10px 0px 10px;
+    color: crimson;
+  }
+  .basicDetails,
+  .qualifications,
+  .workExperience,
+  .documents,
+  .bankDetails,
+  .onboarding {
+    display: grid;
+    // grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    // background-color: $text;
+    padding: 20px 10px;
+    border-radius: 8px;
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .formField {
+      margin-bottom: 20px;
+      .inputLabel {
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: $text;
+        text-transform: uppercase;
+        .inputField {
+          width: 100%;
+          padding: 10px;
+          color: $text;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          font-size: 16px;
+          &:focus {
+            outline: none;
+            border-color: $accent;
+            box-shadow: 0 0 5px $accent;
+          }
+          &:disabled {
+            background-color: white;
+          }
+        }
+      }
+      input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 4px;
+
+        &:disabled {
+          background-color: #f0f0f0;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+.navigationButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+  .btn {
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: $accent;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 900;
+    background-color: $text;
+  }
+}
+
+.required {
+  color: red;
+  margin-left: 4px;
+}
+
+@media screen and (max-width: 750px) {
+  .container {
+    .header {
+      justify-content: center;
+      .links {
+        gap: 55px;
+        .link {
+          p {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

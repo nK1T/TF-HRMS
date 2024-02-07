@@ -1,0 +1,14 @@
+// Calendar.module.scss
+.custom-tile {
+  /* Add your general styles for each date tile here */
+}
+
+.holiday {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+}
+.holidayName {
+//   text-decoration: underline;
+  cursor: pointer;
+}

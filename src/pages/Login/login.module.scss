@@ -1,0 +1,79 @@
+@import "../../App.scss";
+.main {
+    display: flex;
+    margin: 100px auto;
+    max-width: 500px;
+    // width: 300px;
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      background-image: url("./sheroBg.png");
+      padding: 20px 10px;
+      flex: 2;
+      h2 {
+        color: $text;
+      }
+      p {
+        font-size: 0.8rem;
+        font-weight: 700;
+        /* color: var(--ltext); */
+        color: $accent;
+        line-height: 0.7;
+        margin-bottom: 20px;
+      }
+      .btn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 700;
+        padding: 10px 10px;
+        color: $accent;
+        border-radius: 5px;
+        border: none;
+        background-color: $text;
+        margin: 15px auto;
+        transition: all 0.2s ease-in;
+      }
+    }
+  }
+  .formField {
+    margin-bottom: 15px;
+    .inputLabel {
+      font-size: 0.8rem;
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ltext);
+      .inputField {
+        border-style: solid;
+        border-color: rgb(192, 192, 192);
+        border-radius: 4px;
+        width: 100%;
+        padding: 8px;
+        outline: none;
+      }
+    }
+  }
+  
+  
+  @media (max-width: 1150px) {
+    .main {
+    //   margin: 100px 300px;
+    }
+  }
+  @media (max-width: 750px) {
+    .main {
+    //   margin: 70px 20px;
+      .left {
+        border-radius: 10px;
+        h2,
+        p {
+         text-align: start;
+       }
+      }
+    }
+  }
