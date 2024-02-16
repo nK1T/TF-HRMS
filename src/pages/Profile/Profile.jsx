@@ -6,10 +6,14 @@ import { BsBuildingsFill, BsBank2 } from "react-icons/bs";
 import { MdAttachFile } from "react-icons/md";
 import axios from "axios";
 import Loader from "../../components/Loader/loader";
+import { IoLogOut } from "react-icons/io5";
+import { ClipLoader } from "react-spinners";
 
-const Profile = () => {
+
+const Profile = ({ setRole }) => {
   const [data, setData] = useState(null);
   const [uemail, setUemail] = useState();
+  const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("basicDetails");
   const [employee, setEmployee] = useState({
     fullName: "",
@@ -61,7 +65,18 @@ const Profile = () => {
     olsCode: "",
     hiringHrEmail: "",
   });
-
+  const handleLogout = () => {
+    const confirmation = window.confirm("Are you sure you want to logout?");
+    if(confirmation){
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("email");
+      localStorage.removeItem("employeeId");
+      localStorage.removeItem("profilePicture");
+      localStorage.removeItem("team");
+      localStorage.removeItem("role");
+      window.location.href = '/login';
+    }
+  };
   useEffect(() => {
     document.title = "Profile - TALENTFINER HRMS";
     window.scrollTo(0, 0);
@@ -74,13 +89,15 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://talentfiner.com/backend/hrms/getEmpDaTa.php?email=${uemail}`
+          `https://talentfiner.in/backend/getEmpDaTa.php?email=${uemail}`
         );
         if (isMounted) {
           setData(response.data);
           localStorage.setItem("employeeId",(response.data.employeeId));
           localStorage.setItem("profilePicture",(response.data.selfiePhoto));
           localStorage.setItem("team",(response.data.team));
+          localStorage.setItem("role",(response.data.secretRole));
+          setRole(response.data.secretRole)
         }
       } catch (error) {
         console.error("Error fetching data", error);
@@ -195,9 +212,10 @@ const Profile = () => {
     }
 
     // You can make an axios POST request to send the form data to the backend
+    setLoading(true);
     axios
       .post(
-        `https://talentfiner.com/backend/hrms/submitEmpDaTa.php?email=${uemail}`,
+        `https://talentfiner.in/backend/submitEmpDaTa.php?email=${uemail}`,
         employee,
         {
           headers: {
@@ -208,10 +226,12 @@ const Profile = () => {
       .then((response) => {
         // Handle the response from the backend, such as showing a success message
         if (response) {
+          setLoading(false);
           window.alert("Profile Updated Successfully!");
           window.location.reload();
         } else {
           window.alert("Error occured");
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -283,7 +303,7 @@ const Profile = () => {
                   disabled={data.gender !== null}
                   required
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     --Select--
                   </option>
                   <option value="male">Male</option>
@@ -654,7 +674,7 @@ const Profile = () => {
             </div>
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
-                master's degree year in pass
+                master's degree pass year
                 <input
                   type="text"
                   maxLength={4}
@@ -703,7 +723,7 @@ const Profile = () => {
             </div>
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
-                bachelor's/Diploma degree year in pass
+                bachelor's/Diploma degree pass year
                 <span className={styles.required}>*</span>
                 <input
                   type="number"
@@ -756,7 +776,7 @@ const Profile = () => {
             </div>
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
-                higher secodary degree year in pass
+                higher secondary degree pass year
                 <span className={styles.required}>*</span>
                 <input
                   type="number"
@@ -1173,7 +1193,6 @@ const Profile = () => {
     }
   };
   return (
-    <>
       <div className={styles.container}>
         <div className={styles.header}>
           <ul className={styles.links}>
@@ -1231,6 +1250,14 @@ const Profile = () => {
               <MdAttachFile color="#fab437" size={15} />
               <p>onboarding</p>
             </li>
+            <li
+              className={styles.link}
+            >
+              <button onClick={handleLogout}>
+                <IoLogOut />
+                Logout
+              </button>
+            </li>
           </ul>
         </div>
         <form className={styles.formContainer} onSubmit={handleSubmit}>
@@ -1248,6 +1275,7 @@ const Profile = () => {
             {activeSection === "onboarding" ? (
               <button className={styles.btn} type="submit">
                 Submit
+                {loading && <ClipLoader color="#fab437" size={12} />}
               </button>
             ) : (
               <button
@@ -1261,7 +1289,6 @@ const Profile = () => {
           </div>
         </form>
       </div>
-    </>
   );
 };
 

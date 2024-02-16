@@ -10,9 +10,9 @@
     font-weight: bold;
   }
   .boxes {
-    margin: 20px 50px;
+    // margin: 20px 50px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
     gap: 50px;
     .box1 {
       padding: 30px;
@@ -22,6 +22,7 @@
       padding: 30px;
       gap: 20px;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      border-radius: 5px;
       div {
         display: flex;
         flex-direction: column;
@@ -74,6 +75,7 @@
       justify-content: center;
       padding: 30px;
       gap: 30px;
+      border-radius: 5px;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
       p {
         display: flex;
@@ -123,9 +125,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 30px 0px;
+      padding: 30px 5px;
       gap: 20px;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      border-radius: 5px;
       p {
         display: flex;
         align-items: center;
@@ -137,18 +140,18 @@
         min-height: 110px;
         div {
           display: flex;
-          gap: 10px;
+          gap: 5px;
           justify-content: space-between;
           p:nth-child(1) {
             margin-bottom: 5px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: $ltext;
           }
           p:nth-child(2) {
             margin-bottom: 5px;
             font-weight: 400;
-            font-size: 0.8rem;
+            font-size: 0.6rem;
             color: $ltext;
           }
         }
@@ -184,6 +187,7 @@
       padding: 30px 0px;
       gap: 20px;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      border-radius: 5px;
       p {
         display: flex;
         align-items: center;
@@ -200,25 +204,80 @@
           p:nth-child(1) {
             margin-bottom: 5px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: $ltext;
           }
           p:nth-child(2) {
             margin-bottom: 5px;
             font-weight: 400;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: $ltext;
           }
         }
       }
     }
   }
+  .attendanceReport {
+    margin-block: 30px;
+    p {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+      color: $ltext;
+    }
+  }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 650px) {
   .container {
     .boxes {
       margin: 0px;
+      // grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    .attendanceReport {
+      margin: 30px 0px;
+    }
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .container {
+    .boxes {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
+}
+@media screen and (max-width: 480px) {
+  .container {
+    .boxes {
+      .box3 {
+        .team {
+          div {
+            p:nth-child(1) {
+              font-size: .9rem;
+            }
+            p:nth-child(2) {
+              font-size: .8rem;
+            }
+          }
+        }
+      }
+      .box4 {
+        .holidays {
+          div {
+            p:nth-child(1) {
+              font-size: .9rem;
+            }
+            p:nth-child(2) {
+              font-size: .8rem;
+            }
+          }
+        }
+      }
+    }
+    p {
+      font-size: 20px;
     }
   }
 }

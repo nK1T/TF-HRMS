@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./login.module.scss";
 import { Link, useNavigate } from "react-router-dom";
-import { IoLogoWhatsapp, IoMdMail } from "react-icons/io";
 import { ClipLoader } from "react-spinners";
 
 const Login = ({ setAuthenticated }) => {
@@ -25,7 +24,7 @@ const Login = ({ setAuthenticated }) => {
     if (isAuthenticated) {
       // You can use the `navigate` function from your routing library
       // to navigate to the dashboard
-      navigate("/dashboard");
+      navigate("/");
     }
   }, [isAuthenticated]);
 
@@ -35,7 +34,7 @@ const Login = ({ setAuthenticated }) => {
     try {
       // Check if the email is registered
       const response = await axios.post(
-        "https://talentfiner.com/backend/hrms/login/check-email.php",
+        "https://talentfiner.in/backend/login/check-email.php",
         {
           email,
         },
@@ -52,7 +51,7 @@ const Login = ({ setAuthenticated }) => {
 
         // Generate and send OTP
         const generateOTPResponse = await axios.post(
-          "https://talentfiner.com/backend/hrms/login/login-otp-generation.php",
+          "https://talentfiner.in/backend/login/login-otp-generation.php",
           {
             email,
           },
@@ -62,6 +61,7 @@ const Login = ({ setAuthenticated }) => {
             },
           }
         );
+        console.log(generateOTPResponse);
         if (generateOTPResponse.data.success) {
           // OTP sent successfully
           // alert(
@@ -87,7 +87,7 @@ const Login = ({ setAuthenticated }) => {
       // Verify OTP
       setLoading(true);
       const verifyOTPResponse = await axios.post(
-        "https://talentfiner.com/backend/hrms/login/verify-login-otp.php",
+        "https://talentfiner.in/backend/login/verify-login-otp.php",
         {
           email,
           otp,
@@ -109,9 +109,10 @@ const Login = ({ setAuthenticated }) => {
         setIsEmailValid(true);
         setIsOtpSent(false);
         navigate("/profile");
+        
       } else {
         // OTP verification failed
-        alert("Login failed. Please check your email and OTP.");
+        alert("Login failed. Please check OTP or try again after sometime.");
       }
     } catch (error) {
       console.error("Error:", error);

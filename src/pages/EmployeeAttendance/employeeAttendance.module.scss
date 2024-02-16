@@ -1,0 +1,17 @@
+@import "../../App.scss";
+
+.container{
+    margin: 20px 10px;
+    .heading{
+        display: flex;
+        align-items: center;
+        i{
+            font-size: 30px;
+        }
+        p{
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: $ltext;
+        }
+    }
+}

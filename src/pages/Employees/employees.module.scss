@@ -1,0 +1,274 @@
+@import "../../App.scss";
+.container {
+  // margin: 40px 50px;
+  .top {
+    .filters {
+      .filter {
+        z-index: 1;
+        position: sticky;
+        top: 60px;
+        background-color: $text;
+        padding: 15px 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+        .fcatg {
+          width: 100%;
+          padding: 5px;
+          display: flex;
+          gap: 5px;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          text-align: center;
+          font-size: 0.8rem;
+          cursor: pointer;
+          font-weight: 600;
+          color: $text;
+          line-height: 1.1;
+          border-radius: 5px;
+          background-color: $accent;
+          transition: all 0.1s ease-in;
+        }
+        .selected {
+          border: 2px solid $background;
+          transition: all 0.2s linear;
+          transform: scale(1.04);
+        }
+        .search {
+          display: flex;
+          .searchField {
+            width: 100%;
+            border: none;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            padding: 10px;
+            outline: none;
+          }
+          .btn {
+            cursor: pointer;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border: none;
+            background-color: $accent;
+            color: $text;
+            padding: 10px;
+          }
+        }
+      }
+      .errorMsg {
+        margin: 10px;
+        color: $accent;
+      }
+      .employees {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        margin: 10px;
+        gap: 20px;
+        .employee {
+            position: relative;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+          background-color: $background;
+          .editIcon{
+            cursor: pointer;
+            border-top-right-radius: 5px;
+            padding: 5px;
+            top: 0;
+            right: 0;
+            color: $accent;
+            background-color: $text;
+            position: absolute;
+          }
+          img {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            height: 200px;
+            width: 100%;
+          }
+          .employeeDetails {
+            margin-top: 10px;
+            .employeeDetail {
+              border-bottom: 1px solid $ltext;
+              margin-bottom: 10px;
+              padding-bottom: 5px;
+              font-size: 0.7rem;
+              display: flex;
+              justify-content: space-between;
+              p:nth-child(1) {
+                font-weight: 700;
+                color: $text;
+              }
+              p:nth-child(2) {
+                color: $ltext;
+              }
+            }
+          }
+          .bottomBtn{
+            display: flex;
+            justify-content: space-between;
+            .bottomLink{
+              text-decoration: none;
+              .btn2{
+                color: $text;
+                background-color: $accent;
+              }
+              button{
+                display: flex;
+                align-items: center;
+                gap: 3px;
+                cursor: pointer;
+                border-radius: 4px;
+                border: none;
+                background-color: $text;
+                color: $background;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: .7rem;
+                padding: 5px;
+              }
+            }
+          }
+        }
+      }
+      .addNew{
+        margin: 10px;
+        .addNewBtn{
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+            background-color: $text;
+            color: $background;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: .7rem;
+            padding: 5px;
+        }
+      }
+    }
+  }
+}
+
+/* FORM styles */
+.form {
+  position: fixed;
+  top: -25px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  padding: 100px 400px 0px 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+.backdrop {
+  width: 100vw;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: block !important;
+  background-color: rgb(1 1 1 / 80%);
+}
+.formContent {
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  align-items: center;
+  gap: 60px;
+  padding: 40px 20px;
+  cursor: default;
+  position: relative;
+  margin: auto;
+  background: $background;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.closeicon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: $ltext;
+}
+.basicD {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .basicD > .formField {
+      width: 100%;
+  }
+.formField {
+  margin-bottom: 15px;
+}
+
+.inputLabel {
+  font-size: 0.8rem;
+  display: block;
+  margin-bottom: 5px;
+  color: $ltext
+}
+
+.inputField {
+  border-style: solid;
+  border-color: rgb(192, 192, 192);
+  border-radius: 4px;
+  width: 100%;
+  padding: 8px;
+  outline: none;
+}
+.submitBtn {
+  cursor: pointer;
+  color: $background;
+  text-transform: uppercase;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  font-weight: 700;
+  width: fit-content;
+  background-color: $text;
+  margin: auto;
+  font-size: 0.8rem;
+  transition: all .2s ease-in;
+}
+.submitBtn:hover{
+  transform: scale(1.1);
+}
+@media (max-width: 1100px) {
+    .form {
+        padding: 200px 200px 0px 200px;
+      }
+}
+
+@media (max-width: 640px) {
+    .container{
+        .top{
+            .filters{
+                .filter{
+                    top: 0;
+                    position: static;
+                }
+                .employees{
+                  .employee{
+                    img{
+                      height: 350px;
+                    }
+                  }
+                }
+            }
+        }
+        .form {
+            padding: 200px 10px 0px 10px;
+        }
+    }
+}

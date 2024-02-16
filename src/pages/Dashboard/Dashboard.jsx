@@ -3,11 +3,11 @@ import axios from "axios";
 import styles from "./dashboard.module.scss";
 import { Link } from "react-router-dom";
 import { IoFingerPrintSharp } from "react-icons/io5";
-import { TbUsersGroup } from "react-icons/tb";
+import { TbUsersGroup, TbReportSearch } from "react-icons/tb";
 import { PiHandTapDuotone } from "react-icons/pi";
-import { FaRegCalendarAlt,FaUser } from "react-icons/fa";
+import { FaRegCalendarAlt, FaUser } from "react-icons/fa";
 import { MdCelebration } from "react-icons/md";
-import MyCalendar from "../../components/Mycalendar/MyCalendar";
+import Attendance from "../../components/Attendance/Attendance";
 
 const Dashboard = () => {
   const [employeeId, setEmployeeId] = useState();
@@ -15,22 +15,81 @@ const Dashboard = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [greeting, setGreeting] = useState("");
-  const profilePicture = localStorage.getItem("profilePicture");
-  const teamVal = localStorage.getItem("team");
+  const [profilePicture, setProfilePicture] = useState();
   const holidays = [
-    { id: 1, date: "2024-02-14", name: "Valentine's Day" },
-    { id: 2, date: "2024-02-5", name: "April Fools' Day" },
+    { id: 1, date: "2024-02-5", name: "April Fools' Day" },
+    { id: 2, date: "2024-02-14", name: "Vasant Panchami" },
+    { id: 3, date: "2024-02-19", name: "Shivaji Jayanti" },
+    { id: 4, date: "2024-02-24", name: "Guru Ravidas Jayanti" },
+    { id: 5, date: "2024-03-08", name: "Maha Shivratri" },
+    { id: 6, date: "2024-03-25", name: "Holi" },
+    { id: 7, date: "2024-03-29", name: "Good Friday" },
+    { id: 8, date: "2024-04-05", name: "Jamat Ul-Vida" },
+    { id: 9, date: "2024-04-09", name: "Gudi Padwa" },
+    { id: 10, date: "2024-04-13", name: "Vaisakhi" },
+    { id: 11, date: "2024-04-14", name: "Ambedkar Jayanti" },
+    { id: 12, date: "2024-04-21", name: "Mahavir Jayanti" },
+    { id: 13, date: "2024-05-23", name: "Buddha Purnima" },
+    { id: 14, date: "2024-05-23", name: "Buddha Purnima" },
+    { id: 15, date: "2024-06-17", name: "Bakrid/Eid ul-Adha" },
+    { id: 16, date: "2024-07-17", name: "Muharram" },
+    { id: 17, date: "2024-08-15", name: "Independence Day" },
+    { id: 18, date: "2024-08-19", name: "Raksha Bandhan (Rakhi)" },
+    { id: 19, date: "2024-08-26", name: "Janmashtmi" },
+    { id: 20, date: "2024-09-07", name: "Ganesh Chaturthi" },
+    { id: 21, date: "2024-09-15", name: "Onam" },
+    { id: 22, date: "2024-09-16", name: "Milad un-Nabi" },
+    { id: 23, date: "2024-10-02", name: "Gandhi Jayanti" },
+    { id: 24, date: "2024-10-12", name: "Dussehra" },
+    { id: 25, date: "2024-10-17", name: "Maharishi Valmiki Jayanti" },
+    { id: 26, date: "2024-10-20", name: "Karva Chauth" },
+    { id: 27, date: "2024-10-31", name: "Deepavali" },
+    { id: 28, date: "2024-11-02", name: "Govardhan Puja" },
+    { id: 29, date: "2024-11-03", name: "Bhai Duj" },
+    { id: 30, date: "2024-11-07", name: "Chhat Puja" },
+    { id: 31, date: "2024-11-15", name: "Guru Nanak Jayanti" },
+    { id: 32, date: "2024-11-15", name: "Guru Nanak Jayanti" },
+    { id: 33, date: "2024-12-25", name: "Christmas Day" },
   ];
   useEffect(() => {
-    axios
-      .get(
-        `https://talentfiner.com/backend/hrms/getEmpDaTa.php?team=${teamVal}`
-      )
-      .then((response) => {
-        setTeams(response.data);
-      })
-      .catch((err) => console.log("Error fetching data", err));
-  }, [teamVal]);
+    window.scrollTo(0,0);
+    document.title = "Dashboard - TALENTFINER";
+  }, []);
+  useEffect(() => {
+    const storedEmployeeId = localStorage.getItem("employeeId");
+    setEmployeeId(storedEmployeeId);
+
+    const storedCheckInStatus = localStorage.getItem("isCheckedIn");
+    setIsCheckedIn(storedCheckInStatus === "true");
+
+    const storedCountdown = localStorage.getItem("countdown");
+    setCountdown(parseInt(storedCountdown) || 0);
+
+    const profilePic = localStorage.getItem("profilePicture");
+    setProfilePicture(profilePic);
+  }, []);
+  useEffect(() => {
+    const teamName = localStorage.getItem("team");
+    if (teamName) {
+      // Check if teamData is already cached
+      const cachedData = sessionStorage.getItem(`teamData_${teamName}`);
+      if (cachedData) {
+        setTeams(JSON.parse(cachedData));
+      } else {
+        axios
+          .get(`https://talentfiner.in/backend/getEmpDaTa.php?team=${teamName}`)
+          .then((response) => {
+            // Cache the fetched teamData
+            sessionStorage.setItem(
+              `teamData_${teamName}`,
+              JSON.stringify(response.data)
+            );
+            setTeams(response.data);
+          })
+          .catch((err) => console.log("Error fetching data", err));
+      }
+    }
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -52,17 +111,6 @@ const Dashboard = () => {
     } else {
       setGreeting("Good Evening🌃");
     }
-  }, []);
-
-  useEffect(() => {
-    const storedEmployeeId = localStorage.getItem("employeeId");
-    setEmployeeId(storedEmployeeId);
-
-    const storedCheckInStatus = localStorage.getItem("isCheckedIn");
-    setIsCheckedIn(storedCheckInStatus === "true");
-
-    const storedCountdown = localStorage.getItem("countdown");
-    setCountdown(parseInt(storedCountdown) || 0);
   }, []);
 
   useEffect(() => {
@@ -88,7 +136,7 @@ const Dashboard = () => {
 
   const handleCheckin = () => {
     axios
-      .post("http://localhost/hrms/attendance/dailyAttendance.php", {
+      .post("https://talentfiner.in/backend/attendance/dailyAttendance.php", {
         action: "checkin",
         employeeId,
       })
@@ -103,10 +151,9 @@ const Dashboard = () => {
 
   const handleCheckout = () => {
     axios
-      .post("http://localhost/hrms/attendance/dailyAttendance.php", {
+      .post("https://talentfiner.in/backend/attendance/dailyAttendance.php", {
         action: "checkout",
         employeeId,
-        countdown,
       })
       .then(() => {
         setIsCheckedIn(false);
@@ -135,6 +182,7 @@ const Dashboard = () => {
 
     return holidayDate >= new Date() && holidayDate <= oneWeekLater;
   });
+
   return (
     <div className={styles.container}>
       <div className={styles.boxes}>
@@ -142,10 +190,10 @@ const Dashboard = () => {
           <p>{greeting}</p>
           <div>
             <img
-              src={`https://talentfiner.com/backend/hrms/${profilePicture}`}
+              src={`https://talentfiner.in/backend/${profilePicture}`}
               alt="Profile Picture"
             />
-            <p>EMP0011</p>
+            <p>{employeeId}</p>
           </div>
           <Link to="/profile" className={styles.btn}>
             <button>OPEN PROFILE</button>
@@ -175,8 +223,13 @@ const Dashboard = () => {
             </p>
             <div className={styles.team}>
               {currentTeamMembers.map((m) => (
-                <div key={m.id}>
-                  <p><FaUser color="#fab437" size={9.5}/>{m.fullName}</p> <p>({m.employeeId})</p>
+                <div key={m.employeeId}>
+                  <p>
+                    <FaUser color="#fab437" size={9.5} />
+                    {m.fullName.charAt(0).toUpperCase() +
+                      m.fullName.slice(1).toLowerCase()}
+                  </p>{" "}
+                  <p>({m.employeeId})</p>
                 </div>
               ))}
             </div>
@@ -206,12 +259,22 @@ const Dashboard = () => {
           <div className={styles.holidays}>
             {filteredHolidays.map((holiday) => (
               <div key={holiday.id}>
-                <p><MdCelebration color="#fab437" />{holiday.name}</p>
+                <p>
+                  <MdCelebration color="#fab437" />
+                  {holiday.name}
+                </p>
                 <p>{holiday.date}</p>
               </div>
             ))}
           </div>
         </div>
+      </div>
+      <div className={styles.attendanceReport}>
+        <p>
+          <TbReportSearch color="#fab437" />
+          Attendance Report
+        </p>
+        <Attendance employeeId={employeeId} />
       </div>
     </div>
   );

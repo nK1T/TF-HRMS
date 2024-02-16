@@ -1,0 +1,88 @@
+@import "../../App.scss";
+
+.container {
+  margin: 20px 0px 100px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 200px;
+  .left {
+    p:nth-child(1) {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $accent;
+      margin-bottom: 10px;
+    }
+    p:nth-child(2) {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--ltext);
+      margin-bottom: 10px;
+    }
+    p:nth-child(3) {
+      font-size: 1rem;
+      color: var(--ltext);
+    }
+    p:nth-child(4) {
+      font-size: 1rem;
+      color: var(--ltext);
+      margin-bottom: 50px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-radius: 7px;
+      max-width: fit-content;
+      background-color: $text;
+      color: $background;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+  }
+  .right {
+    img {
+      width: 526px;
+      height: 526px;
+    }
+  }
+}
+@media (max-width: 1080px) {
+  .container {
+    gap: 0;
+    .right img {
+      width: 320px;
+      height: 320px;
+    }
+  }
+}
+@media (max-width: 660px) {
+  .container {
+    flex-direction: column-reverse;
+    .right img {
+      width: 220px;
+      height: 220px;
+    }
+  }
+
+  .left {
+    text-align: center;
+    p:nth-child(3) {
+      font-size: 0.9rem;
+      color: var(--ltext);
+    }
+    p:nth-child(4) {
+      font-size: 0.9rem;
+      color: var(--ltext);
+      margin-bottom: 50px;
+    }
+    .btn {
+      margin: auto;
+    }
+  }
+}

@@ -1,0 +1,124 @@
+@import "../../App.scss";
+
+.container{
+    margin: 10px;
+    .main{
+        .btns{
+            margin-block: 10px;
+            display: flex;
+            justify-content: space-between;
+            .leftBtns{
+                .link{
+                    text-decoration: none;
+                    .editBtn{
+                        display: flex;
+                        align-items: center;
+                        gap: 3px;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        cursor: pointer;
+                        border: none;
+                        padding: 5px;
+                        border-radius: 3px;
+                        color: $background;
+                        background-color: forestgreen;
+                        &:hover{
+                            opacity: .7;
+                        }
+                    }
+                }
+            }
+            .rightBtns{
+                display: flex;
+                gap: 10px;
+                .verifyBtn{
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    cursor: pointer;
+                    border: none;
+                    padding: 5px;
+                    border-radius: 3px;
+                    color: $background;
+                    background-color: #1ea5fe;
+                    &:hover{
+                        opacity: .7;
+                    }
+                    &:disabled{
+                        background-color: $ltext;
+                        cursor:not-allowed;
+                    }
+                }
+                .reuploadBtn{
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    cursor: pointer;
+                    border: none;
+                    padding: 5px;
+                    border-radius: 3px;
+                    color: $background;
+                    background-color: $accent;
+                    &:hover{
+                        opacity: .7;
+                    }
+                    &:disabled{
+                        background-color: $ltext;
+                        cursor:not-allowed;
+                    }
+                }
+            }
+        }
+        .heading{
+            // margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            color: $ltext;
+        }
+        .basicDetails{
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, auto));
+            border-radius: 3px;
+            padding-block: 10px;
+            // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            gap: 10px;
+            .detail{
+                // border: 1px solid black;
+                border-radius: 5px;
+                padding: 10px;
+                // box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                text-transform: uppercase;
+                display: flex;
+                gap: 10px;
+                p:nth-child(1){
+                    font-weight: 500;
+                    color: $ltext;
+                }
+                p:nth-child(2){
+                    color: $ltext;
+                }
+                button{
+                    cursor: pointer;
+                    border: none;
+                    padding: 2px;
+                    border-radius: 3px;
+                    font-weight: 500;
+                    color: $background;
+                    background-color: forestgreen;
+                    &:disabled{
+                        background-color: $ltext;
+                        cursor:not-allowed;
+                    }
+                }
+            }
+        }
+    }
+}

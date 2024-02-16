@@ -28,6 +28,19 @@
         border-bottom: 3px solid transparent;
         color: $background;
         font-size: 0.7rem;
+        button {
+          cursor: pointer;
+          padding: 7px 3px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          color: $text;
+          border: none;
+          border-radius: 2px;
+          background-color: $accent;
+          transition: all .1s ease;
+        }
       }
     }
   }
@@ -54,7 +67,6 @@
     border-radius: 8px;
     // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     .formField {
-      margin-bottom: 20px;
       .inputLabel {
         font-size: 0.9rem;
         display: block;
@@ -102,6 +114,9 @@
   justify-content: center;
   margin-bottom: 30px;
   .btn {
+    display: flex;
+    align-items: center;
+    gap: 3px;
     cursor: pointer;
     padding: 10px;
     border: none;
@@ -124,7 +139,7 @@
     .header {
       justify-content: center;
       .links {
-        gap: 55px;
+        gap: 32px;
         .link {
           p {
             display: none;
