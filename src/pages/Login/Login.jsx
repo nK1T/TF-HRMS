@@ -147,7 +147,7 @@ const Login = ({ setAuthenticated }) => {
             </button>
             {!isEmailValid && (
               <p style={{ color: "crimson" }}>
-                Email is not registered.
+                Access Revoked!!!
               </p>
             )}
           </form>

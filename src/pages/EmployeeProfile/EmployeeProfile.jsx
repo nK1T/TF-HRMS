@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./employeeProfile.module.scss";
 import { Link, useParams } from "react-router-dom";
 import { MdContactPhone, MdVerified } from "react-icons/md";
-import { FaPlaneDeparture, FaEdit, FaMinusCircle } from "react-icons/fa";
+import { FaPlaneDeparture, FaEdit, FaMinusCircle, FaRupeeSign } from "react-icons/fa";
 import {
   IoIosInformationCircle,
   IoIosSchool,
@@ -11,6 +11,7 @@ import {
 } from "react-icons/io";
 import { AiFillBank } from "react-icons/ai";
 import { BsBuildingsFill } from "react-icons/bs";
+import { FaBan } from "react-icons/fa";
 
 const EmployeeProfile = () => {
   const { employeeId } = useParams();
@@ -69,6 +70,29 @@ const EmployeeProfile = () => {
       console.log("Error doing verification", error);
     }
   };
+  const handleCurrentStatus = async (employeeId, newStatus) => {
+
+    const markActive = window.confirm(
+      "Are you sure you want to mark this employee as Inactive?"
+    );
+    if (!markActive) {
+      return; // User clicked Cancel, do not mark set as Active
+    }
+    try {
+      await axios.put(
+        `https://talentfiner.in/backend/updateStatus.php?employeeId=${employeeId}`,
+        { currentStatus: newStatus },
+        {
+          headers: {
+            "Content-Type": "application/json", // Use application/json here
+          },
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log("Error Updating status", error);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -85,6 +109,17 @@ const EmployeeProfile = () => {
                 </Link>
               </div>
               <div className={styles.rightBtns}>
+                <button
+                  className={styles.inactiveBtn}
+                  onClick={() =>
+                    handleCurrentStatus(employee.employeeId, "inactive")
+                  }
+                  disabled={employee.currentStatus==='inactive'}
+
+                >
+                  <FaBan />
+                  Inactive
+                </button>
                 <button
                   className={styles.verifyBtn}
                   onClick={() =>
@@ -178,6 +213,10 @@ const EmployeeProfile = () => {
               <div className={styles.detail}>
                 <p>email:</p>
                 <p>{employee.email}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>official email:</p>
+                <p>{employee.officialEmail}</p>
               </div>
               <div className={styles.detail}>
                 <p>contact number:</p>
@@ -458,6 +497,28 @@ const EmployeeProfile = () => {
               <div className={styles.detail}>
                 <p>hiring hr email:</p>
                 <p>{employee.hiringHrEmail}</p>
+              </div>
+            </div>
+            <h3 className={styles.heading}>
+              <FaRupeeSign size={15} color="#fab437" />
+              pays
+            </h3>
+            <div className={styles.basicDetails}>
+            <div className={styles.detail}>
+                <p>CTC:</p>
+                <p>{employee.ctc}</p>
+              </div>
+            <div className={styles.detail}>
+                <p>fixed compensation:</p>
+                <p>{employee.fixedCompensation}</p>
+              </div>
+            <div className={styles.detail}>
+                <p>variable compensation:</p>
+                <p>{employee.variableCompensation}</p>
+              </div>
+            <div className={styles.detail}>
+                <p>probation period (days):</p>
+                <p>{employee.probationPeriod}</p>
               </div>
             </div>
           </div>

@@ -71,14 +71,10 @@
           border-radius: 5px;
           box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
           background-color: $background;
-          .editIcon{
-            cursor: pointer;
-            border-top-right-radius: 5px;
-            padding: 5px;
+          .verifiedIcon{
             top: 0;
             right: 0;
-            color: $accent;
-            background-color: $text;
+            color: #1ea5fe;
             position: absolute;
           }
           img {
@@ -243,6 +239,9 @@
 }
 .submitBtn:hover{
   transform: scale(1.1);
+}
+option{
+  color: $ltext;
 }
 @media (max-width: 1100px) {
     .form {

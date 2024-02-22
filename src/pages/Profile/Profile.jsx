@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./profile.module.scss";
-import { FaUser,FaCircleCheck } from "react-icons/fa6";
+import { FaUser, FaCircleCheck,  } from "react-icons/fa6";
+import { FaRupeeSign } from "react-icons/fa";
 import { IoMdSchool, IoIosDocument } from "react-icons/io";
 import { BsBuildingsFill, BsBank2 } from "react-icons/bs";
 import { MdAttachFile } from "react-icons/md";
@@ -8,7 +9,6 @@ import axios from "axios";
 import Loader from "../../components/Loader/loader";
 import { IoLogOut } from "react-icons/io5";
 import { ClipLoader } from "react-spinners";
-
 
 const Profile = ({ setRole }) => {
   const [data, setData] = useState(null);
@@ -21,9 +21,11 @@ const Profile = ({ setRole }) => {
     dob: "",
     maritalStatus: "",
     email: "",
+    officialEmail: "",
     contactNumber: "",
     whatsappNumber: "",
     employeeId: "",
+    role: "",
     designation: "",
     streetAddress: "",
     city: "",
@@ -64,17 +66,21 @@ const Profile = ({ setRole }) => {
     signedNonDisclosureAgreement: "",
     olsCode: "",
     hiringHrEmail: "",
+    ctc:"",
+    fixedCompensation:"",
+    variableCompensation:"",
+    probationPeriod:""
   });
   const handleLogout = () => {
     const confirmation = window.confirm("Are you sure you want to logout?");
-    if(confirmation){
+    if (confirmation) {
       localStorage.removeItem("isAuthenticated");
       localStorage.removeItem("email");
       localStorage.removeItem("employeeId");
       localStorage.removeItem("profilePicture");
       localStorage.removeItem("team");
       localStorage.removeItem("role");
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
   };
   useEffect(() => {
@@ -93,11 +99,11 @@ const Profile = ({ setRole }) => {
         );
         if (isMounted) {
           setData(response.data);
-          localStorage.setItem("employeeId",(response.data.employeeId));
-          localStorage.setItem("profilePicture",(response.data.selfiePhoto));
-          localStorage.setItem("team",(response.data.team));
-          localStorage.setItem("role",(response.data.secretRole));
-          setRole(response.data.secretRole)
+          localStorage.setItem("employeeId", response.data.employeeId);
+          localStorage.setItem("profilePicture", response.data.selfiePhoto);
+          localStorage.setItem("team", response.data.team);
+          localStorage.setItem("role", response.data.secretRole);
+          setRole(response.data.secretRole);
         }
       } catch (error) {
         console.error("Error fetching data", error);
@@ -110,11 +116,12 @@ const Profile = ({ setRole }) => {
     };
   }, [uemail]);
 
-
   useEffect(() => {
     if (data) {
       setEmployee({
+        officialEmail: data.officialEmail || "",
         employeeId: data.employeeId || "",
+        role: data.role || "",
         maritalStatus: data.maritalStatus || "",
         whatsappNumber: data.whatsappNumber || "",
         streetAddress: data.streetAddress || "",
@@ -156,6 +163,10 @@ const Profile = ({ setRole }) => {
         cancelledCheque: data.cancelledCheque || "",
         signedOfferLetter: data.signedOfferLetter || "",
         signedNonDisclosureAgreement: data.signedNonDisclosureAgreement || "",
+        ctc: data.ctc || "",
+        fixedCompensation: data.fixedCompensation || "",
+        variableCompensation: data.variableCompensation || "",
+        probationPeriod: data.probationPeriod || "",
       });
     }
   }, [data]);
@@ -199,6 +210,10 @@ const Profile = ({ setRole }) => {
       "signedNonDisclosureAgreement",
       "olsCode",
       "hiringHrEmail",
+      "ctc",
+      "fixedCompensation",
+      "variableCompensation",
+      "probationPeriod"
     ];
 
     // Find the first missing field, if any
@@ -308,7 +323,6 @@ const Profile = ({ setRole }) => {
                   </option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
-                  <option value="other">Prefer not to say</option>
                 </select>
               </label>
             </div>
@@ -345,17 +359,22 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 marital status<span className={styles.required}>*</span>
-                <input
+                <select
                   type="text"
                   name="maritalStatus"
-                  // value={data.maritalStatus ?? employee.maritalStatus}
                   value={data.maritalStatus ?? employee.maritalStatus}
                   onChange={handleChange}
                   className={styles.inputField}
-                  placeholder="Marital Status"
                   disabled={data.maritalStatus !== null}
                   required
-                />
+                >
+                  <option value="" disabled>
+                    --Select--
+                  </option>
+                  <option value="married">MARRIED</option>
+                  <option value="unmarried">UNMARRIED</option>
+                  <option value="divorcee">DIVORCEE</option>
+                </select>
               </label>
             </div>
             <div className={styles.formField}>
@@ -411,6 +430,20 @@ const Profile = ({ setRole }) => {
             </div>
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
+                official email id<span className={styles.required}>*</span>
+                <input
+                  type="email"
+                  name="officialEmail"
+                  onChange={handleChange}
+                  value={data.officialEmail ?? employee.officialEmail}
+                  className={styles.inputField}
+                  disabled={data.officialEmail !== null}
+                  required
+                />
+              </label>
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
                 Employee ID<span className={styles.required}>*</span>
                 <input
                   type="text"
@@ -424,7 +457,7 @@ const Profile = ({ setRole }) => {
                 />
               </label>
             </div>
-            <div className={styles.formField}>
+            {/* <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 designation<span className={styles.required}>*</span>
                 <input
@@ -437,6 +470,86 @@ const Profile = ({ setRole }) => {
                   disabled={data.designation !== null}
                   required
                 />
+              </label>
+            </div> */}
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                designation<span className={styles.required}>*</span>
+                <select
+                  name="designation"
+                  value={data.designation ?? employee.designation}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                  disabled={data.designation !== null}
+                  required
+                >
+                  <option value="" disabled>
+                    --Select Designation--
+                  </option>
+                  <option value="Director">Director</option>
+                  <option value="HR Recruiter">HR Recruiter</option>
+                  <option value="HR Admin">HR Admin</option>
+                  <option value="HR Recruiter TL">HR Recruiter TL</option>
+                  <option value="HR Recruiter Associate">
+                    HR Recruiter Associate
+                  </option>
+                  <option value="HR Business Partner">
+                    HR Business Partner
+                  </option>
+
+                  <option value="Product Manager">Product Manager</option>
+                  <option value="Instructional Designer">
+                    Instructional Designer
+                  </option>
+                  <option value="Content Writer">Content Writer</option>
+
+                  <option value="Lead Generation Intern">
+                    Lead Generation Intern
+                  </option>
+                  <option value="Content Creator">Content Creator</option>
+                  <option value="Digital Marketing Intern">
+                    Digital Marketing Intern
+                  </option>
+
+                  <option value="BDA - Direct Sales">BDA - Direct Sales</option>
+                  <option value="BDA - Inside Sales">BDA - Inside Sales</option>
+                  <option value="BDA - Direct Sales TL">
+                    BDA - Direct Sales TL
+                  </option>
+                  <option value="BDA - Inside Sales TL">
+                    BDA - Inside Sales TL
+                  </option>
+
+                  <option value="Customer Support Associate">
+                    Customer Support Associate
+                  </option>
+                  <option value="Product Delivery Intern">
+                    Product Delivery Intern
+                  </option>
+                  <option value="Employee Workflow & Screening">
+                    Employee Workflow & Screening
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                Role
+                <select
+                  name="role"
+                  value={data.role ?? employee.role}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                  disabled={data.role !== null}
+                >
+                  <option value="" disabled>
+                    --Select--
+                  </option>
+                  <option value="Manager">Manager</option>
+                  <option value="Team Lead">Team Lead</option>
+                  <option value="Associate">Associate</option>
+                  <option value="Intern">Intern</option>
+                </select>
               </label>
             </div>
             <div className={styles.formField}>
@@ -642,7 +755,9 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 Master's degree certificate
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="mastersCertificate"
@@ -692,7 +807,9 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 Bachelor's/diploma degree certificate
                 <span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="bachelorsCertificate"
@@ -743,7 +860,9 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 higher secondary certificate
                 <span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="higherSecondaryCertificate"
@@ -830,7 +949,6 @@ const Profile = ({ setRole }) => {
                   }
                   className={styles.inputField}
                   onChange={handleChange}
-                  // placeholder="Full name"
                   disabled={data.previousDesignation !== null}
                 />
               </label>
@@ -927,7 +1045,9 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 relieving letter
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="relievingLetter"
@@ -991,7 +1111,9 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 cancelled cheque<span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="cancelledCheque"
@@ -1010,7 +1132,9 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 e-aadhaar<span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="eaadhaar"
@@ -1025,7 +1149,9 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 pan card<span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="panCard"
@@ -1040,7 +1166,9 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 selfie photo<span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="selfiePhoto"
@@ -1056,7 +1184,9 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 professional photo
                 <span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="professionalPhoto"
@@ -1091,7 +1221,9 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 signed offer letter
                 <span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="signedOfferLetter"
@@ -1107,7 +1239,9 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 signed non-disclosure agreement
                 <span className={styles.required}>*</span>
-                {data.verification === "verified" && <FaCircleCheck color="green" />}
+                {data.verification === "verified" && (
+                  <FaCircleCheck color="green" />
+                )}
                 <input
                   type="file"
                   name="signedNonDisclosureAgreement"
@@ -1151,6 +1285,67 @@ const Profile = ({ setRole }) => {
             </div>
           </div>
         );
+      case "pays":
+        return (
+          <div className={styles.pays}>
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                Cost To Company (CTC)<span className={styles.required}>*</span>
+                <input
+                  type="text"
+                  name="ctc"
+                  value={data.ctc ?? employee.ctc}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                  disabled={data.ctc !== null}
+                  required
+                />
+              </label>
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                fixed compensation<span className={styles.required}>*</span>
+                <input
+                  type="text"
+                  name="fixedCompensation"
+                  value={data.fixedCompensation ?? employee.fixedCompensation}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                  disabled={data.fixedCompensation !== null}
+                  required
+                />
+              </label>
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                Variable compensation<span className={styles.required}>*</span>
+                <input
+                  type="text"
+                  name="variableCompensation"
+                  value={data.variableCompensation ?? employee.variableCompensation}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                  disabled={data.variableCompensation !== null}
+                  required
+                />
+              </label>
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                probation period (days)<span className={styles.required}>*</span>
+                <input
+                  type="text"
+                  name="probationPeriod"
+                  value={data.probationPeriod ?? employee.probationPeriod}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                  disabled={data.probationPeriod !== null}
+                  required
+                />
+              </label>
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -1164,6 +1359,7 @@ const Profile = ({ setRole }) => {
       "documents",
       "bankDetails",
       "onboarding",
+      "pays"
     ];
     const currentIndex = sectionOrder.indexOf(activeSection);
     const prevIndex = currentIndex - 1;
@@ -1183,6 +1379,7 @@ const Profile = ({ setRole }) => {
       "documents",
       "bankDetails",
       "onboarding",
+      "pays",
     ];
     const currentIndex = sectionOrder.indexOf(activeSection);
     const nextIndex = currentIndex + 1;
@@ -1193,102 +1390,117 @@ const Profile = ({ setRole }) => {
     }
   };
   return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <ul className={styles.links}>
-            <li
-              className={`${styles.link} ${
-                activeSection === "basicDetails" && styles.selected
-              }`}
-              onClick={() => setActiveSection("basicDetails")}
-            >
-              <FaUser color="#fab437" size={10} />
-              <p>Basic details</p>
-            </li>
-            <li
-              className={`${styles.link} ${
-                activeSection === "qualifications" && styles.selected
-              }`}
-              onClick={() => setActiveSection("qualifications")}
-            >
-              <IoMdSchool color="#fab437" size={15} />
-              <p>Qualification</p>
-            </li>
-            <li
-              className={`${styles.link} ${
-                activeSection === "workExperience" && styles.selected
-              }`}
-              onClick={() => setActiveSection("workExperience")}
-            >
-              <BsBuildingsFill color="#fab437" />
-              <p>Work Experience</p>
-            </li>
-            <li
-              className={`${styles.link} ${
-                activeSection === "documents" && styles.selected
-              }`}
-              onClick={() => setActiveSection("documents")}
-            >
-              <IoIosDocument color="#fab437" size={15} />
-              <p>Documents</p>
-            </li>
-            <li
-              className={`${styles.link} ${
-                activeSection === "bankDetails" && styles.selected
-              }`}
-              onClick={() => setActiveSection("bankDetails")}
-            >
-              <BsBank2 color="#fab437" />
-              <p>Bank details</p>
-            </li>
-            <li
-              className={`${styles.link} ${
-                activeSection === "onboarding" && styles.selected
-              }`}
-              onClick={() => setActiveSection("onboarding")}
-            >
-              <MdAttachFile color="#fab437" size={15} />
-              <p>onboarding</p>
-            </li>
-            <li
-              className={styles.link}
-            >
-              <button onClick={handleLogout}>
-                <IoLogOut />
-                Logout
-              </button>
-            </li>
-          </ul>
-        </div>
-        <form className={styles.formContainer} onSubmit={handleSubmit}>
-          {data.verification === "pending" && <p className={styles.pending}>Your documents are under verification.</p>}
-          {data.verification === "reupload" && <p className={styles.reupload}>Check the documents and reupload the required document.</p>}
-          {renderFormFields(activeSection)}
-          <div className={styles.navigationButtons}>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <ul className={styles.links}>
+          <li
+            className={`${styles.link} ${
+              activeSection === "basicDetails" && styles.selected
+            }`}
+            onClick={() => setActiveSection("basicDetails")}
+          >
+            <FaUser color="#fab437" size={10} />
+            <p>Basic details</p>
+          </li>
+          <li
+            className={`${styles.link} ${
+              activeSection === "qualifications" && styles.selected
+            }`}
+            onClick={() => setActiveSection("qualifications")}
+          >
+            <IoMdSchool color="#fab437" size={15} />
+            <p>Qualification</p>
+          </li>
+          <li
+            className={`${styles.link} ${
+              activeSection === "workExperience" && styles.selected
+            }`}
+            onClick={() => setActiveSection("workExperience")}
+          >
+            <BsBuildingsFill color="#fab437" />
+            <p>Work Experience</p>
+          </li>
+          <li
+            className={`${styles.link} ${
+              activeSection === "documents" && styles.selected
+            }`}
+            onClick={() => setActiveSection("documents")}
+          >
+            <IoIosDocument color="#fab437" size={15} />
+            <p>Documents</p>
+          </li>
+          <li
+            className={`${styles.link} ${
+              activeSection === "bankDetails" && styles.selected
+            }`}
+            onClick={() => setActiveSection("bankDetails")}
+          >
+            <BsBank2 color="#fab437" />
+            <p>Bank details</p>
+          </li>
+          <li
+            className={`${styles.link} ${
+              activeSection === "onboarding" && styles.selected
+            }`}
+            onClick={() => setActiveSection("onboarding")}
+          >
+            <MdAttachFile color="#fab437" size={15} />
+            <p>onboarding</p>
+          </li>
+          <li
+            className={`${styles.link} ${
+              activeSection === "pays" && styles.selected
+            }`}
+            onClick={() => setActiveSection("pays")}
+          >
+            <FaRupeeSign color="#fab437" size={15} />
+            <p>pays</p>
+          </li>
+          <li className={styles.link}>
+            <button onClick={handleLogout}>
+              <IoLogOut />
+              Logout
+            </button>
+          </li>
+        </ul>
+      </div>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
+        {data.verification === "pending" && (
+          <p className={styles.pending}>
+            Your documents are under verification.
+          </p>
+        )}
+        {data.verification === "reupload" && (
+          <p className={styles.reupload}>
+            Check the documents and reupload the required document.
+          </p>
+        )}
+        {renderFormFields(activeSection)}
+        <div className={styles.navigationButtons}>
+          <button
+            className={styles.btn}
+            onClick={handlePrevClick}
+            disabled={activeSection === "basicDetails"}
+          >
+            Back
+          </button>
+          {activeSection === "pays" ? (
+            <button className={styles.btn} type="submit">
+              Submit
+              {loading && <ClipLoader color="#fab437" size={12} />}
+            </button>
+          ) : (
             <button
               className={styles.btn}
-              onClick={handlePrevClick}
-              disabled={activeSection === "basicDetails"}
+              onClick={handleNextClick}
+              disabled={activeSection === "onboarding"}
             >
-              Back
+              Next
             </button>
-            {activeSection === "onboarding" ? (
-              <button className={styles.btn} type="submit">
-                Submit
-                {loading && <ClipLoader color="#fab437" size={12} />}
-              </button>
-            ) : (
-              <button
-                className={styles.btn}
-                onClick={handleNextClick}
-                disabled={activeSection === "onboarding"}
-              >
-                Next
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
+          )}
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -9,7 +9,7 @@ const EmployeeEdit = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     document.title = "Edit Employee - TALENTFINER";
   }, []);
 
@@ -22,7 +22,6 @@ const EmployeeEdit = () => {
       axios
         .get("https://talentfiner.in/backend/getEmpDaTa.php")
         .then((response) => {
-          console.log("called");
           // Cache the fetched teamData
           sessionStorage.setItem("employeeData", JSON.stringify(response.data));
           setData(response.data);
@@ -42,12 +41,12 @@ const EmployeeEdit = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData(prevData => {
-      const newData = prevData.map(employee => {
+    setData((prevData) => {
+      const newData = prevData.map((employee) => {
         if (employee.employeeId === employeeId) {
           return {
             ...employee,
-            [name]: value
+            [name]: value,
           };
         }
         return employee;
@@ -55,14 +54,14 @@ const EmployeeEdit = () => {
       return newData;
     });
   };
-  
+
   const handleDateChange = (date) => {
-    setData(prevData => {
-      const newData = prevData.map(employee => {
+    setData((prevData) => {
+      const newData = prevData.map((employee) => {
         if (employee.employeeId === employeeId) {
           return {
             ...employee,
-            dob: date
+            dob: date,
           };
         }
         return employee;
@@ -70,14 +69,14 @@ const EmployeeEdit = () => {
       return newData;
     });
   };
-  
+
   const handleDateChangeon = (date) => {
-    setData(prevData => {
-      const newData = prevData.map(employee => {
+    setData((prevData) => {
+      const newData = prevData.map((employee) => {
         if (employee.employeeId === employeeId) {
           return {
             ...employee,
-            onboardingDate: date
+            onboardingDate: date,
           };
         }
         return employee;
@@ -86,19 +85,19 @@ const EmployeeEdit = () => {
     });
   };
   const handleSubmit = async (e) => {
-    const confirm = window.confirm(
-        "Are you sure you want to update?"
-      );
-      if (!confirm) {
-        return; // User clicked Cancel, do not mark verified
-      }
+    const confirm = window.confirm("Are you sure you want to update?");
+    if (!confirm) {
+      return; // User clicked Cancel, do not mark verified
+    }
     e.preventDefault();
 
     // Find the employee data object in the array
-    const employeeData = data.find((employee) => employee.employeeId === employeeId);
+    const employeeData = data.find(
+      (employee) => employee.employeeId === employeeId
+    );
     if (!employeeData) {
-        console.log("Employee data not found");
-        return;
+      console.log("Employee data not found");
+      return;
     }
 
     // Create a copy of the original employee data
@@ -106,21 +105,27 @@ const EmployeeEdit = () => {
 
     // Loop through the keys in the form data
     Object.keys(data).forEach((key) => {
-        // If the key exists in the original employee data and the value has changed,
-        // update the corresponding value in the copy of the employee data
-        if (updatedEmployeeData.hasOwnProperty(key) && data[key] !== employeeData[key]) {
-            updatedEmployeeData[key] = data[key];
-        }
+      // If the key exists in the original employee data and the value has changed,
+      // update the corresponding value in the copy of the employee data
+      if (
+        updatedEmployeeData.hasOwnProperty(key) &&
+        data[key] !== employeeData[key]
+      ) {
+        updatedEmployeeData[key] = data[key];
+      }
     });
 
     try {
-        // Send the updatedEmployeeData to the backend
-        const response = await axios.post(`https://talentfiner.in/backend/updateEmployeeInfo.php`, updatedEmployeeData);
-        window.location.reload();
+      // Send the updatedEmployeeData to the backend
+      const response = await axios.post(
+        `https://talentfiner.in/backend/updateEmployeeInfo.php`,
+        updatedEmployeeData
+      );
+      window.location.reload();
     } catch (error) {
-        console.error("Error updating employee data:", error);
+      console.error("Error updating employee data:", error);
     }
-};  
+  };
   return (
     <div className={styles.container}>
       {filterEmployeeData().map((employee) => (
@@ -153,7 +158,6 @@ const EmployeeEdit = () => {
                 </option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="other">Prefer not to say</option>
               </select>
             </label>
           </div>
@@ -173,22 +177,27 @@ const EmployeeEdit = () => {
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               marital status
-              <input
-                type="text"
+              <select
                 name="maritalStatus"
-                // value={data.maritalStatus ?? employee.maritalStatus}
                 value={data.maritalStatus ?? employee.maritalStatus}
                 onChange={handleChange}
                 className={styles.inputField}
                 required
-              />
+              >
+                <option value="" disabled>
+                  --Select--
+                </option>
+                <option value="married">MARRIED</option>
+                <option value="unmarried">UNMARRIED</option>
+                <option value="divorcee">DIVORCEE</option>
+              </select>
             </label>
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               contact number
               <input
-                type="number"
+                type="text"
                 name="contactNumber"
                 value={data.contactNumber ?? employee.contactNumber}
                 className={styles.inputField}
@@ -231,6 +240,19 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
+              official email ID
+              <input
+                type="email"
+                name="officialEmail"
+                onChange={handleChange}
+                value={data.officialEmail ?? employee.officialEmail}
+                className={styles.inputField}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
               Employee ID
               <input
                 type="text"
@@ -244,17 +266,80 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              designation
-              <input
-                type="text"
+            designation
+              <select
                 name="designation"
                 onChange={handleChange}
                 value={data.designation ?? employee.designation}
                 className={styles.inputField}
                 required
-              />
+              >
+                <option value="" disabled>
+                  --Select Designation--
+                </option>
+                <option value="Director">Director</option>
+                <option value="HR Recruiter">HR Recruiter</option>
+                <option value="HR Admin">HR Admin</option>
+                <option value="HR Recruiter TL">HR Recruiter TL</option>
+                <option value="HR Recruiter Associate">
+                  HR Recruiter Associate
+                </option>
+                <option value="HR Business Partner">HR Business Partner</option>
+
+                <option value="Product Manager">Product Manager</option>
+                <option value="Instructional Designer">
+                  Instructional Designer
+                </option>
+                <option value="Content Writer">Content Writer</option>
+
+                <option value="Lead Generation Intern">
+                  Lead Generation Intern
+                </option>
+                <option value="Content Creator">Content Creator</option>
+                <option value="Digital Marketing Intern">
+                  Digital Marketing Intern
+                </option>
+
+                <option value="BDA - Direct Sales">BDA - Direct Sales</option>
+                <option value="BDA - Inside Sales">BDA - Inside Sales</option>
+                <option value="BDA - Direct Sales TL">
+                  BDA - Direct Sales TL
+                </option>
+                <option value="BDA - Inside Sales TL">
+                  BDA - Inside Sales TL
+                </option>
+
+                <option value="Customer Support Associate">
+                  Customer Support Associate
+                </option>
+                <option value="Product Delivery Intern">
+                  Product Delivery Intern
+                </option>
+                <option value="Employee Workflow & Screening">
+                  Employee Workflow & Screening
+                </option>
+              </select>
             </label>
           </div>
+          <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                Role
+                <select
+                  name="role"
+                  value={data.role ?? employee.role}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                >
+                  <option value="" disabled>
+                    --Select--
+                  </option>
+                  <option value="Manager">Manager</option>
+                  <option value="Team Lead">Team Lead</option>
+                  <option value="Associate">Associate</option>
+                  <option value="Intern">Intern</option>
+                </select>
+              </label>
+            </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               Street address
@@ -443,14 +528,13 @@ const EmployeeEdit = () => {
             <label className={styles.inputLabel}>
               master's degree marks (%)
               <input
-                type="number"
+                type="text"
                 name="mastersMarks"
                 maxLength={3}
                 minLength={3}
                 value={data.mastersMarks ?? employee.mastersMarks}
                 onChange={handleChange}
                 className={styles.inputField}
-                placeholder="Master's Marks"
               />
             </label>
           </div>
@@ -465,7 +549,6 @@ const EmployeeEdit = () => {
                 value={data.mastersYear ?? employee.mastersYear}
                 onChange={handleChange}
                 className={styles.inputField}
-                placeholder="Master's pass year"
               />
             </label>
           </div>
@@ -489,14 +572,13 @@ const EmployeeEdit = () => {
             <label className={styles.inputLabel}>
               bachelor's/diploma marks(%)
               <input
-                type="number"
+                type="text"
                 name="bachelorsMarks"
                 value={data.bachelorsMarks ?? employee.bachelorsMarks}
                 maxLength={3}
                 minLength={3}
                 onChange={handleChange}
                 className={styles.inputField}
-                placeholder="Bachelor's Marks"
                 required
               />
             </label>
@@ -505,14 +587,13 @@ const EmployeeEdit = () => {
             <label className={styles.inputLabel}>
               bachelor's/Diploma pass year
               <input
-                type="number"
+                type="text"
                 name="bachelorsYear"
                 value={data.bachelorsYear ?? employee.bachelorsYear}
                 maxLength={4}
                 minLength={4}
                 onChange={handleChange}
                 className={styles.inputField}
-                placeholder="Master's pass year"
                 required
               />
             </label>
@@ -537,7 +618,7 @@ const EmployeeEdit = () => {
             <label className={styles.inputLabel}>
               higher secondary marks(%)
               <input
-                type="number"
+                type="text"
                 name="higherSecondaryMarks"
                 maxLength={3}
                 minLength={3}
@@ -546,7 +627,6 @@ const EmployeeEdit = () => {
                 }
                 onChange={handleChange}
                 className={styles.inputField}
-                placeholder="Higher Secondary marks"
                 required
               />
             </label>
@@ -555,14 +635,13 @@ const EmployeeEdit = () => {
             <label className={styles.inputLabel}>
               higher secodary pass year
               <input
-                type="number"
+                type="text"
                 name="higherSecondaryYear"
                 value={data.higherSecondaryYear ?? employee.higherSecondaryYear}
                 maxLength={4}
                 minLength={4}
                 onChange={handleChange}
                 className={styles.inputField}
-                placeholder="Higher Secondary pass year"
                 required
               />
             </label>
@@ -630,7 +709,9 @@ const EmployeeEdit = () => {
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               relieving letter
-              {employee.verification === "verified" && <FaCircleCheck color="green" />}
+              {employee.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
               <input
                 type="text"
                 className={styles.inputField}
@@ -827,6 +908,58 @@ const EmployeeEdit = () => {
                 type="email"
                 name="hiringHrEmail"
                 value={data.hiringHrEmail ?? employee.hiringHrEmail}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              ctc
+              <input
+                type="text"
+                name="ctc"
+                value={data.ctc ?? employee.ctc}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              fixed compensation
+              <input
+                type="text"
+                name="fixedCompensation"
+                value={data.fixedCompensation ?? employee.fixedCompensation}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              variable compensation
+              <input
+                type="text"
+                name="variableCompensation"
+                value={data.variableCompensation ?? employee.variableCompensation}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              probation period (days)
+              <input
+                type="text"
+                name="probationPeriod"
+                value={data.probationPeriod ?? employee.probationPeriod}
                 className={styles.inputField}
                 onChange={handleChange}
                 required

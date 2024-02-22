@@ -4,7 +4,7 @@ import { TbReportSearch } from "react-icons/tb";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
 import styles from "./employees.module.scss";
-import { MdAddBox } from "react-icons/md";
+import { MdAddBox, MdVerified } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Employees = () => {
@@ -30,7 +30,7 @@ const Employees = () => {
     },
     {
       catg_id: 3,
-      catg_name: "HUMAN RESOURCES",
+      catg_name: "HR",
     },
     {
       catg_id: 4,
@@ -38,7 +38,11 @@ const Employees = () => {
     },
     {
       catg_id: 5,
-      catg_name: "MENTOR",
+      catg_name: "MARKETING",
+    },
+    {
+      catg_id: 6,
+      catg_name: "OPERATION",
     },
   ];
   const [data, setData] = useState([]);
@@ -47,7 +51,7 @@ const Employees = () => {
   const [isOpenArray, setIsOpenArray] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     document.title = "Employees - TALENTFINER";
   }, []);
 
@@ -119,7 +123,6 @@ const Employees = () => {
       axios
         .get("https://talentfiner.in/backend/getEmpDaTa.php")
         .then((response) => {
-          console.log("called");
           // Cache the fetched teamData
           sessionStorage.setItem("employeeData", JSON.stringify(response.data));
           setData(response.data);
@@ -200,12 +203,15 @@ const Employees = () => {
             <div className={styles.employees}>
               {filterEmployee().map((employee) => (
                 <div key={employee.id} className={styles.employee}>
-                  {/* <div className={styles.editIcon}>
-                    <FaEdit />
-                  </div> */}
+                  {employee.verification === "verified" &&
+                  <div className={styles.verifiedIcon}>
+                    <MdVerified size={20}/>
+                  </div>
+                  }
                   <div className={styles.image}>
                     <img
                       src={`https://talentfiner.in/backend/${employee.selfiePhoto}`}
+                      style={{ filter: employee.currentStatus === "inactive" ? "grayscale(100%)" : "none" }}
                     />
                   </div>
                   <div className={styles.employeeDetails}>
@@ -222,7 +228,7 @@ const Employees = () => {
                     </div>
                     <div className={styles.employeeDetail}>
                       <p>EMAIL</p>
-                      <p>{employee.email.toLowerCase()}</p>
+                      <p>{employee.email?.toLowerCase()}</p>
                     </div>
                   </div>
                   <div className={styles.bottomBtn}>
@@ -231,7 +237,7 @@ const Employees = () => {
                       className={styles.bottomLink}
                     >
                       <button className={styles.btn2}>
-                        <FaExternalLinkAlt color="#08080B" size={10}/>
+                        <FaExternalLinkAlt color="#08080B" size={10} />
                         More details
                       </button>
                     </Link>
@@ -283,12 +289,11 @@ const Employees = () => {
                       className={styles.inputField}
                       required
                     >
-                      <option value="" disabled selected>
+                      <option value="" disabled selected >
                         --Select Gender--
                       </option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
-                      <option value="other">Prefer not to say</option>
                     </select>
                   </label>
                 </div>
@@ -361,28 +366,86 @@ const Employees = () => {
               </div>
               <div className={styles.formField}>
                 <label className={styles.inputLabel}>
-                  <input
-                    type="text"
+                  <select
                     name="designation"
                     value={formData.designation}
                     onChange={handleChange}
                     className={styles.inputField}
-                    placeholder="Designation"
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      --Select Designation--
+                    </option>
+                    <option value="Director">Director</option>
+                    <option value="HR Recruiter">HR Recruiter</option>
+                    <option value="HR Admin">HR Admin</option>
+                    <option value="HR Recruiter TL">HR Recruiter TL</option>
+                    <option value="HR Recruiter Associate">
+                      HR Recruiter Associate
+                    </option>
+                    <option value="HR Business Partner">
+                      HR Business Partner
+                    </option>
+
+                    <option value="Product Manager">Product Manager</option>
+                    <option value="Instructional Designer">
+                      Instructional Designer
+                    </option>
+                    <option value="Content Writer">Content Writer</option>
+
+                    <option value="Lead Generation Intern">
+                      Lead Generation Intern
+                    </option>
+                    <option value="Content Creator">Content Creator</option>
+                    <option value="Digital Marketing Intern">
+                      Digital Marketing Intern
+                    </option>
+
+                    <option value="BDA - Direct Sales">
+                      BDA - Direct Sales
+                    </option>
+                    <option value="BDA - Inside Sales">
+                      BDA - Inside Sales
+                    </option>
+                    <option value="BDA - Direct Sales TL">
+                      BDA - Direct Sales TL
+                    </option>
+                    <option value="BDA - Inside Sales TL">
+                      BDA - Inside Sales TL
+                    </option>
+
+                    <option value="Customer Support Associate">
+                      Customer Support Associate
+                    </option>
+                    <option value="Product Delivery Intern">
+                      Product Delivery Intern
+                    </option>
+                    <option value="Employee Workflow & Screening">
+                      Employee Workflow & Screening
+                    </option>
+                  </select>
                 </label>
               </div>
               <div className={styles.formField}>
                 <label className={styles.inputLabel}>
-                  <input
-                    type="text"
+                  <select
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
                     className={styles.inputField}
-                    placeholder="Department"
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      --Select Department--
+                    </option>
+                    <option value="HR">HR</option>
+                    <option value="Product Development">
+                      Product Development
+                    </option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Operation">Operation</option>
+                  </select>
                 </label>
               </div>
               <div>
