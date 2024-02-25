@@ -1,6 +1,6 @@
 import styles from "./navbar.module.scss";
 import { Link } from "react-router-dom";
-import { FaUserEdit } from "react-icons/fa";
+import { FaUserEdit, FaCalendar } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { useEffect } from "react";
 
@@ -33,6 +33,14 @@ const Navbar = () => {
                   <li>
                     <FaUserEdit  size={15} color="#fab437" />
                     <p>Employees</p>
+                  </li>
+                </Link>
+              )}
+              {role === "4dm1nr0le" && (
+                <Link className={styles.link} to="/leaves">
+                  <li>
+                    <FaCalendar  size={12} color="#fab437" />
+                    <p>Leaves</p>
                   </li>
                 </Link>
               )}

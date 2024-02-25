@@ -156,8 +156,8 @@ const EmployeeEdit = () => {
                 <option value="" disabled>
                   --Select--
                 </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
               </select>
             </label>
           </div>
@@ -187,9 +187,9 @@ const EmployeeEdit = () => {
                 <option value="" disabled>
                   --Select--
                 </option>
-                <option value="married">MARRIED</option>
-                <option value="unmarried">UNMARRIED</option>
-                <option value="divorcee">DIVORCEE</option>
+                <option value="MARRIED">MARRIED</option>
+                <option value="UNMARRIED">UNMARRIED</option>
+                <option value="DIVORCEE">DIVORCEE</option>
               </select>
             </label>
           </div>
@@ -277,47 +277,60 @@ const EmployeeEdit = () => {
                 <option value="" disabled>
                   --Select Designation--
                 </option>
-                <option value="Director">Director</option>
-                <option value="HR Recruiter">HR Recruiter</option>
-                <option value="HR Admin">HR Admin</option>
-                <option value="HR Recruiter TL">HR Recruiter TL</option>
-                <option value="HR Recruiter Associate">
-                  HR Recruiter Associate
-                </option>
-                <option value="HR Business Partner">HR Business Partner</option>
+                <option value="DIRECTOR">Director</option>
+                  <option value="HR ADMIN">HR Admin</option>
+                  <option value="HR OPERATIONS">HR Operations</option>
+                  <option value="HR RECRUITER">HR Recruiter</option>
+                  <option value="HR RECRUITER TL">HR Recruiter TL</option>
+                  <option value="HR RECRUITER ASSOCIATE">
+                    HR Recruiter Associate
+                  </option>
+                  <option value="HR BUSINESS PARTNER">
+                    HR Business Partner
+                  </option>
 
-                <option value="Product Manager">Product Manager</option>
-                <option value="Instructional Designer">
-                  Instructional Designer
-                </option>
-                <option value="Content Writer">Content Writer</option>
+                  <option value="GRAPHIC DESIGNER ASSOCIATE">
+                    Graphic Designer Associate
+                  </option>
+                  <option value="FSD TL">
+                    FSD TL
+                  </option>
 
-                <option value="Lead Generation Intern">
-                  Lead Generation Intern
-                </option>
-                <option value="Content Creator">Content Creator</option>
-                <option value="Digital Marketing Intern">
-                  Digital Marketing Intern
-                </option>
+                  <option value="PRODUCT MANAGER">Product Manager</option>
+                  <option value="INSTRUCTIONAL DESIGNER">
+                    Instructional Designer
+                  </option>
+                  <option value="CONTENT WRITER">Content Writer</option>
 
-                <option value="BDA - Direct Sales">BDA - Direct Sales</option>
-                <option value="BDA - Inside Sales">BDA - Inside Sales</option>
-                <option value="BDA - Direct Sales TL">
-                  BDA - Direct Sales TL
-                </option>
-                <option value="BDA - Inside Sales TL">
-                  BDA - Inside Sales TL
-                </option>
+                  <option value="LEAD GENERATION INTERN">
+                    Lead Generation Intern
+                  </option>
+                  <option value="CONTENT CREATOR">Content Creator</option>
+                  <option value="DIGITAL MARKETING INTERN">
+                    Digital Marketing Intern
+                  </option>
 
-                <option value="Customer Support Associate">
-                  Customer Support Associate
-                </option>
-                <option value="Product Delivery Intern">
-                  Product Delivery Intern
-                </option>
-                <option value="Employee Workflow & Screening">
-                  Employee Workflow & Screening
-                </option>
+                  <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
+                  <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
+                  <option value="BDA - DIRECT SALES TL">
+                    BDA - Direct Sales TL
+                  </option>
+                  <option value="BDA - INSIDE SALES TL">
+                    BDA - Inside Sales TL
+                  </option>
+
+                  <option value="CUSTOMER SUPPORT ASSOCIATE">
+                    Customer Support Associate
+                  </option>
+                  <option value="PRODUCT DELIVERY INTERN">
+                    Product Delivery Intern
+                  </option>
+                  <option value="EMPLOYEE WORKFLOW AND SCREENING">
+                    Employee Workflow & Screening
+                  </option>
+                  <option value="BUSINESS ENGLISH TRAINER">
+                    Business English Trainer
+                  </option>
               </select>
             </label>
           </div>
@@ -333,10 +346,10 @@ const EmployeeEdit = () => {
                   <option value="" disabled>
                     --Select--
                   </option>
-                  <option value="Manager">Manager</option>
-                  <option value="Team Lead">Team Lead</option>
-                  <option value="Associate">Associate</option>
-                  <option value="Intern">Intern</option>
+                  <option value="MANAGER">Manager</option>
+                  <option value="TEAM LEAD">Team Lead</option>
+                  <option value="ASSOCIATE">Associate</option>
+                  <option value="INTERN">Intern</option>
                 </select>
               </label>
             </div>

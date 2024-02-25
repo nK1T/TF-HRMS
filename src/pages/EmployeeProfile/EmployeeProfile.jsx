@@ -50,7 +50,7 @@ const EmployeeProfile = () => {
 
   const handleVerification = async (employeeId, newVerification) => {
     const markVerified = window.confirm(
-      "Are you sure you want to mark this employee as verified?"
+      "Are you sure?"
     );
     if (!markVerified) {
       return; // User clicked Cancel, do not mark verified

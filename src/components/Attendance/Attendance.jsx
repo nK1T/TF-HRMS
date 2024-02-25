@@ -18,7 +18,6 @@ const Attendance = ({ employeeId }) => {
         .get("https://talentfiner.in/backend/attendance/fetchAttendance.php")
         .then((response) => {
           // Cache the fetched attendanceData
-          console.log("api called");
           sessionStorage.setItem("attendanceData", JSON.stringify(response.data));
           setAttendanceData(response.data);
         })

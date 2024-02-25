@@ -5,11 +5,14 @@ import { Link } from "react-router-dom";
 import { IoFingerPrintSharp } from "react-icons/io5";
 import { TbUsersGroup, TbReportSearch } from "react-icons/tb";
 import { PiHandTapDuotone } from "react-icons/pi";
-import { FaRegCalendarAlt, FaUser } from "react-icons/fa";
-import { MdCelebration } from "react-icons/md";
+import { FaRegCalendarAlt, FaUser, FaWindowClose } from "react-icons/fa";
+import { MdCelebration, MdAddBox } from "react-icons/md";
 import Attendance from "../../components/Attendance/Attendance";
+import MonthlyReport from "../../components/MonthlyReport/MonthlyReport";
+import Leave from "../../components/Leave/Leave";
 
 const Dashboard = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [employeeId, setEmployeeId] = useState();
   const [teams, setTeams] = useState(null);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
@@ -51,8 +54,14 @@ const Dashboard = () => {
     { id: 32, date: "2024-11-15", name: "Guru Nanak Jayanti" },
     { id: 33, date: "2024-12-25", name: "Christmas Day" },
   ];
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     document.title = "Dashboard - TALENTFINER";
   }, []);
   useEffect(() => {
@@ -275,6 +284,31 @@ const Dashboard = () => {
           Attendance Report
         </p>
         <Attendance employeeId={employeeId} />
+      </div>
+      <div className={styles.monthlyReport}>
+        <p>
+          <TbReportSearch color="#fab437" />
+          Monthly Report ({new Date().getFullYear()})
+        </p>
+        <MonthlyReport employeeId={employeeId} />
+      </div>
+      <div className={styles.leave}>
+        <p>
+          <TbReportSearch color="#fab437" />
+          Leave
+          {!isOpen ? (
+          <button onClick={handleOpen} className={styles.addBtn}>
+            <MdAddBox color="#fab437" size={15} />
+            Apply
+          </button>
+        ) : (
+          <button onClick={handleClose} className={styles.addBtn}>
+            <FaWindowClose color="#fab437" size={12} />
+            close
+          </button>
+        )}
+        </p>
+        <Leave isOpen={isOpen} employeeId={employeeId}/>
       </div>
     </div>
   );

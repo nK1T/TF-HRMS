@@ -11,6 +11,7 @@ import Employees from "./pages/Employees/Employees";
 import Employeeattendance from "./pages/EmployeeAttendance/Employeeattendance";
 import EmployeeProfile from "./pages/EmployeeProfile/EmployeeProfile";
 import EmployeeEdit from "./pages/EmployeeEdit/EmployeeEdit";
+import Leaves from "./pages/Leaves/Leaves";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -90,6 +91,14 @@ function App() {
               element={
                 <PrivateRoute isAuthenticated={isAuthenticated}>
                   <EmployeeEdit />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/leaves"
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <Leaves />
                 </PrivateRoute>
               }
             />
