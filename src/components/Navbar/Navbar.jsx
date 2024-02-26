@@ -1,6 +1,6 @@
 import styles from "./navbar.module.scss";
 import { Link } from "react-router-dom";
-import { FaUserEdit, FaCalendar } from "react-icons/fa";
+import { FaUserEdit, FaCalendar,FaPenNib } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { useEffect } from "react";
 
@@ -9,9 +9,7 @@ const Navbar = () => {
   const role = localStorage.getItem("role");
   const profilePicture = localStorage.getItem("profilePicture");
 
-  useEffect(()=>{
-
-  },[isAuthenticated])
+  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <div className={styles.container}>
@@ -31,7 +29,7 @@ const Navbar = () => {
               {role === "4dm1nr0le" && (
                 <Link className={styles.link} to="/employees">
                   <li>
-                    <FaUserEdit  size={15} color="#fab437" />
+                    <FaUserEdit size={15} color="#fab437" />
                     <p>Employees</p>
                   </li>
                 </Link>
@@ -39,8 +37,16 @@ const Navbar = () => {
               {role === "4dm1nr0le" && (
                 <Link className={styles.link} to="/leaves">
                   <li>
-                    <FaCalendar  size={12} color="#fab437" />
+                    <FaCalendar size={12} color="#fab437" />
                     <p>Leaves</p>
+                  </li>
+                </Link>
+              )}
+              {role === "4dm1nr0le" && (
+                <Link className={styles.link} to="/resignations">
+                  <li>
+                    <FaPenNib size={12} color="#fab437" />
+                    <p>Resignations</p>
                   </li>
                 </Link>
               )}

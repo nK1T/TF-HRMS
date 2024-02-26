@@ -60,7 +60,8 @@ const Leaves = () => {
             <th style={{width:"100px"}}>From</th>
             <th style={{width:"100px"}}>To</th>
             <th>Days</th>
-            <th>Reason</th>
+            <th style={{width:"200px"}}>Leave type</th>
+            <th style={{width:"300px"}}>Reason</th>
             <th>Attachment</th>
             <th>Status</th>
             <th colSpan={2}>Action</th>
@@ -75,6 +76,7 @@ const Leaves = () => {
               <td>{item.fromDate}</td>
               <td>{item.toDate}</td>
               <td>{item.days}</td>
+              <td>{item.leaveType}</td>
               <td>{item.reason}</td>
               <td>
                 <button
@@ -94,7 +96,7 @@ const Leaves = () => {
                 <button className={styles.approve} onClick={() => handleStatus(item.id, "approved")} disabled={item.status==="approved"}>
                   Approve
                 </button>
-                <button className={styles.reject} onClick={() => handleStatus(item.id, "rejected")} disabled={item.status==="rejected"}>
+                <button className={styles.reject} onClick={() => handleStatus(item.id, "rejected")} disabled={item.status === "approved" || item.status === "rejected"}>
                   Reject
                 </button>
               </td>

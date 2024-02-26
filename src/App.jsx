@@ -12,6 +12,8 @@ import Employeeattendance from "./pages/EmployeeAttendance/Employeeattendance";
 import EmployeeProfile from "./pages/EmployeeProfile/EmployeeProfile";
 import EmployeeEdit from "./pages/EmployeeEdit/EmployeeEdit";
 import Leaves from "./pages/Leaves/Leaves";
+import Resignation from "./pages/Resignation/Resignation";
+import Resignations from "./pages/Resignations/Resignations";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -60,6 +62,14 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/resignation-page"
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <Resignation />
+            </PrivateRoute>
+          }
+        />
         {role === "4dm1nr0le" && (
           <>
             <Route
@@ -99,6 +109,14 @@ function App() {
               element={
                 <PrivateRoute isAuthenticated={isAuthenticated}>
                   <Leaves />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/resignations"
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <Resignations />
                 </PrivateRoute>
               }
             />

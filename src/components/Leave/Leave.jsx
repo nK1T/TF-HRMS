@@ -22,10 +22,7 @@ const Leave = ({ isOpen, employeeId }) => {
           "https://talentfiner.in/backend/leaves/fetchLeaves.php"
         );
         setLeavesData(response.data);
-        sessionStorage.setItem(
-          "leavesData",
-          JSON.stringify(response.data)
-        );
+        sessionStorage.setItem("leavesData", JSON.stringify(response.data));
       } catch (error) {
         console.error("Error fetching monthly report data:", error);
       }
@@ -50,6 +47,7 @@ const Leave = ({ isOpen, employeeId }) => {
     formData.append("from", data.from);
     formData.append("to", data.to);
     formData.append("days", data.days);
+    formData.append("leaveType", data.leaveType);
     formData.append("reason", data.reason);
     formData.append("attachment", data.attachment[0]);
     try {
@@ -64,7 +62,7 @@ const Leave = ({ isOpen, employeeId }) => {
         }
       );
       if (response.data.success) {
-        window.alert("Leave applied")
+        window.alert("Leave applied");
         reset(); // Reset form fields
       }
     } catch (error) {
@@ -111,6 +109,21 @@ const Leave = ({ isOpen, employeeId }) => {
                 {errors.days && <span>This field is required</span>}
               </div>
               <div className={styles.formField}>
+                <label htmlFor="leaveType">Leave type</label>
+                <select
+                  id="leaveType"
+                  {...register("leaveType", { required: true })}
+                  className={styles.inputField}
+                >
+                  <option value="">--Select Reason--</option>
+                  <option value="Sick Leave">Sick Leave</option>
+                  <option value="Optional Leave">Optional Leave</option>
+                  <option value="Casual Leave">Casual Leave</option>
+                  <option value="Compensatory Leave">Compensatory Leave</option>
+                </select>
+                {errors.leaveType && <span>This field is required</span>}
+              </div>
+              <div className={styles.formField}>
                 <label htmlFor="reason">Reason</label>
                 <textarea
                   id="reason"
@@ -119,7 +132,6 @@ const Leave = ({ isOpen, employeeId }) => {
                 />
                 {errors.reason && <span>This field is required</span>}
               </div>
-
               <div className={styles.formField}>
                 <label htmlFor="attachment">Attachment</label>
                 <input
@@ -145,6 +157,7 @@ const Leave = ({ isOpen, employeeId }) => {
               <th>From</th>
               <th>To</th>
               <th>Days</th>
+              <th>Leave type</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -156,6 +169,7 @@ const Leave = ({ isOpen, employeeId }) => {
                 <td>{item.fromDate}</td>
                 <td>{item.toDate}</td>
                 <td>{item.days}</td>
+                <td>{item.leaveType}</td>
                 <td>{item.status}</td>
               </tr>
             ))}

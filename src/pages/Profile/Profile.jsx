@@ -8,13 +8,16 @@ import { MdAttachFile } from "react-icons/md";
 import axios from "axios";
 import Loader from "../../components/Loader/loader";
 import { IoLogOut } from "react-icons/io5";
+import { ImExit } from "react-icons/im";
 import { ClipLoader } from "react-spinners";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = ({ setRole }) => {
   const [data, setData] = useState(null);
   const [uemail, setUemail] = useState();
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("basicDetails");
+  const navigate = useNavigate();
   const [employee, setEmployee] = useState({
     fullName: "",
     gender: "",
@@ -223,6 +226,12 @@ const Profile = ({ setRole }) => {
     if (missingField) {
       const fieldName = missingField;
       window.alert(`Please fill ${fieldName} before proceeding.`);
+      return;
+    }
+
+    // Ask for confirmation before submission
+    const isConfirmed = window.confirm("Are you sure you want to submit?");
+    if (!isConfirmed) {
       return;
     }
 
@@ -764,6 +773,7 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 Master's degree certificate
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -816,6 +826,7 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 Bachelor's/diploma degree certificate
                 <span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -869,6 +880,7 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 higher secondary certificate
                 <span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1054,6 +1066,7 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 relieving letter
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1120,6 +1133,7 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 cancelled cheque<span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1141,6 +1155,7 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 e-aadhaar<span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1158,6 +1173,7 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 pan card<span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1175,6 +1191,7 @@ const Profile = ({ setRole }) => {
             <div className={styles.formField}>
               <label className={styles.inputLabel}>
                 selfie photo<span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1193,6 +1210,7 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 professional photo
                 <span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1230,6 +1248,7 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 signed offer letter
                 <span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1248,6 +1267,7 @@ const Profile = ({ setRole }) => {
               <label className={styles.inputLabel}>
                 signed non-disclosure agreement
                 <span className={styles.required}>*</span>
+                <span className={styles.maxSize}>(max size 1mb)</span>
                 {data.verification === "verified" && (
                   <FaCircleCheck color="green" />
                 )}
@@ -1401,6 +1421,13 @@ const Profile = ({ setRole }) => {
       setActiveSection(nextSection);
     }
   };
+  const handleResign = ()=>{
+    const confirmation = window.confirm("Are you sure you want to move to the resignation page?");
+    if(!confirmation){
+      return
+    }
+    navigate('/resignation-page')
+  }
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -1469,17 +1496,25 @@ const Profile = ({ setRole }) => {
             <p>pays</p>
           </li>
           <li className={styles.link}>
-            <button onClick={handleLogout}>
-              <IoLogOut />
-              Logout
-            </button>
+              <button onClick={handleResign}>
+                <ImExit />
+                <p>Self Resignation</p>
+              </button>
           </li>
         </ul>
+        <div className={styles.logout}>
+          <button onClick={handleLogout}>
+            <IoLogOut />
+            Logout
+          </button>
+        </div>
       </div>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         {data.verification === "pending" && (
           <p className={styles.pending}>
-            Your documents are under verification.
+            Your documents are currently under verification, with an estimated
+            completion time of 48 hours. For assistance, please contact our HR
+            support.
           </p>
         )}
         {data.verification === "reupload" && (

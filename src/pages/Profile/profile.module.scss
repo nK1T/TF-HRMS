@@ -7,11 +7,30 @@
     top:  60px;
     display: flex;
     height: 40px;
+    align-items: center;
+    justify-content: space-between;
     background-color: $text;
+    .logout{
+      text-decoration: none;
+      button{
+        cursor: pointer;
+        margin: 10px;
+        padding: 7px 3px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        color: $text;
+        border: none;
+        border-radius: 2px;
+        background-color: $accent;
+        transition: all .1s ease;
+      }
+    }
     .links {
       display: flex;
       align-items: center;
-      gap: 30px;
+      gap: 20px;
       list-style: none;
       padding-inline-start: 10px;
       .selected {
@@ -30,15 +49,16 @@
         font-size: 0.7rem;
         button {
           cursor: pointer;
+          margin: 10px;
           padding: 7px 3px;
           font-weight: 700;
           display: flex;
           align-items: center;
           gap: 3px;
-          color: $text;
+          color: $background;
           border: none;
           border-radius: 2px;
-          background-color: $accent;
+          background-color: crimson;
           transition: all .1s ease;
         }
       }
@@ -75,6 +95,12 @@
         font-weight: 700;
         color: $text;
         text-transform: uppercase;
+        .maxSize{
+          margin-left: 5px;
+          text-transform: none;
+          font-size: .7rem;
+          color: crimson;
+        }
         .inputField {
           width: 100%;
           padding: 10px;
@@ -89,7 +115,7 @@
             box-shadow: 0 0 5px $accent;
           }
           &:disabled {
-            background-color: white;
+            background-color: #e6e6e6;
           }
         }
       }
@@ -140,7 +166,7 @@
     .header {
       justify-content: center;
       .links {
-        gap: 25px;
+        gap: 20px;
         .link {
           p {
             display: none;

@@ -143,23 +143,29 @@ const Employees = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://talentfiner.in/backend/regEmployee.php",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+        const response = await axios.post(
+            "https://talentfiner.in/backend/regEmployee.php",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+
+        if (response.data.status) {
+            // Employee registered successfully
+            window.alert(response.data.message);
+            window.location.reload();
+        } else {
+            window.alert(response.data.message);
         }
-      );
-      window.alert("Employee Register Successfully");
-      console.log(formData);
-      window.location.reload();
     } catch (error) {
-      window.alert("An unexpected error occurred. Please try again later.");
-      console.error("Error:", error);
+        window.alert("An unexpected error occurred. Please try again later.");
+        console.error("Error:", error);
     }
-  };
+};
+
 
   return (
     <div className={styles.container}>

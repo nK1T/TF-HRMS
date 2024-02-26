@@ -1,0 +1,53 @@
+@import "../../App.scss";
+
+.tableContainer {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: $text transparent;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid $accent;
+      padding: 10px;
+      text-align: center;
+    }
+    td {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: #717171;
+      button {
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 3px;
+        padding: 3px;
+        color: $accent;
+        background-color: $text;
+        border: none;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.725);
+        }
+        &:disabled {
+          background-color: $ltext;
+          cursor: not-allowed;
+        }
+      }
+    }
+    th {
+      border: 1px solid black;
+      border-top: none;
+      font-size: 0.9rem;
+      background-color: #fab437;
+      color: $text;
+      font-weight: 600;
+    }
+  }
+}
