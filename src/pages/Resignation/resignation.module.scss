@@ -31,19 +31,25 @@
       }
     }
   }
-  button {
-    margin-top: 10px;
-    grid-column: span 2; /* Make the button span across two columns */
-    padding: 0.5rem 1rem;
-    background-color: $text; /* Change button color as needed */
-    color: $accent;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px; /* Adjust font size */
-    font-weight: 600;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.723); /* Change hover color as needed */
+  .applyBtn{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 30px;
+    button {
+      margin-top: 10px;
+      grid-column: span 2; /* Make the button span across two columns */
+      padding: 0.5rem 1rem;
+      background-color: $text; /* Change button color as needed */
+      color: $accent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px; /* Adjust font size */
+      font-weight: 600;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.723); /* Change hover color as needed */
+      }
     }
   }
 }

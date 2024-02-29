@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Profile = ({ setRole }) => {
   const [data, setData] = useState(null);
   const [uemail, setUemail] = useState();
+  const [employeeId, setEmpId] = useState();
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("basicDetails");
   const navigate = useNavigate();
@@ -83,6 +84,8 @@ const Profile = ({ setRole }) => {
       localStorage.removeItem("profilePicture");
       localStorage.removeItem("team");
       localStorage.removeItem("role");
+      localStorage.removeItem("countdown");
+      localStorage.removeItem("isCheckedIn");
       window.location.href = "/login";
     }
   };
@@ -90,6 +93,7 @@ const Profile = ({ setRole }) => {
     document.title = "Profile - TALENTFINER HRMS";
     window.scrollTo(0, 0);
     setUemail(localStorage.getItem("email"));
+    setEmpId(localStorage.getItem("employeeId"));
   }, []);
 
   useEffect(() => {
@@ -106,6 +110,8 @@ const Profile = ({ setRole }) => {
           localStorage.setItem("profilePicture", response.data.selfiePhoto);
           localStorage.setItem("team", response.data.team);
           localStorage.setItem("role", response.data.secretRole);
+          localStorage.setItem("fullName", response.data.fullName);
+          localStorage.setItem("designation", response.data.designation);
           setRole(response.data.secretRole);
         }
       } catch (error) {
@@ -215,7 +221,6 @@ const Profile = ({ setRole }) => {
       "hiringHrEmail",
       "ctc",
       "fixedCompensation",
-      "variableCompensation",
       "probationPeriod",
     ];
 
@@ -239,7 +244,7 @@ const Profile = ({ setRole }) => {
     setLoading(true);
     axios
       .post(
-        `https://talentfiner.in/backend/submitEmpDaTa.php?email=${uemail}`,
+        `https://talentfiner.in/backend/submitEmpDaTa.php?employeeId=${employeeId}`,
         employee,
         {
           headers: {
@@ -763,7 +768,7 @@ const Profile = ({ setRole }) => {
                   <option value="" disabled selected>
                     --Select--
                   </option>
-                  <option value="bacheors">BACHELOR'S DEGREE</option>
+                  <option value="bachelors">BACHELOR'S DEGREE</option>
                   <option value="masters">MASTER'S DEGREE</option>
                   <option value="phd">Ph.D. DEGREE</option>
                   <option value="diploma">DIPLOMA DEGREE</option>
@@ -1421,18 +1426,20 @@ const Profile = ({ setRole }) => {
       setActiveSection(nextSection);
     }
   };
-  const handleResign = ()=>{
-    const confirmation = window.confirm("Are you sure you want to move to the resignation page?");
-    if(!confirmation){
-      return
+  const handleResign = () => {
+    const confirmation = window.confirm(
+      "Are you sure you want to move to the resignation page?"
+    );
+    if (!confirmation) {
+      return;
     }
-    navigate('/resignation-page')
-  }
+    navigate("/resignation-page");
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <ul className={styles.links}>
-          <li
+          {/* <li
             className={`${styles.link} ${
               activeSection === "basicDetails" && styles.selected
             }`}
@@ -1494,12 +1501,12 @@ const Profile = ({ setRole }) => {
           >
             <FaRupeeSign color="#fab437" size={15} />
             <p>pays</p>
-          </li>
+          </li> */}
           <li className={styles.link}>
-              <button onClick={handleResign}>
-                <ImExit />
-                <p>Self Resignation</p>
-              </button>
+            <button onClick={handleResign}>
+              <ImExit />
+              <p>Self Resignation</p>
+            </button>
           </li>
         </ul>
         <div className={styles.logout}>
@@ -1517,13 +1524,16 @@ const Profile = ({ setRole }) => {
             support.
           </p>
         )}
+        {data.verification === "verified" && (
+          <p className={styles.verified}>Your documents are verified.</p>
+        )}
         {data.verification === "reupload" && (
           <p className={styles.reupload}>
             Check the documents and reupload the required document.
           </p>
         )}
-        {renderFormFields(activeSection)}
-        <div className={styles.navigationButtons}>
+        {/* {renderFormFields(activeSection)} */}
+        {/* <div className={styles.navigationButtons}>
           <button
             className={styles.btn}
             onClick={handlePrevClick}
@@ -1545,6 +1555,1091 @@ const Profile = ({ setRole }) => {
               Next
             </button>
           )}
+        </div> */}
+        <div className={styles.heading}>
+          <FaUser color="#fab437" size={10} />
+          <p>Basic details</p>
+        </div>
+        <div className={styles.basicDetails}>
+          <div className={styles.formField}>
+            <label key={data.id} className={styles.inputLabel}>
+              Full Name<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="fullName"
+                onChange={handleChange}
+                value={data.fullName ?? employee.fullName}
+                className={styles.inputField}
+                placeholder="Full name"
+                disabled={data.fullName !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              gender<span className={styles.required}>*</span>
+              <select
+                name="gender"
+                value={data.gender ?? employee.gender}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.gender !== null}
+                required
+              >
+                <option value="" disabled>
+                  --Select--
+                </option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Date of birth (mm/dd/yyyy)
+              <span className={styles.required}>*</span>
+              <input
+                type="date"
+                name="dob"
+                value={data.dob ?? employee.dob}
+                onChange={(e) => handleDateChange(e.target.value)}
+                className={styles.inputField}
+                disabled={data.dob !== null}
+                required
+              />
+            </label>
+          </div>
+          {/* <div className={styles.formField}>
+                    <label className={styles.inputLabel}>
+                      age<span className={styles.required}>*</span>
+                      <input
+                        type="number"
+                        name="age"
+                        value={data.age}
+                        onChange={handleChange}
+                        className={styles.inputField}
+                        placeholder="Age"
+                        disabled={data.age !== null}
+                        required
+                      />
+                    </label>
+                  </div> */}
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              marital status<span className={styles.required}>*</span>
+              <select
+                type="text"
+                name="maritalStatus"
+                value={data.maritalStatus ?? employee.maritalStatus}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.maritalStatus !== null}
+                required
+              >
+                <option value="" disabled>
+                  --Select--
+                </option>
+                <option value="MARRIED">MARRIED</option>
+                <option value="UNMARRIED">UNMARRIED</option>
+                <option value="DIVORCEE">DIVORCEE</option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              contact number<span className={styles.required}>*</span>
+              <input
+                type="number"
+                name="contactNumber"
+                value={data.contactNumber ?? employee.contactNumber}
+                className={styles.inputField}
+                onChange={handleChange}
+                placeholder="Contact Number"
+                pattern="\d*"
+                maxLength={10}
+                minLength={10}
+                disabled={data.contactNumber !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              whatsapp number<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="whatsappNumber"
+                onChange={handleChange}
+                value={data.whatsappNumber ?? employee.whatsappNumber}
+                className={styles.inputField}
+                placeholder="WhatsApp Number"
+                pattern="\d*"
+                maxLength={10}
+                minLength={10}
+                disabled={data.whatsappNumber !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              email ID<span className={styles.required}>*</span>
+              <input
+                type="email"
+                name="email"
+                onChange={handleChange}
+                value={data.email ?? employee.email}
+                className={styles.inputField}
+                placeholder="Email ID"
+                disabled={data.email !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              official email id
+              <input
+                type="email"
+                name="officialEmail"
+                onChange={handleChange}
+                value={data.officialEmail ?? employee.officialEmail}
+                className={styles.inputField}
+                disabled={data.officialEmail !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Employee ID<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="employeeId"
+                value={data.employeeId ?? employee.employeeId}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Employee ID"
+                disabled={data.employeeId !== null}
+                required
+              />
+            </label>
+          </div>
+          {/* <div className={styles.formField}>
+              <label className={styles.inputLabel}>
+                designation<span className={styles.required}>*</span>
+                <input
+                  type="text"
+                  name="designation"
+                  onChange={handleChange}
+                  value={data.designation ?? employee.designation}
+                  className={styles.inputField}
+                  placeholder="Designation"
+                  disabled={data.designation !== null}
+                  required
+                />
+              </label>
+            </div> */}
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              designation<span className={styles.required}>*</span>
+              <select
+                name="designation"
+                value={data.designation ?? employee.designation}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.designation !== null}
+                required
+              >
+                <option value="" disabled>
+                  --Select Designation--
+                </option>
+                <option value="DIRECTOR">Director</option>
+                <option value="HR ADMIN">HR Admin</option>
+                <option value="HR OPERATIONS">HR Operations</option>
+                <option value="HR RECRUITER">HR Recruiter</option>
+                <option value="HR RECRUITER TL">HR Recruiter TL</option>
+                <option value="HR RECRUITER ASSOCIATE">
+                  HR Recruiter Associate
+                </option>
+                <option value="HR BUSINESS PARTNER">HR Business Partner</option>
+
+                <option value="GRAPHIC DESIGNER ASSOCIATE">
+                  Graphic Designer Associate
+                </option>
+                <option value="FSD TL">FSD TL</option>
+
+                <option value="PRODUCT MANAGER">Product Manager</option>
+                <option value="INSTRUCTIONAL DESIGNER">
+                  Instructional Designer
+                </option>
+                <option value="CONTENT WRITER">Content Writer</option>
+
+                <option value="LEAD GENERATION INTERN">
+                  Lead Generation Intern
+                </option>
+                <option value="CONTENT CREATOR">Content Creator</option>
+                <option value="DIGITAL MARKETING INTERN">
+                  Digital Marketing Intern
+                </option>
+
+                <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
+                <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
+                <option value="BDA - DIRECT SALES TL">
+                  BDA - Direct Sales TL
+                </option>
+                <option value="BDA - INSIDE SALES TL">
+                  BDA - Inside Sales TL
+                </option>
+
+                <option value="CUSTOMER SUPPORT ASSOCIATE">
+                  Customer Support Associate
+                </option>
+                <option value="PRODUCT DELIVERY INTERN">
+                  Product Delivery Intern
+                </option>
+                <option value="EMPLOYEE WORKFLOW AND SCREENING">
+                  Employee Workflow & Screening
+                </option>
+
+                <option value="BUSINESS ENGLISH TRAINER">
+                  Business English Trainer
+                </option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Role
+              <select
+                name="role"
+                value={data.role ?? employee.role}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.role !== null}
+              >
+                <option value="" disabled>
+                  --Select--
+                </option>
+                <option value="MANAGER">Manager</option>
+                <option value="TEAM LEAD">Team Lead</option>
+                <option value="ASSOCIATE">Associate</option>
+                <option value="INTERN">Intern</option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Street address<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="streetAddress"
+                onChange={handleChange}
+                value={data.streetAddress ?? employee.streetAddress}
+                className={styles.inputField}
+                placeholder="Street Address"
+                disabled={data.streetAddress !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              city<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="city"
+                value={data.city ?? employee.city}
+                className={styles.inputField}
+                onChange={handleChange}
+                placeholder="City"
+                disabled={data.city !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              state<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="state"
+                onChange={handleChange}
+                value={data.state ?? employee.state}
+                className={styles.inputField}
+                placeholder="State"
+                disabled={data.state !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              zip code<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="zipCode"
+                value={data.zipCode ?? employee.zipCode}
+                className={styles.inputField}
+                onChange={handleChange}
+                placeholder="ZIP code"
+                disabled={data.zipCode !== null}
+                minLength="6"
+                maxLength="6"
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              country<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="country"
+                value={data.country ?? employee.country}
+                className={styles.inputField}
+                onChange={handleChange}
+                placeholder="Country"
+                disabled={data.country !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              father name<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="fatherName"
+                value={data.fatherName ?? employee.fatherName}
+                className={styles.inputField}
+                onChange={handleChange}
+                placeholder="Father Name"
+                disabled={data.fatherName !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              father occupation
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="fatherOccupation"
+                value={data.fatherOccupation ?? employee.fatherOccupation}
+                className={styles.inputField}
+                placeholder="Father Occupation"
+                onChange={handleChange}
+                disabled={data.fatherOccupation !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Father Contact Number
+              <input
+                type="text"
+                name="fatherNo"
+                value={data.fatherNo ?? employee.fatherNo}
+                className={styles.inputField}
+                placeholder="Father Contact Number"
+                minLength={10}
+                maxLength={10}
+                onChange={handleChange}
+                disabled={data.fatherNo !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Mother name<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="motherName"
+                value={data.motherName ?? employee.motherName}
+                className={styles.inputField}
+                placeholder="Mother Name"
+                onChange={handleChange}
+                disabled={data.motherName !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              mother occupation
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="motherOccupation"
+                value={data.motherOccupation ?? employee.motherOccupation}
+                className={styles.inputField}
+                placeholder="Mother Occupation"
+                onChange={handleChange}
+                disabled={data.motherOccupation !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              mother contact number
+              <input
+                type="text"
+                name="motherNo"
+                value={data.motherNo ?? employee.motherNo}
+                className={styles.inputField}
+                minLength={10}
+                maxLength={10}
+                onChange={handleChange}
+                placeholder="Mother Contact Number"
+                disabled={data.motherNo !== null}
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
+          <IoMdSchool color="#fab437" size={15} />
+          <p>Qualification</p>
+        </div>
+        <div className={styles.qualifications}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              highest qualification
+              <span className={styles.required}>*</span>
+              <select
+                name="highestQualification"
+                value={
+                  data.highestQualification ?? employee.highestQualification
+                }
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.highestQualification !== null}
+                required
+              >
+                <option value="" disabled selected>
+                  --Select--
+                </option>
+                <option value="bachelors">BACHELOR'S DEGREE</option>
+                <option value="masters">MASTER'S DEGREE</option>
+                <option value="phd">Ph.D. DEGREE</option>
+                <option value="diploma">DIPLOMA DEGREE</option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Master's degree certificate
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="mastersCertificate"
+                // value={data.mastersCertificate}
+                disabled={
+                  data.mastersCertificate !== null &&
+                  data.mastersCertificate !== ""
+                }
+                accept=".pdf, .jpg, .jpeg"
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              master's degree marks (%)
+              <input
+                type="number"
+                name="mastersMarks"
+                maxLength={3}
+                minLength={3}
+                value={data.mastersMarks ?? employee.mastersMarks}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Master's Marks"
+                disabled={data.mastersMarks !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              master's degree pass year
+              <input
+                type="text"
+                maxLength={4}
+                minLength={4}
+                name="mastersYear"
+                value={data.mastersYear ?? employee.mastersYear}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Master's pass year"
+                disabled={data.mastersYear !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Bachelor's/diploma degree certificate
+              <span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="bachelorsCertificate"
+                disabled={data.bachelorsCertificate !== null}
+                accept=".pdf, .jpg, .jpeg"
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              bachelor's/diploma degree marks(%)
+              <span className={styles.required}>*</span>
+              <input
+                type="number"
+                name="bachelorsMarks"
+                value={data.bachelorsMarks ?? employee.bachelorsMarks}
+                maxLength={3}
+                minLength={3}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Bachelor's Marks"
+                disabled={data.bachelorsMarks !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              bachelor's/Diploma degree pass year
+              <span className={styles.required}>*</span>
+              <input
+                type="number"
+                name="bachelorsYear"
+                value={data.bachelorsYear ?? employee.bachelorsYear}
+                maxLength={4}
+                minLength={4}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Master's pass year"
+                disabled={data.bachelorsYear !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              higher secondary certificate
+              <span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="higherSecondaryCertificate"
+                disabled={data.higherSecondaryCertificate !== null}
+                accept=".pdf, .jpg, .jpeg"
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              higher secondary marks(%)
+              <span className={styles.required}>*</span>
+              <input
+                type="number"
+                name="higherSecondaryMarks"
+                maxLength={3}
+                minLength={3}
+                value={
+                  data.higherSecondaryMarks ?? employee.higherSecondaryMarks
+                }
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Higher Secondary marks"
+                disabled={data.higherSecondaryMarks !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              higher secondary degree pass year
+              <span className={styles.required}>*</span>
+              <input
+                type="number"
+                name="higherSecondaryYear"
+                value={data.higherSecondaryYear ?? employee.higherSecondaryYear}
+                maxLength={4}
+                minLength={4}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Higher Secondary pass year"
+                disabled={data.higherSecondaryYear !== null}
+                required
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
+          <BsBuildingsFill color="#fab437" />
+          <p>Work Experience</p>
+        </div>
+        <div className={styles.workExperience}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              work experience (years)
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="workExperienceYears"
+                maxLength={2}
+                minLength={2}
+                value={data.workExperienceYears ?? employee.workExperienceYears}
+                className={styles.inputField}
+                onChange={handleChange}
+                // placeholder="Full name"
+                disabled={data.workExperienceYears !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              previous designation
+              <input
+                type="text"
+                name="previousDesignation"
+                value={data.previousDesignation ?? employee.previousDesignation}
+                className={styles.inputField}
+                onChange={handleChange}
+                disabled={data.previousDesignation !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              previous organization name
+              <input
+                type="text"
+                name="previousOrganization"
+                value={
+                  data.previousOrganization ?? employee.previousOrganization
+                }
+                className={styles.inputField}
+                onChange={handleChange}
+                // placeholder="Full name"
+                disabled={data.previousOrganization !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              previous organization address
+              <input
+                type="text"
+                name="previousOrganizationAddress"
+                value={
+                  data.previousOrganizationAddress ??
+                  employee.previousOrganizationAddress
+                }
+                className={styles.inputField}
+                onChange={handleChange}
+                // placeholder="Full name"
+                disabled={data.previousOrganizationAddress !== null}
+              />
+            </label>
+          </div>
+          {/* <div className={styles.formField}>
+                    <label className={styles.inputLabel}>
+                      previous organization city
+                      <input
+                        type="text"
+                        name="previousOrganizationCity"
+                        value={data.previousOrganizationCity}
+                        className={styles.inputField}
+                        onChange={handleChange}
+                        // placeholder="Full name"
+                        disabled={data.previousOrganizationCity !== null}
+                      />
+                    </label>
+                  </div> */}
+          {/* <div className={styles.formField}>
+                    <label className={styles.inputLabel}>
+                      previous organization state
+                      <input
+                        type="text"
+                        name="previousOrganizationState"
+                        value={data.previousOrganizationState}
+                        className={styles.inputField}
+                        onChange={handleChange}
+                        // placeholder="Full name"
+                        disabled={data.previousOrganizationState !== null}
+                      />
+                    </label>
+                  </div> */}
+          {/* <div className={styles.formField}>
+                    <label className={styles.inputLabel}>
+                      previous organization ZIP code
+                      <input
+                        type="text"
+                        name="previousOrganizationZipCode"
+                        value={data.previousOrganizationZipCode}
+                        className={styles.inputField}
+                        onChange={handleChange}
+                        // placeholder="Full name"
+                        disabled={data.previousOrganizationZipCode !== null}
+                      />
+                    </label>
+                  </div> */}
+          {/* <div className={styles.formField}>
+                    <label className={styles.inputLabel}>
+                      previous organization country
+                      <input
+                        type="text"
+                        name="previousOrganizationCountry"
+                        value={data.previousOrganizationCountry}
+                        className={styles.inputField}
+                        onChange={handleChange}
+                        // placeholder="Full name"
+                        disabled={data.previousOrganizationCountry !== null}
+                      />
+                    </label>
+                  </div> */}
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              relieving letter
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="relievingLetter"
+                onChange={handleChange}
+                // value={data.relievingLetter}
+                disabled={data.relievingLetter !== null}
+                accept=".pdf, .doc, .docx, .jpg, .jpeg"
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
+          <IoIosDocument color="#fab437" size={15} />
+          <p>Documents</p>
+        </div>
+        <div className={styles.documents}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              e-aadhaar<span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="eaadhaar"
+                onChange={handleChange}
+                // value={data.eaadhaar}
+                disabled={data.eaadhaar !== null}
+                accept=".pdf, .jpg, .jpeg"
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              pan card<span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="panCard"
+                onChange={handleChange}
+                // value={data.panCard}
+                accept=".pdf, .jpg, .jpeg"
+                disabled={data.panCard !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              selfie photo<span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="selfiePhoto"
+                onChange={handleChange}
+                accept=".jpg, .jpeg"
+                // value={data.selfiePhoto}
+                disabled={data.selfiePhoto !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              professional photo
+              <span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="professionalPhoto"
+                onChange={handleChange}
+                accept=".jpg, .jpeg"
+                // value={data.professionalPhoto}
+                disabled={data.professionalPhoto !== null}
+                required
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
+          <BsBank2 color="#fab437" />
+          <p>Bank details</p>
+        </div>
+        <div className={styles.bankDetails}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              bank name<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="bankName"
+                value={data.bankName ?? employee.bankName}
+                className={styles.inputField}
+                onChange={handleChange}
+                // placeholder="Full name"
+                disabled={data.bankName !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              account number<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="accountNumber"
+                value={data.accountNumber ?? employee.accountNumber}
+                className={styles.inputField}
+                onChange={handleChange}
+                // placeholder="Full name"
+                disabled={data.accountNumber !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              ifsc<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="ifsc"
+                value={data.ifsc ?? employee.ifsc}
+                className={styles.inputField}
+                onChange={handleChange}
+                // placeholder="Full name"
+                disabled={data.ifsc !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              cancelled cheque<span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="cancelledCheque"
+                disabled={data.cancelledCheque !== null}
+                accept=".pdf, .jpg, .jpeg"
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
+          <MdAttachFile color="#fab437" size={15} />
+          <p>onboarding details</p>
+        </div>
+        <div className={styles.onboarding}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              onboarding date<span className={styles.required}>*</span>
+              <input
+                type="date"
+                name="onboardingDate"
+                value={data.onboardingDate ?? employee.onboardingDate}
+                className={styles.inputField}
+                onChange={(e) => handleDateChangeon(e.target.value)}
+                disabled={data.onboardingDate !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              signed offer letter
+              <span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="signedOfferLetter"
+                onChange={handleChange}
+                accept=".pdf, .doc, .docx .jpg, .jpeg"
+                // value={data.signedOfferLetter ?? employee.signedOfferLetter}
+                disabled={data.signedOfferLetter !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              signed non-disclosure agreement
+              <span className={styles.required}>*</span>
+              <span className={styles.maxSize}>(max size 1mb)</span>
+              {data.verification === "verified" && (
+                <FaCircleCheck color="green" />
+              )}
+              <input
+                type="file"
+                name="signedNonDisclosureAgreement"
+                onChange={handleChange}
+                accept=".pdf, .doc, .docx, .jpg, .jpeg"
+                // value={data.signedNonDisclosureAgreement ?? employee.signedNonDisclosureAgreement}
+                disabled={data.signedNonDisclosureAgreement !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              offer letter secret code
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="olsCode"
+                value={data.olsCode ?? employee.olsCode}
+                onChange={handleChange}
+                disabled={data.olsCode !== null}
+                className={styles.inputField}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Hiring hr email ID
+              <span className={styles.required}>*</span>
+              <input
+                type="email"
+                name="hiringHrEmail"
+                value={data.hiringHrEmail ?? employee.hiringHrEmail}
+                className={styles.inputField}
+                onChange={handleChange}
+                disabled={data.hiringHrEmail !== null}
+                required
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
+          <FaRupeeSign color="#fab437" size={15} />
+          <p>pay details</p>
+        </div>
+        <div className={styles.pays}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Cost To Company (CTC)<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="ctc"
+                value={data.ctc ?? employee.ctc}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.ctc !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              fixed compensation<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="fixedCompensation"
+                value={data.fixedCompensation ?? employee.fixedCompensation}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.fixedCompensation !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Variable compensation<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="variableCompensation"
+                value={
+                  data.variableCompensation ?? employee.variableCompensation
+                }
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.variableCompensation !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              probation period (days)
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="probationPeriod"
+                value={data.probationPeriod ?? employee.probationPeriod}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.probationPeriod !== null}
+                required
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.submitBtn}>
+        <button className={styles.btn} type="submit">
+          Submit
+          {loading && <ClipLoader color="#fab437" size={12} />}
+        </button>
         </div>
       </form>
     </div>

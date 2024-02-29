@@ -8,15 +8,24 @@ const Resignation = () => {
   const [loading, setLoading] = useState(false);
   const [employeeId, setEmployeeId] = useState();
   const [emailId, setEmailId] = useState();
+  const[fullName, setFullname] = useState();
+  const[designation, setDesignation] = useState();
+
   useEffect(() => {
     document.title = "Self Resignation";
   }, []);
+
   useEffect(() => {
     const storedEmployeeId = localStorage.getItem("employeeId");
     setEmployeeId(storedEmployeeId);
     const storedEmailId = localStorage.getItem("email");
     setEmailId(storedEmailId);
+    const storedFullName = localStorage.getItem("fullName");
+    setFullname(storedFullName);
+    const storedDesignation = localStorage.getItem("designation");
+    setDesignation(storedDesignation);
   }, []);
+
   const {
     register,
     handleSubmit,
@@ -30,6 +39,8 @@ const Resignation = () => {
     }
     const formData = new FormData();
     formData.append("employeeId", employeeId);
+    formData.append("fullName", fullName);
+    formData.append("designation", designation);
     formData.append("emailId", emailId);
     formData.append("resignationDate", data.resignationDate);
     formData.append("reason", data.reason);
@@ -89,9 +100,11 @@ const Resignation = () => {
             />
           </div>
         </div>
+        <div className={styles.applyBtn}>
         <button type="submit">
           Apply{loading && <ClipLoader color="#fab437" size={12} />}
         </button>
+        </div>
       </form>
     </div>
   );

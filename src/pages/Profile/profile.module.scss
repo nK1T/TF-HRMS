@@ -4,15 +4,15 @@
   .header {
     z-index: 1;
     position: sticky;
-    top:  60px;
+    top: 60px;
     display: flex;
     height: 40px;
     align-items: center;
     justify-content: space-between;
     background-color: $text;
-    .logout{
+    .logout {
       text-decoration: none;
-      button{
+      button {
         cursor: pointer;
         margin: 10px;
         padding: 7px 3px;
@@ -24,7 +24,7 @@
         border: none;
         border-radius: 2px;
         background-color: $accent;
-        transition: all .1s ease;
+        transition: all 0.1s ease;
       }
     }
     .links {
@@ -49,7 +49,7 @@
         font-size: 0.7rem;
         button {
           cursor: pointer;
-          margin: 10px;
+          // margin: 10px;
           padding: 7px 3px;
           font-weight: 700;
           display: flex;
@@ -59,18 +59,42 @@
           border: none;
           border-radius: 2px;
           background-color: crimson;
-          transition: all .1s ease;
+          transition: all 0.1s ease;
         }
       }
     }
   }
 }
 .formContainer {
-  margin: auto;
-  .pending, .reupload{
-    font-size: .8rem;
-    margin: 10px 10px 0px 10px;
+  margin: 10px;
+  .heading {
+    padding: 10px;
+    border-radius: 5px;
+    width: fit-content;
+    display: flex;
+    margin-bottom:10px;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    background-color: $text;
+    padding-block: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: $background;
+    font-size: .9rem;
+  }
+  .pending,
+  .reupload {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    // margin: 10px 10px 0px 10px;
     color: crimson;
+  }
+  .verified {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    // margin: 10px 10px 0px 10px;
+    color: forestgreen;
   }
   .basicDetails,
   .qualifications,
@@ -79,44 +103,41 @@
   .bankDetails,
   .onboarding,
   .pays {
+    margin-bottom: 40px;
     display: grid;
-    // grid-template-columns: repeat(4, auto);
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-    // background-color: $text;
-    padding: 20px 10px;
     border-radius: 8px;
-    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     .formField {
       .inputLabel {
         font-size: 0.9rem;
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 3px;
         font-weight: 700;
         color: $text;
         text-transform: uppercase;
-        .maxSize{
+        .maxSize {
           margin-left: 5px;
           text-transform: none;
-          font-size: .7rem;
+          font-size: 0.7rem;
           color: crimson;
         }
-        .inputField {
-          width: 100%;
-          padding: 10px;
-          color: $text;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          box-sizing: border-box;
-          font-size: 16px;
-          &:focus {
-            outline: none;
-            border-color: $accent;
-            box-shadow: 0 0 5px $accent;
-          }
-          &:disabled {
-            background-color: #e6e6e6;
-          }
+      }
+      .inputField {
+        width: 100%;
+        padding: 10px;
+        color: $text;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 0.8rem;
+        &:focus {
+          outline: none;
+          border-color: $accent;
+          box-shadow: 0 0 5px $accent;
+        }
+        &:disabled {
+          background-color: #e6e6e6;
         }
       }
       input[type="file"] {
@@ -135,12 +156,12 @@
     }
   }
 }
-.navigationButtons {
+.submitBtn {
   display: flex;
   gap: 10px;
   justify-content: center;
   margin-bottom: 30px;
-  .btn {
+  button {
     display: flex;
     align-items: center;
     gap: 3px;
@@ -164,12 +185,12 @@
 @media screen and (max-width: 750px) {
   .container {
     .header {
-      justify-content: center;
+      // justify-content: center;
       .links {
         gap: 20px;
         .link {
           p {
-            display: none;
+            // display: none;
           }
         }
       }

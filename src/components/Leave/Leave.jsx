@@ -7,6 +7,15 @@ import { ClipLoader } from "react-spinners";
 const Leave = ({ isOpen, employeeId }) => {
   const [loading, setLoading] = useState(false);
   const [leavesData, setLeavesData] = useState([]);
+  const[fullName, setFullname] = useState();
+  const[designation, setDesignation] = useState();
+
+  useEffect(() => {
+    const storedFullName = localStorage.getItem("fullName");
+    setFullname(storedFullName);
+    const storedDesignation = localStorage.getItem("designation");
+    setDesignation(storedDesignation);
+  }, []);
 
   const {
     register,
@@ -44,6 +53,8 @@ const Leave = ({ isOpen, employeeId }) => {
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("employeeId", employeeId);
+    formData.append("fullName", fullName);
+    formData.append("designation", designation);
     formData.append("from", data.from);
     formData.append("to", data.to);
     formData.append("days", data.days);
@@ -119,6 +130,7 @@ const Leave = ({ isOpen, employeeId }) => {
                   <option value="Sick Leave">Sick Leave</option>
                   <option value="Optional Leave">Optional Leave</option>
                   <option value="Casual Leave">Casual Leave</option>
+                  <option value="Exam Leave">Exam Leave</option>
                   <option value="Compensatory Leave">Compensatory Leave</option>
                 </select>
                 {errors.leaveType && <span>This field is required</span>}

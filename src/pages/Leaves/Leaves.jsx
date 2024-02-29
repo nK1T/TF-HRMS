@@ -55,8 +55,10 @@ const Leaves = () => {
         <thead>
           <tr>
             <th style={{width:"70px"}}>Sr No</th>
-            <th style={{width:"120px"}}>Employee ID</th>
-            <th style={{width:"100px"}}>Applied At</th>
+            <th style={{width:"200px"}}>Employee ID</th>
+            <th style={{width:"200px"}}>Name</th>
+            <th style={{width:"120px"}}>Designation</th>
+            <th style={{width:"120px"}}>Applied At</th>
             <th style={{width:"100px"}}>From</th>
             <th style={{width:"100px"}}>To</th>
             <th>Days</th>
@@ -72,6 +74,8 @@ const Leaves = () => {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{item.employeeId}</td>
+              <td>{item.fullName}</td>
+              <td>{item.designation}</td>
               <td>{item.appliedAt}</td>
               <td>{item.fromDate}</td>
               <td>{item.toDate}</td>
