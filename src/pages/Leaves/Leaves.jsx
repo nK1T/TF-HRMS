@@ -59,8 +59,7 @@ const Leaves = () => {
             <th style={{width:"200px"}}>Name</th>
             <th style={{width:"120px"}}>Designation</th>
             <th style={{width:"120px"}}>Applied At</th>
-            <th style={{width:"100px"}}>From</th>
-            <th style={{width:"100px"}}>To</th>
+            <th style={{width:"150px"}}>Leave Date</th>
             <th>Days</th>
             <th style={{width:"200px"}}>Leave type</th>
             <th style={{width:"300px"}}>Reason</th>
@@ -77,8 +76,7 @@ const Leaves = () => {
               <td>{item.fullName}</td>
               <td>{item.designation}</td>
               <td>{item.appliedAt}</td>
-              <td>{item.fromDate}</td>
-              <td>{item.toDate}</td>
+              <td>{item.leaveDate}</td>
               <td>{item.days}</td>
               <td>{item.leaveType}</td>
               <td>{item.reason}</td>

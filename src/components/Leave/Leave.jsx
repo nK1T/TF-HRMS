@@ -55,9 +55,8 @@ const Leave = ({ isOpen, employeeId }) => {
     formData.append("employeeId", employeeId);
     formData.append("fullName", fullName);
     formData.append("designation", designation);
-    formData.append("from", data.from);
-    formData.append("to", data.to);
-    formData.append("days", data.days);
+    formData.append("leaveDate", data.leaveDate);
+    formData.append("days", 1);
     formData.append("leaveType", data.leaveType);
     formData.append("reason", data.reason);
     formData.append("attachment", data.attachment[0]);
@@ -90,32 +89,23 @@ const Leave = ({ isOpen, employeeId }) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formFieldsWrapper}>
               <div className={styles.formField}>
-                <label htmlFor="from">From</label>
+                <label htmlFor="leaveDate">Leave Date</label>
                 <input
                   type="date"
-                  id="from"
-                  {...register("from", { required: true })}
+                  id="leaveDate"
+                  {...register("leaveDate", { required: true })}
                   className={styles.inputField}
                 />
-                {errors.from && <span>This field is required</span>}
-              </div>
-
-              <div className={styles.formField}>
-                <label htmlFor="to">To</label>
-                <input
-                  type="date"
-                  id="to"
-                  {...register("to", { required: true })}
-                  className={styles.inputField}
-                />
-                {errors.to && <span>This field is required</span>}
+                {errors.leaveDate && <span>This field is required</span>}
               </div>
               <div className={styles.formField}>
                 <label>Days</label>
                 <input
-                  {...register("days", { required: true })}
+                  {...register("days")}
                   type="number"
+                  defaultValue={1}
                   className={styles.inputField}
+                  disabled
                 />
                 {errors.days && <span>This field is required</span>}
               </div>
@@ -166,8 +156,7 @@ const Leave = ({ isOpen, employeeId }) => {
             <tr>
               <th>Sr No</th>
               <th>Applied At</th>
-              <th>From</th>
-              <th>To</th>
+              <th>Leave Date</th>
               <th>Days</th>
               <th>Leave type</th>
               <th>Status</th>
@@ -178,8 +167,7 @@ const Leave = ({ isOpen, employeeId }) => {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{item.appliedAt}</td>
-                <td>{item.fromDate}</td>
-                <td>{item.toDate}</td>
+                <td>{item.leaveDate}</td>
                 <td>{item.days}</td>
                 <td>{item.leaveType}</td>
                 <td>{item.status}</td>

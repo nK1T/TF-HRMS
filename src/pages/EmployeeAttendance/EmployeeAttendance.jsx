@@ -124,6 +124,7 @@ const Employeeattendance = () => {
                   <option value="October">October</option>
                   <option value="November">November</option>
                   <option value="December">December</option>
+                  <option value="Full and Final">Full and Final</option>
                 </select>
                 {errors.month && errors.month.type === "required" && (
                   <span>This field is required</span>

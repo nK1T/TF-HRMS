@@ -292,6 +292,9 @@ const EmployeeEdit = () => {
                   <option value="GRAPHIC DESIGNER ASSOCIATE">
                     Graphic Designer Associate
                   </option>
+                  <option value="FSD">
+                    FSD
+                  </option>
                   <option value="FSD TL">
                     FSD TL
                   </option>
@@ -310,6 +313,7 @@ const EmployeeEdit = () => {
                     Digital Marketing Intern
                   </option>
 
+                  <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
                   <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
                   <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
                   <option value="BDA - DIRECT SALES TL">
@@ -330,6 +334,9 @@ const EmployeeEdit = () => {
                   </option>
                   <option value="BUSINESS ENGLISH TRAINER">
                     Business English Trainer
+                  </option>
+                  <option value="BRAND COLLABORATION INTERN">
+                    Brand Collaboration Intern
                   </option>
               </select>
             </label>
@@ -955,11 +962,11 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              variable compensation
+              stipend
               <input
                 type="text"
-                name="variableCompensation"
-                value={data.variableCompensation ?? employee.variableCompensation}
+                name="stipend"
+                value={data.stipend ?? employee.stipend}
                 className={styles.inputField}
                 onChange={handleChange}
                 required

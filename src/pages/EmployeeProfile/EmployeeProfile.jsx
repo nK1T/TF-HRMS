@@ -513,8 +513,8 @@ const EmployeeProfile = () => {
                 <p>{employee.fixedCompensation}</p>
               </div>
             <div className={styles.detail}>
-                <p>variable compensation:</p>
-                <p>{employee.variableCompensation}</p>
+                <p>stipend:</p>
+                <p>{employee.stipend}</p>
               </div>
             <div className={styles.detail}>
                 <p>probation period (days):</p>

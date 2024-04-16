@@ -397,6 +397,9 @@ const Employees = () => {
                   <option value="GRAPHIC DESIGNER ASSOCIATE">
                     Graphic Designer Associate
                   </option>
+                  <option value="FSD">
+                    FSD
+                  </option>
                   <option value="FSD TL">
                     FSD TL
                   </option>
@@ -415,6 +418,7 @@ const Employees = () => {
                     Digital Marketing Intern
                   </option>
 
+                  <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
                   <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
                   <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
                   <option value="BDA - DIRECT SALES TL">
@@ -435,6 +439,9 @@ const Employees = () => {
                   </option>
                   <option value="BUSINESS ENGLISH TRAINER">
                     Business English Trainer
+                  </option>
+                  <option value="BRAND COLLABORATION INTERN">
+                    Brand Collaboration Intern
                   </option>
                   </select>
                 </label>
