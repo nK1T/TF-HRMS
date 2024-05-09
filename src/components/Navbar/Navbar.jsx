@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { FaUserEdit, FaCalendar,FaPenNib } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { useEffect } from "react";
+import { useUser } from "../dataProvider";
 
 const Navbar = () => {
   const isAuthenticated = localStorage.getItem("isAuthenticated");
   const role = localStorage.getItem("role");
   const profilePicture = localStorage.getItem("profilePicture");
-
+  const {user} = useUser();
   useEffect(() => {}, [isAuthenticated]);
 
   return (
@@ -26,7 +27,7 @@ const Navbar = () => {
                   <p>Dashboard</p>
                 </li>
               </Link>
-              {role === "4dm1nr0le" && (
+              {(role === "4dm1nr0le" || role === "t3aml34d") && (
                 <Link className={styles.link} to="/employees">
                   <li>
                     <FaUserEdit size={15} color="#fab437" />
@@ -34,7 +35,7 @@ const Navbar = () => {
                   </li>
                 </Link>
               )}
-              {role === "4dm1nr0le" && (
+              {(role === "4dm1nr0le" || role === "t3aml34d") && (
                 <Link className={styles.link} to="/leaves">
                   <li>
                     <FaCalendar size={12} color="#fab437" />
@@ -42,7 +43,7 @@ const Navbar = () => {
                   </li>
                 </Link>
               )}
-              {role === "4dm1nr0le" && (
+              {(role === "4dm1nr0le" || role === "t3aml34d") && (
                 <Link className={styles.link} to="/resignations">
                   <li>
                     <FaPenNib size={12} color="#fab437" />

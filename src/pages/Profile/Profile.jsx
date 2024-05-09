@@ -11,6 +11,9 @@ import { IoLogOut } from "react-icons/io5";
 import { ImExit } from "react-icons/im";
 import { ClipLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { RiGovernmentFill } from "react-icons/ri";
 
 const Profile = ({ setRole }) => {
   const [data, setData] = useState(null);
@@ -19,6 +22,39 @@ const Profile = ({ setRole }) => {
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("basicDetails");
   const navigate = useNavigate();
+  const notifySuccess = () =>
+    toast.success("Profile Updated", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    const notifyFail = () =>
+      toast.error("Try again after sometime", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    const notifyField = ({field}) =>
+      toast.warn(`Please fill ${field} before proceeding.`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
   const [employee, setEmployee] = useState({
     fullName: "",
     gender: "",
@@ -74,6 +110,10 @@ const Profile = ({ setRole }) => {
     fixedCompensation: "",
     stipend: "",
     probationPeriod: "",
+    professionTax:"",
+    provisionFund:"",
+    uanNumber:"",
+    pfAccountNumber:""
   });
   const handleLogout = () => {
     const confirmation = window.confirm("Are you sure you want to logout?");
@@ -178,6 +218,10 @@ const Profile = ({ setRole }) => {
         fixedCompensation: data.fixedCompensation || "",
         stipend: data.stipend || "",
         probationPeriod: data.probationPeriod || "",
+        professionTax: data.professionTax || "",
+        provisionFund: data.provisionFund || "",
+        uanNumber: data.uanNumber || "",
+        pfAccountNumber: data.pfAccountNumber || "",
       });
     }
   }, [data]);
@@ -222,6 +266,10 @@ const Profile = ({ setRole }) => {
       "olsCode",
       "hiringHrEmail",
       "probationPeriod",
+      "professionTax",
+      "provisionFund",
+      "uanNumber",
+      "pfAccountNumber"
     ];
 
     // Find the first missing field, if any
@@ -231,6 +279,7 @@ const Profile = ({ setRole }) => {
     if (missingField) {
       const fieldName = missingField;
       window.alert(`Please fill ${fieldName} before proceeding.`);
+      notifyField(fieldName)
       return;
     }
 
@@ -256,10 +305,10 @@ const Profile = ({ setRole }) => {
         // Handle the response from the backend, such as showing a success message
         if (response) {
           setLoading(false);
-          window.alert("Profile Updated Successfully!");
-          window.location.reload();
+          notifySuccess();
+          // window.location.reload();
         } else {
-          window.alert("Error occured");
+          notifyFail();
           setLoading(false);
         }
       })
@@ -311,6 +360,7 @@ const Profile = ({ setRole }) => {
   };
   return (
     <div className={styles.container}>
+      <ToastContainer position="top-right" />
       <div className={styles.header}>
         <ul className={styles.links}>
           {/* <li
@@ -637,12 +687,25 @@ const Profile = ({ setRole }) => {
                   HR Recruiter Associate
                 </option>
                 <option value="HR BUSINESS PARTNER">HR Business Partner</option>
+                <option value="HR-PLACEMENT-ASSOCIATE">
+                  HR Placement Associate
+                </option>
+                <option value="HR-PLACEMENT-TL">HR Placement TL</option>
+                <option value="HR GENERALIST - TL">HR Generalist TL</option>
+                <option value="HR GENERALIST">HR Generalist</option>
 
                 <option value="GRAPHIC DESIGNER ASSOCIATE">
                   Graphic Designer Associate
                 </option>
                 <option value="FSD">FSD</option>
                 <option value="FSD TL">FSD TL</option>
+                <option value="BLOCKCHAIN DEVELOPER ASSOCIATE">
+                  Blockchain Developer Associate
+                </option>
+                <option value="ANDROID DEVELOPER">Android Developer</option>
+                <option value="ANDROID DEVELOPER INTERN">
+                  Android Developer Intern
+                </option>
 
                 <option value="PRODUCT MANAGER">Product Manager</option>
                 <option value="INSTRUCTIONAL DESIGNER">
@@ -656,6 +719,12 @@ const Profile = ({ setRole }) => {
                 <option value="CONTENT CREATOR">Content Creator</option>
                 <option value="DIGITAL MARKETING INTERN">
                   Digital Marketing Intern
+                </option>
+                <option value="DIGITAL MARKETING ASSOCIATE">
+                  Digital Marketing Associate
+                </option>
+                <option value="SOCIAL MEDIA MARKETING EXECUTIVE">
+                  Social Media Marketing Executive
                 </option>
                 <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
                 <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
@@ -681,8 +750,11 @@ const Profile = ({ setRole }) => {
                   Business English Trainer
                 </option>
                 <option value="BRAND COLLABORATION INTERN">
-                    Brand Collaboration Intern
-                  </option>
+                  Brand Collaboration Intern
+                </option>
+                <option value="MARKETING BRAND COLLABORATION - TL">
+                  Marketing Brand Collaboration - TL
+                </option>
               </select>
             </label>
           </div>
@@ -1485,9 +1557,7 @@ const Profile = ({ setRole }) => {
               <input
                 type="text"
                 name="stipend"
-                value={
-                  data.stipend ?? employee.stipend
-                }
+                value={data.stipend ?? employee.stipend}
                 onChange={handleChange}
                 className={styles.inputField}
                 disabled={data.stipend !== null}
@@ -1511,11 +1581,72 @@ const Profile = ({ setRole }) => {
             </label>
           </div>
         </div>
+        <div className={styles.heading}>
+          <RiGovernmentFill  color="#fab437" size={15} />
+          <p>Additional details</p>
+        </div>
+        <div className={styles.additionalDetails}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Profession Tax<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="professionTax"
+                value={data.professionTax ?? employee.professionTax}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.professionTax !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              provision fund<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="provisionFund"
+                value={data.provisionFund ?? employee.provisionFund}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.provisionFund !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              uan Number<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="uanNumber"
+                value={data.uanNumber ?? employee.uanNumber}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.uanNumber !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Pf account number
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="pfAccountNumber"
+                value={data.pfAccountNumber ?? employee.pfAccountNumber}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.pfAccountNumber !== null}
+                required
+              />
+            </label>
+          </div>
+        </div>
         <div className={styles.submitBtn}>
-        <button className={styles.btn} type="submit">
-          Submit
-          {loading && <ClipLoader color="#fab437" size={12} />}
-        </button>
+          <button className={styles.btn} type="submit">
+            Submit
+            {loading && <ClipLoader color="#fab437" size={12} />}
+          </button>
         </div>
       </form>
     </div>

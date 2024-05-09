@@ -266,7 +266,7 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-            designation
+              designation
               <select
                 name="designation"
                 onChange={handleChange}
@@ -278,88 +278,128 @@ const EmployeeEdit = () => {
                   --Select Designation--
                 </option>
                 <option value="DIRECTOR">Director</option>
-                  <option value="HR ADMIN">HR Admin</option>
-                  <option value="HR OPERATIONS">HR Operations</option>
-                  <option value="HR RECRUITER">HR Recruiter</option>
-                  <option value="HR RECRUITER TL">HR Recruiter TL</option>
-                  <option value="HR RECRUITER ASSOCIATE">
-                    HR Recruiter Associate
-                  </option>
-                  <option value="HR BUSINESS PARTNER">
-                    HR Business Partner
-                  </option>
+                <option value="HR ADMIN">HR Admin</option>
+                <option value="HR OPERATIONS">HR Operations</option>
+                <option value="HR RECRUITER">HR Recruiter</option>
+                <option value="HR RECRUITER TL">HR Recruiter TL</option>
+                <option value="HR RECRUITER ASSOCIATE">
+                  HR Recruiter Associate
+                </option>
+                <option value="HR BUSINESS PARTNER">HR Business Partner</option>
+                <option value="HR-PLACEMENT-ASSOCIATE">
+                  HR Placement Associate
+                </option>
+                <option value="HR-PLACEMENT-TL">HR Placement TL</option>
+                <option value="HR GENERALIST - TL">HR Generalist TL</option>
+                <option value="HR GENERALIST">HR Generalist</option>
+                <option value="GRAPHIC DESIGNER ASSOCIATE">
+                  Graphic Designer Associate
+                </option>
+                <option value="FSD">FSD</option>
+                <option value="FSD TL">FSD TL</option>
+                <option value="BLOCKCHAIN DEVELOPER ASSOCIATE">
+                  Blockchain Developer Associate
+                </option>
+                <option value="ANDROID DEVELOPER">Android Developer</option>
+                <option value="ANDROID DEVELOPER INTERN">
+                  Android Developer Intern
+                </option>
+                <option value="PRODUCT MANAGER">Product Manager</option>
+                <option value="INSTRUCTIONAL DESIGNER">
+                  Instructional Designer
+                </option>
+                <option value="CONTENT WRITER">Content Writer</option>
 
-                  <option value="GRAPHIC DESIGNER ASSOCIATE">
-                    Graphic Designer Associate
-                  </option>
-                  <option value="FSD">
-                    FSD
-                  </option>
-                  <option value="FSD TL">
-                    FSD TL
-                  </option>
+                <option value="LEAD GENERATION INTERN">
+                  Lead Generation Intern
+                </option>
+                <option value="CONTENT CREATOR">Content Creator</option>
+                <option value="DIGITAL MARKETING INTERN">
+                  Digital Marketing Intern
+                </option>
+                <option value="DIGITAL MARKETING ASSOCIATE">
+                  Digital Marketing Associate
+                </option>
+                <option value="SOCIAL MEDIA MARKETING EXECUTIVE">
+                  Social Media Marketing Executive
+                </option>
+                <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
+                <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
+                <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
+                <option value="BDA - DIRECT SALES TL">
+                  BDA - Direct Sales TL
+                </option>
+                <option value="BDA - INSIDE SALES TL">
+                  BDA - Inside Sales TL
+                </option>
 
-                  <option value="PRODUCT MANAGER">Product Manager</option>
-                  <option value="INSTRUCTIONAL DESIGNER">
-                    Instructional Designer
-                  </option>
-                  <option value="CONTENT WRITER">Content Writer</option>
-
-                  <option value="LEAD GENERATION INTERN">
-                    Lead Generation Intern
-                  </option>
-                  <option value="CONTENT CREATOR">Content Creator</option>
-                  <option value="DIGITAL MARKETING INTERN">
-                    Digital Marketing Intern
-                  </option>
-
-                  <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
-                  <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
-                  <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
-                  <option value="BDA - DIRECT SALES TL">
-                    BDA - Direct Sales TL
-                  </option>
-                  <option value="BDA - INSIDE SALES TL">
-                    BDA - Inside Sales TL
-                  </option>
-
-                  <option value="CUSTOMER SUPPORT ASSOCIATE">
-                    Customer Support Associate
-                  </option>
-                  <option value="PRODUCT DELIVERY INTERN">
-                    Product Delivery Intern
-                  </option>
-                  <option value="EMPLOYEE WORKFLOW AND SCREENING">
-                    Employee Workflow & Screening
-                  </option>
-                  <option value="BUSINESS ENGLISH TRAINER">
-                    Business English Trainer
-                  </option>
-                  <option value="BRAND COLLABORATION INTERN">
-                    Brand Collaboration Intern
-                  </option>
+                <option value="CUSTOMER SUPPORT ASSOCIATE">
+                  Customer Support Associate
+                </option>
+                <option value="PRODUCT DELIVERY INTERN">
+                  Product Delivery Intern
+                </option>
+                <option value="EMPLOYEE WORKFLOW AND SCREENING">
+                  Employee Workflow & Screening
+                </option>
+                <option value="BUSINESS ENGLISH TRAINER">
+                  Business English Trainer
+                </option>
+                <option value="BRAND COLLABORATION INTERN">
+                  Brand Collaboration Intern
+                </option>
+                <option value="MARKETING BRAND COLLABORATION - TL">
+                  Marketing Brand Collaboration - TL
+                </option>
               </select>
             </label>
           </div>
           <div className={styles.formField}>
-              <label className={styles.inputLabel}>
-                Role
-                <select
-                  name="role"
-                  value={data.role ?? employee.role}
-                  onChange={handleChange}
-                  className={styles.inputField}
-                >
-                  <option value="" disabled>
-                    --Select--
-                  </option>
-                  <option value="MANAGER">Manager</option>
-                  <option value="TEAM LEAD">Team Lead</option>
-                  <option value="ASSOCIATE">Associate</option>
-                  <option value="INTERN">Intern</option>
-                </select>
-              </label>
-            </div>
+            <label className={styles.inputLabel}>
+              Department
+              <select
+                name="department"
+                onChange={handleChange}
+                value={data.department ?? employee.department}
+                className={styles.inputField}
+                required
+              >
+                <option value="" disabled>
+                  --Select Department--
+                </option>
+                <option value="HR">HR</option>
+                <option value="HR PLACEMENT">HR Placement</option>
+                <option value="IT">IT</option>
+                <option value="FINANCE">Finance</option>
+                <option value="PRODUCT DEVELOPMENT">Product Development</option>
+                <option value="MARKETING">Marketing</option>
+                <option value="SALES">Sales</option>
+                <option value="OPERATIONS">Operations</option>
+                <option value="LEARNING AND DEVELOPMENT">
+                  Learning And Development
+                </option>
+              </select>
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Role
+              <select
+                name="role"
+                value={data.role ?? employee.role}
+                onChange={handleChange}
+                className={styles.inputField}
+              >
+                <option value="" disabled>
+                  --Select--
+                </option>
+                <option value="MANAGER">Manager</option>
+                <option value="TEAM LEAD">Team Lead</option>
+                <option value="ASSOCIATE">Associate</option>
+                <option value="INTERN">Intern</option>
+              </select>
+            </label>
+          </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               Street address
@@ -986,6 +1026,58 @@ const EmployeeEdit = () => {
               />
             </label>
           </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Profession Tax<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="professionTax"
+                value={data.professionTax ?? employee.professionTax}
+                onChange={handleChange}
+                className={styles.inputField}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              provision fund<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="provisionFund"
+                value={data.provisionFund ?? employee.provisionFund}
+                onChange={handleChange}
+                className={styles.inputField}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              uan Number<span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="uanNumber"
+                value={data.uanNumber ?? employee.uanNumber}
+                onChange={handleChange}
+                className={styles.inputField}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Pf account number
+              <span className={styles.required}>*</span>
+              <input
+                type="text"
+                name="pfAccountNumber"
+                value={data.pfAccountNumber ?? employee.pfAccountNumber}
+                onChange={handleChange}
+                className={styles.inputField}
+                required
+              />
+            </label>
+          </div>
+
         </form>
       ))}
       <button onClick={handleSubmit}>update</button>

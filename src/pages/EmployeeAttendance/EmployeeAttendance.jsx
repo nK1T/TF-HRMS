@@ -9,6 +9,8 @@ import { useParams } from "react-router-dom";
 import MonthlyReport from "../../components/MonthlyReport/MonthlyReport";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Employeeattendance = () => {
   const { employeeId } = useParams();
@@ -20,6 +22,30 @@ const Employeeattendance = () => {
     window.scrollTo(0, 0);
     document.title = "Attendance - TALENTFINER";
   }, []);
+
+  const notifySucess = () =>
+    toast.success("Report Created Successfully", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+  const notifyFail = () =>
+    toast.error("Try again after sometime", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
 
   const {
     register,
@@ -42,8 +68,12 @@ const Employeeattendance = () => {
     formData.append("presentDays", data.presentDays);
     formData.append("absentDays", data.absentDays);
     formData.append("leaveDays", data.leaveDays);
+    formData.append("unpaidLeaves", data.unpaidLeaves);
     formData.append("incentive", data.incentive);
     formData.append("salary", data.salary);
+    formData.append("lossOfPay", data.lossOfPay);
+    formData.append("houseRentAllowance", data.houseRentAllowance);
+    formData.append("specialAllowance", data.specialAllowance);
     formData.append("paySlip", data.paySlip[0]);
     formData.append("certificate", data.certificate[0]);
 
@@ -59,10 +89,11 @@ const Employeeattendance = () => {
         }
       );
       if (response.data.success) {
+        notifySucess();
         reset(); // Reset form fields
       }
     } catch (error) {
-      window.alert("Try again after sometime");
+      notifyFail();
       console.error(error);
     } finally {
       setLoading(false);
@@ -70,6 +101,7 @@ const Employeeattendance = () => {
   };
   return (
     <div className={styles.container}>
+      <ToastContainer position="top-right" />
       <div className={styles.heading}>
         <i>
           <TbReportSearch color="#fab437" />
@@ -178,7 +210,7 @@ const Employeeattendance = () => {
               <div className={styles.formField}>
                 <label>Leave Days</label>
                 <input
-                  {...register("leaveDays", {maxLength: 2 })}
+                  {...register("leaveDays", { maxLength: 2 })}
                   type="number"
                   className={styles.inputField}
                 />
@@ -187,7 +219,15 @@ const Employeeattendance = () => {
                 )}
               </div>
               <div className={styles.formField}>
-                <label>Salary</label>
+                <label>Unpaid Leaves</label>
+                <input
+                  {...register("unpaidLeaves")}
+                  type="number"
+                  className={styles.inputField}
+                />
+              </div>
+              <div className={styles.formField}>
+                <label>Basic Salary</label>
                 <input
                   {...register("salary", { required: true })}
                   type="number"
@@ -201,6 +241,30 @@ const Employeeattendance = () => {
                 <label>Incentive</label>
                 <input
                   {...register("incentive")}
+                  type="number"
+                  className={styles.inputField}
+                />
+              </div>
+              <div className={styles.formField}>
+                <label>Loss of Pay</label>
+                <input
+                  {...register("lossOfPay")}
+                  type="number"
+                  className={styles.inputField}
+                />
+              </div>
+              <div className={styles.formField}>
+                <label>House Rent Allowance</label>
+                <input
+                  {...register("houseRentAllowance")}
+                  type="number"
+                  className={styles.inputField}
+                />
+              </div>
+              <div className={styles.formField}>
+                <label>Special Allowance</label>
+                <input
+                  {...register("specialAllowance")}
                   type="number"
                   className={styles.inputField}
                 />
@@ -234,7 +298,7 @@ const Employeeattendance = () => {
           </form>
         </div>
       )}
-      <MonthlyReport employeeId={employeeId} />
+      <MonthlyReport employeeId={employeeId} action={true} />
     </div>
   );
 };

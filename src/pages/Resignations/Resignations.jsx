@@ -4,6 +4,8 @@ import styles from "./resignations.module.scss";
 
 const Resignations = () => {
   const [resignationsData, setResignationsData] = useState([]);
+  const team = localStorage.getItem("team");
+  const role = localStorage.getItem("role");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,6 +29,16 @@ const Resignations = () => {
       fetchData();
     }
   }, []);
+  const filteredReport = () => {
+    if (!Array.isArray(resignationsData)) {
+      return [];
+    }
+    if(role === "t3aml34d"){
+      return resignationsData.filter((item) => item.team === team);
+    }else{
+      return resignationsData
+    }
+  };
   return (
     <div className={styles.tableContainer}>
       <table>
@@ -44,7 +56,7 @@ const Resignations = () => {
           </tr>
         </thead>
         <tbody>
-          {resignationsData.map((item, index) => (
+          {filteredReport().map((item, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{item.employeeId}</td>

@@ -6,6 +6,9 @@ import axios from "axios";
 import styles from "./employees.module.scss";
 import { MdAddBox, MdVerified } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { GrPowerReset } from "react-icons/gr";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Employees = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +22,29 @@ const Employees = () => {
     team: "",
     department: "",
   });
+  const notifySucess = () =>
+    toast.success("Employee Registered", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+    const notifyFail = (msg) =>
+      toast.error(`${msg}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
   const catg = [
     {
       catg_id: 1,
@@ -34,24 +60,38 @@ const Employees = () => {
     },
     {
       catg_id: 4,
-      catg_name: "PRODUCT DEVELOPMENT",
+      catg_name: "HR PLACEMENT",
     },
     {
       catg_id: 5,
-      catg_name: "MARKETING",
+      catg_name: "IT",
     },
     {
       catg_id: 6,
+      catg_name: "FINANCE",
+    },
+    {
+      catg_id: 7,
+      catg_name: "PRODUCT DEVELOPMENT",
+    },
+    {
+      catg_id: 8,
+      catg_name: "MARKETING",
+    },
+    {
+      catg_id: 9,
       catg_name: "OPERATIONS",
     },
   ];
   const [data, setData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isOpenArray, setIsOpenArray] = useState(false);
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     document.title = "Employees - TALENTFINER";
   }, []);
 
@@ -84,40 +124,63 @@ const Employees = () => {
     document.body.style.overflow = isOpenArray ? "hidden" : "auto";
   }, [isOpenArray]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (query) => {
     setSelectedCategory("All");
-    e.preventDefault();
-    // Ensure that searchQuery is not empty before making the API call
-    if (searchQuery.trim() !== "") {
-      axios
-        .get(
-          `https://talentfiner.in/backend/getEmpDaTa.php?employeeId=${searchQuery}`
-        )
-        .then((response) => {
-          // Check if the response is an array
-          if (Array.isArray(response.data)) {
-            setData(response.data);
-          } else if (response.data && typeof response.data === "object") {
-            // If response is an object, convert it to an array
-            setData([response.data]);
-          } else {
-            console.log("Unexpected API response format");
-          }
-        })
-        .catch((err) => console.log("Error fetching data", err));
+
+    // Ensure that searchQuery is not empty before filtering the data
+    if (query.trim() !== "") {
+      let filteredData;
+      // Check if searchQuery starts with "TEMP" or "PEMP" followed by numbers
+      if (/^(TEMP|PEMP)\d+$/.test(query)) {
+        filteredData = originalData.filter((employee) =>
+          employee.employeeId.startsWith(query.toUpperCase())
+        );
+      } else {
+        filteredData = originalData.filter((employee) =>
+          employee.fullName.toLowerCase().startsWith(query.toLowerCase())
+        );
+      }
+
+      setData(filteredData);
+    } else {
+      setData(originalData); // Reset data when search query is empty
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch(e);
-    }
-  };
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Enter") {
+  //     handleSearch(e);
+  //   }
+  // };
 
   useEffect(() => {
-    // Check if teamData is already cached
-    const cachedData = sessionStorage.getItem("employeeData");
-    if (cachedData) {
+    if(role === "t3aml34d"){
+      const teamName = localStorage.getItem("team");
+      if (teamName) {
+        // Check if teamData is already cached
+        const cachedData = sessionStorage.getItem(`teamData_${teamName}`);
+        if (cachedData) {
+          setData(JSON.parse(cachedData));
+        } else {
+          axios
+            .get(`https://talentfiner.in/backend/getEmpDaTa.php?team=${teamName}`)
+            .then((response) => {
+              // Cache the fetched teamData
+              sessionStorage.setItem(
+                `teamData_${teamName}`,
+                JSON.stringify(response.data)
+              );
+              setData(response.data);
+            })
+            .catch((err) => console.log("Error fetching data", err));
+        }
+      }
+    }else{
+
+      // Check if teamData is already cached
+      const cachedData = sessionStorage.getItem("employeeData");
+      if (cachedData) {
+      setOriginalData(JSON.parse(cachedData));
       setData(JSON.parse(cachedData));
     } else {
       axios
@@ -125,10 +188,12 @@ const Employees = () => {
         .then((response) => {
           // Cache the fetched teamData
           sessionStorage.setItem("employeeData", JSON.stringify(response.data));
+          setOriginalData(response.data);
           setData(response.data);
         })
         .catch((err) => console.log("Error fetching data", err));
     }
+  }
   }, []);
 
   const filterEmployee = () => {
@@ -143,81 +208,96 @@ const Employees = () => {
     e.preventDefault();
 
     try {
-        const response = await axios.post(
-            "https://talentfiner.in/backend/regEmployee.php",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-            }
-        );
-
-        if (response.data.status) {
-            // Employee registered successfully
-            window.alert(response.data.message);
-            window.location.reload();
-        } else {
-            window.alert(response.data.message);
+      const response = await axios.post(
+        "https://talentfiner.in/backend/regEmployee.php",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
         }
-    } catch (error) {
-        window.alert("An unexpected error occurred. Please try again later.");
-        console.error("Error:", error);
-    }
-};
+      );
 
+      if (response.data.status) {
+        // Employee registered successfully
+        // window.alert(response.data.message);
+        notifySucess();
+        setFormData({});
+        setIsOpenArray(false);
+        
+      } else {
+        notifyFail(response.data.message)
+      }
+    } catch (error) {
+      window.alert("An unexpected error occurred. Please try again later.");
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className={styles.container}>
+      <ToastContainer position="top-right" />
       <div className={styles.top}>
         <div className={styles.filters}>
-          <div className={styles.filter}>
-            {catg.map((c) => (
-              <p
-                key={c.catg_id}
-                className={`${styles.fcatg} ${
-                  selectedCategory === c.catg_name && styles.selected
-                }`}
-                onClick={() => setSelectedCategory(c.catg_name)}
-              >
-                {c.catg_name}
-              </p>
-            ))}
-            <div className={styles.search}>
-              <input
-                type="search"
-                placeholder="Search by ID"
-                className={styles.searchField}
-                value={searchQuery.toUpperCase()}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-              <button className={styles.btn} onClick={handleSearch}>
-                <FaSearch />
-              </button>
-            </div>
-          </div>
-          <div className={styles.addNew}>
-            <button onClick={() => openModal()} className={styles.addNewBtn}>
-              <MdAddBox color="#fab437" size={15} />
-              Add new
-            </button>
-          </div>
+          {role === "4dm1nr0le" && (
+            <>
+              <div className={styles.filter}>
+                {catg.map((c) => (
+                  <p
+                    key={c.catg_id}
+                    className={`${styles.fcatg} ${
+                      selectedCategory === c.catg_name && styles.selected
+                    }`}
+                    onClick={() => setSelectedCategory(c.catg_name)}
+                  >
+                    {c.catg_name}
+                  </p>
+                ))}
+                <div className={styles.search}>
+                  <input
+                    type="search"
+                    placeholder="Search by name or Id"
+                    className={styles.searchField}
+                    value={searchQuery.toUpperCase()}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      handleSearch(e.target.value);
+                    }}
+                    // onKeyDown={handleKeyDown}
+                  />
+                </div>
+              </div>
+              <div className={styles.addNew}>
+                <button
+                  onClick={() => openModal()}
+                  className={styles.addNewBtn}
+                >
+                  <MdAddBox color="#fab437" size={15} />
+                  Add new
+                </button>
+              </div>
+            </>
+          )}
           {data.length === 0 ? (
             <p className={styles.errorMsg}>Employee not found</p>
           ) : (
             <div className={styles.employees}>
               {filterEmployee().map((employee) => (
                 <div key={employee.id} className={styles.employee}>
-                  {employee.verification === "verified" &&
-                  <div className={styles.verifiedIcon}>
-                    <MdVerified size={20}/>
-                  </div>
-                  }
+                  {employee.verification === "verified" && (
+                    <div className={styles.verifiedIcon}>
+                      <MdVerified size={20} />
+                    </div>
+                  )}
                   <div className={styles.image}>
                     <img
                       src={`https://talentfiner.in/backend/${employee.selfiePhoto}`}
-                      style={{ filter: employee.currentStatus === "inactive" ? "grayscale(100%)" : "none" }}
+                      style={{
+                        filter:
+                          employee.currentStatus === "inactive"
+                            ? "grayscale(100%)"
+                            : "none",
+                      }}
                     />
                   </div>
                   <div className={styles.employeeDetails}>
@@ -241,6 +321,8 @@ const Employees = () => {
                     <Link
                       to={`/employee/${employee.employeeId}/details`}
                       className={styles.bottomLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <button className={styles.btn2}>
                         <FaExternalLinkAlt color="#08080B" size={10} />
@@ -295,7 +377,7 @@ const Employees = () => {
                       className={styles.inputField}
                       required
                     >
-                      <option value="" disabled selected >
+                      <option value="" disabled selected>
                         --Select Gender--
                       </option>
                       <option value="MALE">Male</option>
@@ -383,66 +465,87 @@ const Employees = () => {
                       --Select Designation--
                     </option>
                     <option value="DIRECTOR">Director</option>
-                  <option value="HR ADMIN">HR Admin</option>
-                  <option value="HR OPERATIONS">HR Operations</option>
-                  <option value="HR RECRUITER">HR Recruiter</option>
-                  <option value="HR RECRUITER TL">HR Recruiter TL</option>
-                  <option value="HR RECRUITER ASSOCIATE">
-                    HR Recruiter Associate
-                  </option>
-                  <option value="HR BUSINESS PARTNER">
-                    HR Business Partner
-                  </option>
+                    <option value="HR ADMIN">HR Admin</option>
+                    <option value="HR OPERATIONS">HR Operations</option>
+                    <option value="HR RECRUITER">HR Recruiter</option>
+                    <option value="HR RECRUITER TL">HR Recruiter TL</option>
+                    <option value="HR RECRUITER ASSOCIATE">
+                      HR Recruiter Associate
+                    </option>
+                    <option value="HR BUSINESS PARTNER">
+                      HR Business Partner
+                    </option>
+                    <option value="HR-PLACEMENT-ASSOCIATE">
+                      HR Placement Associate
+                    </option>
+                    <option value="HR-PLACEMENT-TL">HR Placement TL</option>
+                    <option value="HR GENERALIST - TL">HR Generalist TL</option>
+                    <option value="HR GENERALIST">HR Generalist</option>
+                    <option value="GRAPHIC DESIGNER ASSOCIATE">
+                      Graphic Designer Associate
+                    </option>
+                    <option value="FSD">FSD</option>
+                    <option value="FSD TL">FSD TL</option>
+                    <option value="BLOCKCHAIN DEVELOPER ASSOCIATE">
+                      Blockchain Developer Associate
+                    </option>
+                    <option value="ANDROID DEVELOPER">Android Developer</option>
+                    <option value="ANDROID DEVELOPER INTERN">
+                      Android Developer Intern
+                    </option>
+                    <option value="PRODUCT MANAGER">Product Manager</option>
+                    <option value="INSTRUCTIONAL DESIGNER">
+                      Instructional Designer
+                    </option>
+                    <option value="CONTENT WRITER">Content Writer</option>
 
-                  <option value="GRAPHIC DESIGNER ASSOCIATE">
-                    Graphic Designer Associate
-                  </option>
-                  <option value="FSD">
-                    FSD
-                  </option>
-                  <option value="FSD TL">
-                    FSD TL
-                  </option>
+                    <option value="LEAD GENERATION INTERN">
+                      Lead Generation Intern
+                    </option>
+                    <option value="CONTENT CREATOR">Content Creator</option>
+                    <option value="DIGITAL MARKETING INTERN">
+                      Digital Marketing Intern
+                    </option>
+                    <option value="DIGITAL MARKETING ASSOCIATE">
+                      Digital Marketing Associate
+                    </option>
+                    <option value="SOCIAL MEDIA MARKETING EXECUTIVE">
+                      Social Media Marketing Executive
+                    </option>
+                    <option value="INSIDE SALES INTERN">
+                      Inside Sales Intern
+                    </option>
+                    <option value="BDA - DIRECT SALES">
+                      BDA - Direct Sales
+                    </option>
+                    <option value="BDA - INSIDE SALES">
+                      BDA - Inside Sales
+                    </option>
+                    <option value="BDA - DIRECT SALES TL">
+                      BDA - Direct Sales TL
+                    </option>
+                    <option value="BDA - INSIDE SALES TL">
+                      BDA - Inside Sales TL
+                    </option>
 
-                  <option value="PRODUCT MANAGER">Product Manager</option>
-                  <option value="INSTRUCTIONAL DESIGNER">
-                    Instructional Designer
-                  </option>
-                  <option value="CONTENT WRITER">Content Writer</option>
-
-                  <option value="LEAD GENERATION INTERN">
-                    Lead Generation Intern
-                  </option>
-                  <option value="CONTENT CREATOR">Content Creator</option>
-                  <option value="DIGITAL MARKETING INTERN">
-                    Digital Marketing Intern
-                  </option>
-
-                  <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
-                  <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
-                  <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
-                  <option value="BDA - DIRECT SALES TL">
-                    BDA - Direct Sales TL
-                  </option>
-                  <option value="BDA - INSIDE SALES TL">
-                    BDA - Inside Sales TL
-                  </option>
-
-                  <option value="CUSTOMER SUPPORT ASSOCIATE">
-                    Customer Support Associate
-                  </option>
-                  <option value="PRODUCT DELIVERY INTERN">
-                    Product Delivery Intern
-                  </option>
-                  <option value="EMPLOYEE WORKFLOW AND SCREENING">
-                    Employee Workflow & Screening
-                  </option>
-                  <option value="BUSINESS ENGLISH TRAINER">
-                    Business English Trainer
-                  </option>
-                  <option value="BRAND COLLABORATION INTERN">
-                    Brand Collaboration Intern
-                  </option>
+                    <option value="CUSTOMER SUPPORT ASSOCIATE">
+                      Customer Support Associate
+                    </option>
+                    <option value="PRODUCT DELIVERY INTERN">
+                      Product Delivery Intern
+                    </option>
+                    <option value="EMPLOYEE WORKFLOW AND SCREENING">
+                      Employee Workflow & Screening
+                    </option>
+                    <option value="BUSINESS ENGLISH TRAINER">
+                      Business English Trainer
+                    </option>
+                    <option value="MARKETING BRAND COLLABORATION - TL">
+                      Marketing Brand Collaboration - TL
+                    </option>
+                    <option value="BRAND COLLABORATION INTERN">
+                      Brand Collaboration Intern
+                    </option>
                   </select>
                 </label>
               </div>
@@ -459,13 +562,18 @@ const Employees = () => {
                       --Select Department--
                     </option>
                     <option value="HR">HR</option>
-                    <option value="Product Development">
+                    <option value="HR PLACEMENT">HR Placement</option>
+                    <option value="IT">IT</option>
+                    <option value="FINANCE">Finance</option>
+                    <option value="PRODUCT DEVELOPMENT">
                       Product Development
                     </option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Operations">Operations</option>
-                    <option value="Learning And Development">Learning And Development</option>
+                    <option value="MARKETING">Marketing</option>
+                    <option value="SALES">Sales</option>
+                    <option value="OPERATIONS">Operations</option>
+                    <option value="LEARNING AND DEVELOPMENT">
+                      Learning And Development
+                    </option>
                   </select>
                 </label>
               </div>

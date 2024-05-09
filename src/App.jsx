@@ -14,6 +14,7 @@ import EmployeeEdit from "./pages/EmployeeEdit/EmployeeEdit";
 import Leaves from "./pages/Leaves/Leaves";
 import Resignation from "./pages/Resignation/Resignation";
 import Resignations from "./pages/Resignations/Resignations";
+import { DataProvider } from "./components/dataProvider";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -38,92 +39,94 @@ function App() {
   // const role = localStorage.getItem("role");
 
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/login"
-          element={<Login setAuthenticated={setAuthenticated} />}
-        />
-        <Route path="*" element={<Login />} />
-        <Route
-          path="/"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Profile setRole={setRole} />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/resignation-page"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Resignation />
-            </PrivateRoute>
-          }
-        />
-        {role === "4dm1nr0le" && (
-          <>
-            <Route
-              path="/employees"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Employees />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/employee/:employeeId/attendance"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Employeeattendance />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/employee/:employeeId/details"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <EmployeeProfile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/employee/:employeeId/edit"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <EmployeeEdit />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/leaves"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Leaves />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/resignations"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Resignations />
-                </PrivateRoute>
-              }
-            />
-          </>
-        )}
-      </Routes>
-    </Router>
+    <DataProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/login"
+            element={<Login setAuthenticated={setAuthenticated} />}
+          />
+          <Route path="*" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Profile setRole={setRole} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/resignation-page"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Resignation />
+              </PrivateRoute>
+            }
+          />
+          {(role === "4dm1nr0le" || role === "t3aml34d") && (
+            <>
+              <Route
+                path="/employees"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <Employees />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/employee/:employeeId/attendance"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <Employeeattendance />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/employee/:employeeId/details"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <EmployeeProfile />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/employee/:employeeId/edit"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <EmployeeEdit />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/leaves"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <Leaves />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/resignations"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <Resignations />
+                  </PrivateRoute>
+                }
+              />
+            </>
+          )}
+        </Routes>
+      </Router>
+    </DataProvider>
   );
 }
 

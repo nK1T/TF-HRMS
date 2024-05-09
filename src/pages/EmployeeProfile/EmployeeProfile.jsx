@@ -12,6 +12,7 @@ import {
 import { AiFillBank } from "react-icons/ai";
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
+import { RiGovernmentFill } from "react-icons/ri";
 
 const EmployeeProfile = () => {
   const { employeeId } = useParams();
@@ -519,6 +520,28 @@ const EmployeeProfile = () => {
             <div className={styles.detail}>
                 <p>probation period (days):</p>
                 <p>{employee.probationPeriod}</p>
+              </div>
+            </div>
+            <h3 className={styles.heading}>
+              <RiGovernmentFill  size={15} color="#fab437" />
+              Additional Details
+            </h3>
+            <div className={styles.basicDetails}>
+            <div className={styles.detail}>
+                <p>Profession Tax:</p>
+                <p>{employee.professionTax}</p>
+              </div>
+            <div className={styles.detail}>
+                <p>Provision Fund:</p>
+                <p>{employee.provisionFund}</p>
+              </div>
+            <div className={styles.detail}>
+                <p>UAN Number:</p>
+                <p>{employee.uanNumber}</p>
+              </div>
+            <div className={styles.detail}>
+                <p>PF Account Number:</p>
+                <p>{employee.pfAccountNumber}</p>
               </div>
             </div>
           </div>

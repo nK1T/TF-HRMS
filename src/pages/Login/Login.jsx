@@ -3,6 +3,9 @@ import axios from "axios";
 import styles from "./login.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { FaArrowRight } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = ({ setAuthenticated }) => {
   const navigate = useNavigate();
@@ -17,6 +20,39 @@ const Login = ({ setAuthenticated }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  const notifySucess = () =>
+    toast.success("OTP sent", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const notifyFail = () =>
+    toast.error("Failed to send OTP. Please try again.", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const notifyNoAccess = () =>
+    toast.error("Access Revoked !!!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   // Check if the user is already authenticated
   const isAuthenticated = localStorage.getItem("isAuthenticated");
   // If the user is authenticated, redirect to the dashboard
@@ -43,11 +79,12 @@ const Login = ({ setAuthenticated }) => {
             "Content-Type": "application/x-www-form-urlencoded",
           },
         }
-        );
+      );
 
       if (response.data.success) {
         // Email is registered, proceed to generate OTP
         setIsOtpSent(true);
+        notifySucess();
 
         // Generate and send OTP
         const generateOTPResponse = await axios.post(
@@ -61,7 +98,6 @@ const Login = ({ setAuthenticated }) => {
             },
           }
         );
-        console.log(generateOTPResponse);
         if (generateOTPResponse.data.success) {
           // OTP sent successfully
           // alert(
@@ -69,10 +105,11 @@ const Login = ({ setAuthenticated }) => {
           // );
         } else {
           // Failed to send OTP
-          alert("Failed to send OTP. Please try again.");
+          notifyFail();
         }
       } else {
         // Email is not registered
+        notifyNoAccess();
         setIsEmailValid(false);
       }
     } catch (error) {
@@ -109,7 +146,6 @@ const Login = ({ setAuthenticated }) => {
         setIsEmailValid(true);
         setIsOtpSent(false);
         navigate("/profile");
-        
       } else {
         // OTP verification failed
         alert("Login failed. Please check OTP or try again after sometime.");
@@ -123,6 +159,7 @@ const Login = ({ setAuthenticated }) => {
 
   return (
     <div className={styles.main}>
+      <ToastContainer position="top-right" />
       <div className={styles.left}>
         <h2>Login to your Account</h2>
         <p>Welcome back!</p>
@@ -142,14 +179,22 @@ const Login = ({ setAuthenticated }) => {
                 />
               </label>
             </div>
+
             <button type="submit" className={styles.btn}>
               Send OTP
             </button>
-            {!isEmailValid && (
-              <p style={{ color: "crimson" }}>
-                Access Revoked!!!
-              </p>
-            )}
+            <a
+              href="https://talentfiner.com/"
+              target="_blank"
+              rel="noreferrer"
+              className={styles.tf}
+            >
+              Visit www.talentfiner.com
+              <FaArrowRight />
+            </a>
+            {/* {!isEmailValid && (
+              <p style={{ color: "crimson" }}>Access Revoked!!!</p>
+            )} */}
           </form>
         ) : (
           <form onSubmit={handleLogin}>

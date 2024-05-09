@@ -3,18 +3,23 @@ import { useForm } from "react-hook-form";
 import styles from "./leave.module.scss";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Leave = ({ isOpen, employeeId }) => {
   const [loading, setLoading] = useState(false);
   const [leavesData, setLeavesData] = useState([]);
   const[fullName, setFullname] = useState();
   const[designation, setDesignation] = useState();
+  const[team, setTeam] = useState();
 
   useEffect(() => {
     const storedFullName = localStorage.getItem("fullName");
     setFullname(storedFullName);
     const storedDesignation = localStorage.getItem("designation");
     setDesignation(storedDesignation);
+    const storedTeam = localStorage.getItem("team");
+    setTeam(storedTeam);
   }, []);
 
   const {
@@ -55,6 +60,7 @@ const Leave = ({ isOpen, employeeId }) => {
     formData.append("employeeId", employeeId);
     formData.append("fullName", fullName);
     formData.append("designation", designation);
+    formData.append("team", team);
     formData.append("leaveDate", data.leaveDate);
     formData.append("days", 1);
     formData.append("leaveType", data.leaveType);
@@ -72,18 +78,41 @@ const Leave = ({ isOpen, employeeId }) => {
         }
       );
       if (response.data.success) {
-        window.alert("Leave applied");
+        notifySuccess();
         reset(); // Reset form fields
       }
     } catch (error) {
-      window.alert("Try again after sometime");
+      notifyFail();
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+  const notifySuccess = () =>
+    toast.success("Leave Applied", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const notifyFail = () =>
+    toast.error("Try again after sometime", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   return (
     <>
+          <ToastContainer position="top-right" />
       {isOpen && (
         <div className={styles.formContainer}>
           <form onSubmit={handleSubmit(onSubmit)}>

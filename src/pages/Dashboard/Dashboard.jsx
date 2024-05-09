@@ -214,8 +214,8 @@ const Dashboard = () => {
             Mark Attendance
           </p>
           <div>
-            <IoFingerPrintSharp color="#fab437" size={50} />
-            {isCheckedIn ? <p>{formatTime(countdown)}</p> : <p>00:00:00 hrs</p>}
+            <IoFingerPrintSharp color="#fab437" size={80} />
+            {/* {isCheckedIn ? <p>{formatTime(countdown)}</p> : <p>00:00:00 hrs</p>} */}
           </div>
           <button
             className={isCheckedIn ? styles.checkOut : styles.checkIn}
