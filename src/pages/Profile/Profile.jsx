@@ -15,6 +15,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiGovernmentFill } from "react-icons/ri";
 
+const fetchData = async (uemail, setData, setRole) => {
+  try {
+    const response = await axios.get(
+      `https://talentfiner.in/backend/getEmpDaTa.php?email=${uemail}`
+    );
+    setData(response.data);
+    localStorage.setItem("employeeId", response.data.employeeId);
+    localStorage.setItem("profilePicture", response.data.selfiePhoto);
+    localStorage.setItem("team", response.data.team);
+    localStorage.setItem("role", response.data.secretRole);
+    localStorage.setItem("fullName", response.data.fullName);
+    localStorage.setItem("designation", response.data.designation);
+    setRole(response.data.secretRole);
+  } catch (error) {
+    console.error("Error fetching data", error);
+  }
+};
+
 const Profile = ({ setRole }) => {
   const [data, setData] = useState(null);
   const [uemail, setUemail] = useState();
@@ -111,7 +129,7 @@ const Profile = ({ setRole }) => {
     stipend: "",
     probationPeriod: "",
     professionTax:"",
-    provisionFund:"",
+    providentFund:"",
     uanNumber:"",
     pfAccountNumber:""
   });
@@ -139,33 +157,11 @@ const Profile = ({ setRole }) => {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `https://talentfiner.in/backend/getEmpDaTa.php?email=${uemail}`
-        );
-        if (isMounted) {
-          setData(response.data);
-          localStorage.setItem("employeeId", response.data.employeeId);
-          localStorage.setItem("profilePicture", response.data.selfiePhoto);
-          localStorage.setItem("team", response.data.team);
-          localStorage.setItem("role", response.data.secretRole);
-          localStorage.setItem("fullName", response.data.fullName);
-          localStorage.setItem("designation", response.data.designation);
-          setRole(response.data.secretRole);
-        }
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
-
-    fetchData();
-    return () => {
-      isMounted = false;
-    };
-  }, [uemail]);
+    // Only fetch data if uemail is available
+    if (uemail) {
+      fetchData(uemail, setData, setRole);
+    }
+  }, [uemail]); // Dependency on uemail
 
   useEffect(() => {
     if (data) {
@@ -219,7 +215,7 @@ const Profile = ({ setRole }) => {
         stipend: data.stipend || "",
         probationPeriod: data.probationPeriod || "",
         professionTax: data.professionTax || "",
-        provisionFund: data.provisionFund || "",
+        providentFund: data.providentFund || "",
         uanNumber: data.uanNumber || "",
         pfAccountNumber: data.pfAccountNumber || "",
       });
@@ -267,7 +263,7 @@ const Profile = ({ setRole }) => {
       "hiringHrEmail",
       "probationPeriod",
       "professionTax",
-      "provisionFund",
+      "providentFund",
       "uanNumber",
       "pfAccountNumber"
     ];
@@ -304,6 +300,7 @@ const Profile = ({ setRole }) => {
       .then((response) => {
         // Handle the response from the backend, such as showing a success message
         if (response) {
+          fetchData(uemail, setData, setRole);
           setLoading(false);
           notifySuccess();
           // window.location.reload();
@@ -1601,14 +1598,14 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              provision fund<span className={styles.required}>*</span>
+              provident fund<span className={styles.required}>*</span>
               <input
                 type="text"
-                name="provisionFund"
-                value={data.provisionFund ?? employee.provisionFund}
+                name="providentFund"
+                value={data.providentFund ?? employee.providentFund}
                 onChange={handleChange}
                 className={styles.inputField}
-                disabled={data.provisionFund !== null}
+                disabled={data.providentFund !== null}
               />
             </label>
           </div>

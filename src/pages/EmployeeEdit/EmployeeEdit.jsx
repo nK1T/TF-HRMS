@@ -2,11 +2,35 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaCircleCheck } from "react-icons/fa6";
 import styles from "./employeeEdit.module.scss";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const EmployeeEdit = () => {
   const { employeeId } = useParams();
   const [data, setData] = useState([]);
+  const notifySuccess = () =>
+    toast.success("Profile Updated", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    const notifyFail = () =>
+      toast.error("Try again after sometime", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -120,14 +144,21 @@ const EmployeeEdit = () => {
       const response = await axios.post(
         `https://talentfiner.in/backend/updateEmployeeInfo.php`,
         updatedEmployeeData
-      );
-      window.location.reload();
+      ).then((response)=>{
+        console.log(response);
+          if(response.data.success){
+            notifySuccess();
+          }else{
+            notifyFail()
+          }
+      })
     } catch (error) {
       console.error("Error updating employee data:", error);
     }
   };
   return (
     <div className={styles.container}>
+      <ToastContainer position="top-right" />
       {filterEmployeeData().map((employee) => (
         <form key={employee.employeeId} className={styles.details}>
           <div className={styles.formField}>
@@ -1040,11 +1071,11 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              provision fund<span className={styles.required}>*</span>
+            provident fund<span className={styles.required}>*</span>
               <input
                 type="text"
-                name="provisionFund"
-                value={data.provisionFund ?? employee.provisionFund}
+                name="providentFund"
+                value={data.providentFund ?? employee.providentFund}
                 onChange={handleChange}
                 className={styles.inputField}
               />

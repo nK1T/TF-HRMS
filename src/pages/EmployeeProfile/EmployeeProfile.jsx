@@ -532,8 +532,8 @@ const EmployeeProfile = () => {
                 <p>{employee.professionTax}</p>
               </div>
             <div className={styles.detail}>
-                <p>Provision Fund:</p>
-                <p>{employee.provisionFund}</p>
+                <p>Provident Fund:</p>
+                <p>{employee.providentFund}</p>
               </div>
             <div className={styles.detail}>
                 <p>UAN Number:</p>

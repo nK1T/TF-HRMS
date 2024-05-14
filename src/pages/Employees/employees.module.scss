@@ -65,12 +65,12 @@
         margin: 10px;
         gap: 20px;
         .employee {
-            position: relative;
+          position: relative;
           padding: 10px;
           border-radius: 5px;
           box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
           background-color: $background;
-          .verifiedIcon{
+          .verifiedIcon {
             top: 0;
             right: 0;
             color: #1ea5fe;
@@ -100,16 +100,16 @@
               }
             }
           }
-          .bottomBtn{
+          .bottomBtn {
             display: flex;
             justify-content: space-between;
-            .bottomLink{
+            .bottomLink {
               text-decoration: none;
-              .btn2{
+              .btn2 {
                 color: $text;
                 background-color: $accent;
               }
-              button{
+              button {
                 display: flex;
                 align-items: center;
                 gap: 3px;
@@ -120,16 +120,48 @@
                 color: $background;
                 font-weight: 600;
                 text-transform: uppercase;
-                font-size: .7rem;
+                font-size: 0.7rem;
                 padding: 5px;
               }
             }
           }
         }
       }
-      .addNew{
-        margin: 10px;
-        .addNewBtn{
+      .shead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 10px 20px 10px;
+        .toggleBtns {
+          display: flex;
+          gap: 10px;
+          .toggleBtn1 {
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
+            border: none;
+            cursor: pointer;
+            background-color: forestgreen;
+            padding: 10px;
+            border-radius: 5px;
+            color: $background;
+            font-weight: 600;
+            font-size: 0.8rem;
+          }
+          .toggleBtn2 {
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
+            border: none;
+            cursor: pointer;
+            background-color: crimson;
+            padding: 10px;
+            border-radius: 5px;
+            color: $background;
+            font-weight: 600;
+            font-size: 0.8rem;
+          }
+        }
+        .addNew {
+          .addNewBtn {
             display: flex;
             align-items: center;
             gap: 3px;
@@ -140,14 +172,18 @@
             color: $background;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: .7rem;
+            font-size: 0.7rem;
             padding: 5px;
+          }
         }
       }
     }
   }
 }
-
+.activeBtn {
+  transform: scale(.9);
+  box-shadow: none !important;
+}
 /* FORM styles */
 .form {
   position: fixed;
@@ -194,13 +230,13 @@
   color: $ltext;
 }
 .basicD {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  .basicD > .formField {
-      width: 100%;
-  }
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.basicD > .formField {
+  width: 100%;
+}
 .formField {
   margin-bottom: 15px;
 }
@@ -209,7 +245,7 @@
   font-size: 0.8rem;
   display: block;
   margin-bottom: 5px;
-  color: $ltext
+  color: $ltext;
 }
 
 .inputField {
@@ -234,39 +270,39 @@
   background-color: $text;
   margin: auto;
   font-size: 0.8rem;
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
 }
-.submitBtn:hover{
+.submitBtn:hover {
   transform: scale(1.1);
 }
-option{
+option {
   color: $ltext;
 }
 @media (max-width: 1100px) {
-    .form {
-        padding: 200px 200px 0px 200px;
-      }
+  .form {
+    padding: 200px 200px 0px 200px;
+  }
 }
 
 @media (max-width: 640px) {
-    .container{
-        .top{
-            .filters{
-                .filter{
-                    top: 0;
-                    position: static;
-                }
-                .employees{
-                  .employee{
-                    img{
-                      height: 350px;
-                    }
-                  }
-                }
+  .container {
+    .top {
+      .filters {
+        .filter {
+          top: 0;
+          position: static;
+        }
+        .employees {
+          .employee {
+            img {
+              height: 350px;
             }
+          }
         }
-        .form {
-            padding: 200px 10px 0px 10px;
-        }
+      }
     }
+    .form {
+      padding: 200px 10px 0px 10px;
+    }
+  }
 }

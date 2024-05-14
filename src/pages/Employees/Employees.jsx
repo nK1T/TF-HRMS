@@ -34,17 +34,17 @@ const Employees = () => {
       theme: "dark",
     });
 
-    const notifyFail = (msg) =>
-      toast.error(`${msg}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+  const notifyFail = (msg) =>
+    toast.error(`${msg}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   const catg = [
     {
       catg_id: 1,
@@ -84,6 +84,7 @@ const Employees = () => {
     },
   ];
   const [data, setData] = useState([]);
+  const [activeToggle, setActiveToggle] = useState();
   const [originalData, setOriginalData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -154,7 +155,7 @@ const Employees = () => {
   // };
 
   useEffect(() => {
-    if(role === "t3aml34d"){
+    if (role === "t3aml34d") {
       const teamName = localStorage.getItem("team");
       if (teamName) {
         // Check if teamData is already cached
@@ -163,7 +164,9 @@ const Employees = () => {
           setData(JSON.parse(cachedData));
         } else {
           axios
-            .get(`https://talentfiner.in/backend/getEmpDaTa.php?team=${teamName}`)
+            .get(
+              `https://talentfiner.in/backend/getEmpDaTa.php?team=${teamName}`
+            )
             .then((response) => {
               // Cache the fetched teamData
               sessionStorage.setItem(
@@ -175,25 +178,27 @@ const Employees = () => {
             .catch((err) => console.log("Error fetching data", err));
         }
       }
-    }else{
-
+    } else {
       // Check if teamData is already cached
       const cachedData = sessionStorage.getItem("employeeData");
       if (cachedData) {
-      setOriginalData(JSON.parse(cachedData));
-      setData(JSON.parse(cachedData));
-    } else {
-      axios
-        .get("https://talentfiner.in/backend/getEmpDaTa.php")
-        .then((response) => {
-          // Cache the fetched teamData
-          sessionStorage.setItem("employeeData", JSON.stringify(response.data));
-          setOriginalData(response.data);
-          setData(response.data);
-        })
-        .catch((err) => console.log("Error fetching data", err));
+        setOriginalData(JSON.parse(cachedData));
+        setData(JSON.parse(cachedData));
+      } else {
+        axios
+          .get("https://talentfiner.in/backend/getEmpDaTa.php")
+          .then((response) => {
+            // Cache the fetched teamData
+            sessionStorage.setItem(
+              "employeeData",
+              JSON.stringify(response.data)
+            );
+            setOriginalData(response.data);
+            setData(response.data);
+          })
+          .catch((err) => console.log("Error fetching data", err));
+      }
     }
-  }
   }, []);
 
   const filterEmployee = () => {
@@ -202,6 +207,11 @@ const Employees = () => {
     }
 
     return data.filter((employee) => employee.department === selectedCategory);
+  };
+
+  const handleToggle = (task) => {
+    setData(originalData.filter((employee) => employee.currentStatus === task));
+    setActiveToggle(task);
   };
 
   const handleSubmit = async (e) => {
@@ -224,9 +234,8 @@ const Employees = () => {
         notifySucess();
         setFormData({});
         setIsOpenArray(false);
-        
       } else {
-        notifyFail(response.data.message)
+        notifyFail(response.data.message);
       }
     } catch (error) {
       window.alert("An unexpected error occurred. Please try again later.");
@@ -267,14 +276,34 @@ const Employees = () => {
                   />
                 </div>
               </div>
-              <div className={styles.addNew}>
-                <button
-                  onClick={() => openModal()}
-                  className={styles.addNewBtn}
-                >
-                  <MdAddBox color="#fab437" size={15} />
-                  Add new
-                </button>
+              <div className={styles.shead}>
+                <div className={styles.addNew}>
+                  <button
+                    onClick={() => openModal()}
+                    className={styles.addNewBtn}
+                  >
+                    <MdAddBox color="#fab437" size={15} />
+                    Add new
+                  </button>
+                </div>
+                <div className={styles.toggleBtns}>
+                  <button
+                    className={`${styles.toggleBtn1} ${
+                      activeToggle === "active" ? styles.activeBtn : ""
+                    }`}
+                    onClick={() => handleToggle("active")}
+                  >
+                    Active
+                  </button>
+                  <button
+                    className={`${styles.toggleBtn2} ${
+                      activeToggle === "inactive" ? styles.activeBtn : ""
+                    }`}
+                    onClick={() => handleToggle("inactive")}
+                  >
+                    Inactive
+                  </button>
+                </div>
               </div>
             </>
           )}

@@ -9,9 +9,9 @@ import "react-toastify/dist/ReactToastify.css";
 const Leave = ({ isOpen, employeeId }) => {
   const [loading, setLoading] = useState(false);
   const [leavesData, setLeavesData] = useState([]);
-  const[fullName, setFullname] = useState();
-  const[designation, setDesignation] = useState();
-  const[team, setTeam] = useState();
+  const [fullName, setFullname] = useState();
+  const [designation, setDesignation] = useState();
+  const [team, setTeam] = useState();
 
   useEffect(() => {
     const storedFullName = localStorage.getItem("fullName");
@@ -80,6 +80,12 @@ const Leave = ({ isOpen, employeeId }) => {
       if (response.data.success) {
         notifySuccess();
         reset(); // Reset form fields
+        // Refetch data after successful submission
+        const newData = await axios.get(
+          "https://talentfiner.in/backend/leaves/fetchLeaves.php"
+        );
+        setLeavesData(newData.data);
+        sessionStorage.setItem("leavesData", JSON.stringify(newData.data));
       }
     } catch (error) {
       notifyFail();
@@ -112,7 +118,7 @@ const Leave = ({ isOpen, employeeId }) => {
     });
   return (
     <>
-          <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" />
       {isOpen && (
         <div className={styles.formContainer}>
           <form onSubmit={handleSubmit(onSubmit)}>

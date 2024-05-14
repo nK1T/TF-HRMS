@@ -11,21 +11,21 @@ const Leaves = () => {
   const [leavesData, setLeavesData] = useState([]);
   const role = localStorage.getItem("role");
   const team = localStorage.getItem("team");
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let url = "https://talentfiner.in/backend/leaves/fetchLeaves.php";
-        if (role === "t3aml34d") {
-          url = `https://talentfiner.in/backend/leaves/fetchLeaves.php?team=${team}`;
-        }
-        const response = await axios.get(url);
-        setLeavesData(response.data);
-        sessionStorage.setItem("leavesData", JSON.stringify(response.data));
-      } catch (error) {
-        console.error("Error fetching monthly report data:", error);
+  const fetchData = async () => {
+    try {
+      let url = "https://talentfiner.in/backend/leaves/fetchLeaves.php";
+      if (role === "t3aml34d") {
+        url = `https://talentfiner.in/backend/leaves/fetchLeaves.php?team=${team}`;
       }
-    };
-  
+      const response = await axios.get(url);
+      setLeavesData(response.data);
+      sessionStorage.setItem("leavesData", JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error fetching leaves data:", error);
+    }
+  };
+
+  useEffect(() => {
     const cachedData = sessionStorage.getItem("leavesData");
     if (cachedData) {
       setLeavesData(JSON.parse(cachedData));
@@ -33,8 +33,7 @@ const Leaves = () => {
       fetchData();
     }
   }, []);
-  
-  
+
   const handleStatus = async (id, newStatus) => {
     const markVerified = window.confirm("Are you sure?");
     if (!markVerified) {
@@ -50,9 +49,9 @@ const Leaves = () => {
           },
         }
       );
-      //   window.location.reload();
+      fetchData(); // Refetch data after action
     } catch (error) {
-      console.log("Error doing verification", error);
+      console.log("Error updating status:", error);
     }
   };
   

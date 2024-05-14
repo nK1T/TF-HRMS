@@ -10,6 +10,7 @@ import { MdCelebration, MdAddBox } from "react-icons/md";
 import Attendance from "../../components/Attendance/Attendance";
 import MonthlyReport from "../../components/MonthlyReport/MonthlyReport";
 import Leave from "../../components/Leave/Leave";
+import { useRefreshData } from "../../components/RefreshDataProvider";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,11 @@ const Dashboard = () => {
   const [countdown, setCountdown] = useState(0);
   const [greeting, setGreeting] = useState("");
   const [profilePicture, setProfilePicture] = useState();
+  const { refreshData, setRefreshData } = useRefreshData();
+
+  const handleRefreshData = () => {
+    setRefreshData(!refreshData);
+  };
   const holidays = [
     { id: 1, date: "2024-02-5", name: "April Fools' Day" },
     { id: 2, date: "2024-02-14", name: "Vasant Panchami" },
@@ -150,6 +156,8 @@ const Dashboard = () => {
         employeeId,
       })
       .then(() => {
+        handleRefreshData();
+
         setIsCheckedIn(true);
         setCountdown(0);
         localStorage.setItem("isCheckedIn", "true");
@@ -165,6 +173,8 @@ const Dashboard = () => {
         employeeId,
       })
       .then(() => {
+        handleRefreshData();
+
         setIsCheckedIn(false);
         setCountdown(0);
         localStorage.setItem("isCheckedIn", "false");
@@ -297,18 +307,18 @@ const Dashboard = () => {
           <TbReportSearch color="#fab437" />
           Leave
           {!isOpen ? (
-          <button onClick={handleOpen} className={styles.addBtn}>
-            <MdAddBox color="#fab437" size={15} />
-            Apply
-          </button>
-        ) : (
-          <button onClick={handleClose} className={styles.addBtn}>
-            <FaWindowClose color="#fab437" size={12} />
-            close
-          </button>
-        )}
+            <button onClick={handleOpen} className={styles.addBtn}>
+              <MdAddBox color="#fab437" size={15} />
+              Apply
+            </button>
+          ) : (
+            <button onClick={handleClose} className={styles.addBtn}>
+              <FaWindowClose color="#fab437" size={12} />
+              close
+            </button>
+          )}
         </p>
-        <Leave isOpen={isOpen} employeeId={employeeId}/>
+        <Leave isOpen={isOpen} employeeId={employeeId} />
       </div>
     </div>
   );

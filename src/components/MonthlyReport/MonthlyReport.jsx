@@ -7,24 +7,15 @@ import { ClipLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MonthlyReport = ({ employeeId, action }) => {
-  // const [formData, setFormData] = useState({});
+const MonthlyReport = ({ employeeId, action, refreshData }) => {
   const [MonthlyReportData, setMonthlyReportData] = useState([]);
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // };
   const [loadingReports, setLoadingReports] = useState({});
   const notifySuccess = () =>
     toast.success("Email Sent", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
-      closeOnClick: true,
+      closeOnClick: false,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
@@ -35,14 +26,13 @@ const MonthlyReport = ({ employeeId, action }) => {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
-      closeOnClick: true,
+      closeOnClick: false,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
       theme: "dark",
     });
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { // Moved fetchData outside useEffect
       try {
         const response = await axios.get(
           "https://talentfiner.in/backend/monthlyReport/fetchMonthlyReport.php"
@@ -56,15 +46,19 @@ const MonthlyReport = ({ employeeId, action }) => {
         console.error("Error fetching monthly report data:", error);
       }
     };
-
-    const cachedData = sessionStorage.getItem("monthlyReportData");
-    if (cachedData) {
-      setMonthlyReportData(JSON.parse(cachedData));
-    } else {
-      fetchData();
-    }
-  }, []);
-
+  
+    useEffect(() => {
+      const cachedData = sessionStorage.getItem("monthlyReportData");
+      if (cachedData) {
+        setMonthlyReportData(JSON.parse(cachedData));
+      } else {
+        fetchData();
+      }
+    }, []);
+  
+    useEffect(() => {
+      fetchData(); // Call fetchData when refreshData changes
+    }, [refreshData]);
   const filteredReport = () => {
     if (!Array.isArray(MonthlyReportData)) {
       return [];
@@ -90,6 +84,7 @@ const MonthlyReport = ({ employeeId, action }) => {
       .then((response) => {
         if (response.data.success) {
           notifySuccess();
+          fetchData();
         } else {
           notifyFail();
         }
@@ -114,6 +109,8 @@ const MonthlyReport = ({ employeeId, action }) => {
           <tr>
             <th>Sr No.</th>
             <th>Month</th>
+            <th>From</th>
+            <th>To</th>
             <th>Paid Days</th>
             <th>Present Days</th>
             <th>Absent Days</th>
@@ -124,7 +121,7 @@ const MonthlyReport = ({ employeeId, action }) => {
             <th>Loss of Pay</th>
             <th>House Rent Allowance</th>
             <th>Special Allowance</th>
-            <th>Pay Slip</th>
+            <th>Payment Proof</th>
             <th>Certificate</th>
             {action && <th>Action</th>}
           </tr>
@@ -134,6 +131,8 @@ const MonthlyReport = ({ employeeId, action }) => {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{item.month}</td>
+              <td>{item.fromDate}</td>
+              <td>{item.toDate}</td>
               <td>{item.paidDays}</td>
               <td>{item.presentDays}</td>
               <td>{item.absentDays}</td>

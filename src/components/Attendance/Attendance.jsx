@@ -3,29 +3,28 @@ import styles from "./attendance.module.scss";
 import axios from "axios";
 import Calendar from "react-calendar";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import { useRefreshData } from "../RefreshDataProvider";
 
 const Attendance = ({ employeeId }) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const  refreshData  = useRefreshData();
   useEffect(() => {
-    // Check if attendanceData is already cached
-    const cachedData = sessionStorage.getItem("attendanceData");
-    if (cachedData) {
-      setAttendanceData(JSON.parse(cachedData));
-    } else {
-      axios
-        .get("https://talentfiner.in/backend/attendance/fetchAttendance.php")
-        .then((response) => {
-          // Cache the fetched attendanceData
-          sessionStorage.setItem("attendanceData", JSON.stringify(response.data));
-          setAttendanceData(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching attendance data:", error);
-        });
-    }
-  }, []);
+    fetchData();
+  }, [refreshData]);
+
+  const fetchData = () => {
+    axios
+      .get("https://talentfiner.in/backend/attendance/fetchAttendance.php")
+      .then((response) => {
+        // Cache the fetched attendanceData
+        sessionStorage.setItem("attendanceData", JSON.stringify(response.data));
+        setAttendanceData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching attendance data:", error);
+      });
+  };
 
   const filterAttendanceData = () => {
     if (!Array.isArray(attendanceData)) {

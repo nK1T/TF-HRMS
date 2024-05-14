@@ -16,7 +16,13 @@ const Employeeattendance = () => {
   const { employeeId } = useParams();
   const uppercaseEmployeeId = employeeId.toUpperCase();
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
+
+  const handleRefreshData = () => {
+    setRefreshData(!refreshData);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,7 +34,7 @@ const Employeeattendance = () => {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
-      closeOnClick: true,
+      closeOnClick: false,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
@@ -40,7 +46,7 @@ const Employeeattendance = () => {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
-      closeOnClick: true,
+      closeOnClick: false,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
@@ -64,6 +70,8 @@ const Employeeattendance = () => {
     const formData = new FormData();
     formData.append("employeeId", uppercaseEmployeeId);
     formData.append("month", data.month);
+    formData.append("fromDate", data.fromDate);
+    formData.append("toDate", data.toDate);
     formData.append("paidDays", data.paidDays);
     formData.append("presentDays", data.presentDays);
     formData.append("absentDays", data.absentDays);
@@ -91,6 +99,7 @@ const Employeeattendance = () => {
       if (response.data.success) {
         notifySucess();
         reset(); // Reset form fields
+        handleRefreshData();
       }
     } catch (error) {
       notifyFail();
@@ -99,6 +108,17 @@ const Employeeattendance = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://talentfiner.in/backend/getEmpDaTa.php?employeeId=${uppercaseEmployeeId}`
+      )
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => console.log("Error fetching data", err));
+  }, [uppercaseEmployeeId]);
   return (
     <div className={styles.container}>
       <ToastContainer position="top-right" />
@@ -132,6 +152,20 @@ const Employeeattendance = () => {
       </div>
       {isOpen && (
         <div className={styles.formContainer}>
+          <div className={styles.paysInfo}>
+            <div className={styles.payInfo}>
+              <p>CTC:</p>
+              <p>{data.ctc}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Fixed Compensation:</p>
+              <p>{data.fixedCompensation}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Stipend:</p>
+              <p>{data.stipend ? data.stipend : 0}</p>
+            </div>
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formFieldsWrapper}>
               <div className={styles.formField}>
@@ -161,6 +195,24 @@ const Employeeattendance = () => {
                 {errors.month && errors.month.type === "required" && (
                   <span>This field is required</span>
                 )}
+              </div>
+              <div className={styles.formField}>
+                <label htmlFor="fromDate">From Date</label>
+                <input
+                  type="date"
+                  {...register("fromDate", { required: true })}
+                  className={styles.inputField}
+                />
+                {errors.fromDate && <span>This field is required</span>}
+              </div>
+              <div className={styles.formField}>
+                <label htmlFor="toDate">To Date</label>
+                <input
+                  type="date"
+                  {...register("toDate", { required: true })}
+                  className={styles.inputField}
+                />
+                {errors.toDate && <span>This field is required</span>}
               </div>
               <div className={styles.formField}>
                 <label>Paid Days</label>
@@ -270,7 +322,7 @@ const Employeeattendance = () => {
                 />
               </div>
               <div className={styles.formField}>
-                <label>Pay Slip</label>
+                <label>Payment Proof</label>
                 <input
                   {...register("paySlip", { required: true })}
                   type="file"
@@ -298,7 +350,7 @@ const Employeeattendance = () => {
           </form>
         </div>
       )}
-      <MonthlyReport employeeId={employeeId} action={true} />
+      <MonthlyReport employeeId={employeeId} action={true} refreshData={handleRefreshData} />
     </div>
   );
 };

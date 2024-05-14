@@ -15,6 +15,7 @@ import Leaves from "./pages/Leaves/Leaves";
 import Resignation from "./pages/Resignation/Resignation";
 import Resignations from "./pages/Resignations/Resignations";
 import { DataProvider } from "./components/dataProvider";
+import { RefreshDataProvider } from "./components/RefreshDataProvider";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -52,7 +53,9 @@ function App() {
             path="/"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Dashboard />
+                <RefreshDataProvider>
+                  <Dashboard />
+                </RefreshDataProvider>
               </PrivateRoute>
             }
           />
