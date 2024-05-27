@@ -61,69 +61,128 @@
       }
       .employees {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(1, minmax(220px, 1fr));
         margin: 10px;
         gap: 20px;
         .employee {
-          position: relative;
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          // position: relative;
           padding: 10px;
           border-radius: 5px;
           box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
           background-color: $background;
-          .verifiedIcon {
-            top: 0;
-            right: 0;
-            color: #1ea5fe;
-            position: absolute;
-          }
-          img {
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            height: 200px;
-            width: 100%;
-          }
-          .employeeDetails {
-            margin-top: 10px;
-            .employeeDetail {
-              border-bottom: 1px solid $ltext;
-              margin-bottom: 10px;
-              padding-bottom: 5px;
-              font-size: 0.7rem;
-              display: flex;
-              justify-content: space-between;
-              p:nth-child(1) {
-                font-weight: 700;
-                color: $text;
-              }
-              p:nth-child(2) {
-                color: $ltext;
-              }
-            }
-          }
-          .bottomBtn {
+          // align-items: center;
+          .left{
+            flex: 1;
             display: flex;
             justify-content: space-between;
-            .bottomLink {
-              text-decoration: none;
-              .btn2 {
-                color: $text;
-                background-color: $accent;
-              }
-              button {
-                display: flex;
-                align-items: center;
-                gap: 3px;
-                cursor: pointer;
-                border-radius: 4px;
-                border: none;
-                background-color: $text;
-                color: $background;
-                font-weight: 600;
-                text-transform: uppercase;
-                font-size: 0.7rem;
+            align-items: center !important;
+            gap: 20px;
+            img {
+              border-radius: 5px;
+              height: 100px;
+              width: 100px;
+            }
+            .image{
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 15px;
+              position: relative;
+              .imgBottom{
                 padding: 5px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                border-radius: 5px;
+                color: $text;
+                width: 100%;
+                // background-color: $accent;
+                :nth-child(1){
+                  padding: 2px;
+                  text-align: center;
+                  color: $text;
+                  border-radius: 4px;
+                  font-size: .7rem;
+                  font-weight: 600;
+                  background-color: $accent;
+                }
+                :nth-child(2){
+                  padding: 2px;
+                  text-align: center;
+                  color: $background;
+                  border-radius: 4px;
+                  font-size: .7rem;
+                  font-weight: 500;
+                  background-color: $text;
+                }
+                :nth-child(3){
+                  padding: 2px;
+                  text-align: center;
+                  color: $background;
+                  border-radius: 4px;
+                  font-size: .7rem;
+                  font-weight: 500;
+                  background-color: $text;
+                }
               }
             }
+            .verifiedIcon {
+              top: -10px;
+              right: -10px;
+              color: #1ea5fe;
+              position: absolute;
+            }
+            .employeeDetails {
+              min-width: 300px;
+              .employeeDetail {
+                // border-bottom: 1px solid $ltext;
+                margin-bottom: 3px;
+                padding-bottom: 5px;
+                font-size: 0.7rem;
+                display: flex;
+                justify-content: space-between;
+                // gap: 100px;
+                p:nth-child(1) {
+                  font-weight: 700;
+                  color: $text;
+                }
+                p:nth-child(2) {
+                  color: $ltext;
+                }
+              }
+            }
+            .bottomBtn {
+              display: flex;
+              justify-content: space-between;
+              .bottomLink {
+                text-decoration: none;
+                .btn2 {
+                  color: $text;
+                  background-color: $accent;
+                }
+                button {
+                  display: flex;
+                  align-items: center;
+                  gap: 3px;
+                  cursor: pointer;
+                  border-radius: 4px;
+                  border: none;
+                  background-color: $text;
+                  color: $background;
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  font-size: 0.7rem;
+                  padding: 5px;
+                }
+              }
+            }
+          }
+          .right{
+            flex: 2;
           }
         }
       }
@@ -134,14 +193,16 @@
         margin: 10px 10px 20px 10px;
         .toggleBtns {
           display: flex;
+          justify-content: space-between;
           gap: 10px;
           .toggleBtn1 {
             box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
-    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
+              rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+              rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
             border: none;
             cursor: pointer;
             background-color: forestgreen;
-            padding: 10px;
+            padding: 5px 10px;
             border-radius: 5px;
             color: $background;
             font-weight: 600;
@@ -149,11 +210,12 @@
           }
           .toggleBtn2 {
             box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
-    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
-            border: none;
-            cursor: pointer;
-            background-color: crimson;
-            padding: 10px;
+              rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+              rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
+              border: none;
+              cursor: pointer;
+              background-color: crimson;
+              padding: 5px 10px;
             border-radius: 5px;
             color: $background;
             font-weight: 600;
@@ -181,7 +243,7 @@
   }
 }
 .activeBtn {
-  transform: scale(.9);
+  transform: scale(0.9);
   box-shadow: none !important;
 }
 /* FORM styles */
@@ -192,7 +254,7 @@
   bottom: 0;
   left: 0;
   z-index: 2;
-  padding: 100px 400px 0px 400px;
+  padding: 70px 450px 0px 450px;
   overflow-x: hidden;
   overflow-y: auto;
   outline: 0;
@@ -213,7 +275,7 @@
   border-radius: 5px;
   align-items: center;
   gap: 60px;
-  padding: 40px 20px;
+  padding: 20px;
   cursor: default;
   position: relative;
   margin: auto;
@@ -280,7 +342,12 @@ option {
 }
 @media (max-width: 1100px) {
   .form {
-    padding: 200px 200px 0px 200px;
+    padding: 100px 200px 0px 200px;
+  }
+  .employees{
+    .employee{
+      flex-direction: column;
+    }
   }
 }
 
@@ -302,7 +369,20 @@ option {
       }
     }
     .form {
-      padding: 200px 10px 0px 10px;
+      padding: 100px 10px 0px 10px;
     }
+  }
+}
+@media (max-width: 550px) {
+  .employees{
+    .employee{
+      .left{
+        flex-direction: column;
+      }
+    }
+  }
+  .image{
+    display: flex;
+    justify-content: center;
   }
 }

@@ -84,13 +84,39 @@
         font-weight: 600;
         color: $ltext;
       }
-      div {
+      .fingerPrint {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 10px;
       }
+      .btns {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        .btn {
+          width: 100%;
+          button {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            border: none;
+            font-weight: 600;
+            background-color: $accent;
+            color: $text;
+            width: 100%;
+            border: 2px solid $accent;
+            &:hover {
+              background-color: transparent;
+              color: $accent;
+            }
+          }
+        }
+      }
       .checkIn {
+        width: 100%;
         cursor: pointer;
         padding: 5px;
         border-radius: 5px;
@@ -106,6 +132,7 @@
         }
       }
       .checkOut {
+        width: 100%;
         cursor: pointer;
         padding: 5px;
         border-radius: 5px;
@@ -292,10 +319,10 @@
         .team {
           div {
             p:nth-child(1) {
-              font-size: .9rem;
+              font-size: 0.9rem;
             }
             p:nth-child(2) {
-              font-size: .8rem;
+              font-size: 0.8rem;
             }
           }
         }
@@ -304,10 +331,10 @@
         .holidays {
           div {
             p:nth-child(1) {
-              font-size: .9rem;
+              font-size: 0.9rem;
             }
             p:nth-child(2) {
-              font-size: .8rem;
+              font-size: 0.8rem;
             }
           }
         }

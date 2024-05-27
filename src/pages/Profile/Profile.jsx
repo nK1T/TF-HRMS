@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiGovernmentFill } from "react-icons/ri";
+import { HiBuildingOffice2 } from "react-icons/hi2";
 
 const fetchData = async (uemail, setData, setRole) => {
   try {
@@ -27,7 +28,10 @@ const fetchData = async (uemail, setData, setRole) => {
     localStorage.setItem("role", response.data.secretRole);
     localStorage.setItem("fullName", response.data.fullName);
     localStorage.setItem("designation", response.data.designation);
+    localStorage.setItem("department", response.data.department);
     setRole(response.data.secretRole);
+    sessionStorage.setItem("selfProfileData",JSON.stringify(response.data));
+    console.log("calledddddd");
   } catch (error) {
     console.error("Error fetching data", error);
   }
@@ -62,7 +66,7 @@ const Profile = ({ setRole }) => {
         progress: undefined,
         theme: "dark",
       });
-    const notifyField = ({field}) =>
+    const notifyField = (field) =>
       toast.warn(`Please fill ${field} before proceeding.`, {
         position: "top-right",
         autoClose: 5000,
@@ -127,7 +131,10 @@ const Profile = ({ setRole }) => {
     ctc: "",
     fixedCompensation: "",
     stipend: "",
+    houseRentAllowance:"",
+    specialAllowance:"",
     probationPeriod: "",
+    probationEndDate:"",
     professionTax:"",
     providentFund:"",
     uanNumber:"",
@@ -157,10 +164,15 @@ const Profile = ({ setRole }) => {
   }, []);
 
   useEffect(() => {
-    // Only fetch data if uemail is available
-    if (uemail) {
-      fetchData(uemail, setData, setRole);
+    const cachedData = sessionStorage.getItem("selfProfileData");
+    if(cachedData){
+      setData(JSON.parse(cachedData));
+    }else{
+      if (uemail) {
+        fetchData(uemail, setData, setRole);
+      }
     }
+    // Only fetch data if uemail is available
   }, [uemail]); // Dependency on uemail
 
   useEffect(() => {
@@ -214,6 +226,7 @@ const Profile = ({ setRole }) => {
         fixedCompensation: data.fixedCompensation || "",
         stipend: data.stipend || "",
         probationPeriod: data.probationPeriod || "",
+        probationEndDate: data.probationEndDate || "",
         professionTax: data.professionTax || "",
         providentFund: data.providentFund || "",
         uanNumber: data.uanNumber || "",
@@ -262,10 +275,11 @@ const Profile = ({ setRole }) => {
       "olsCode",
       "hiringHrEmail",
       "probationPeriod",
-      "professionTax",
-      "providentFund",
-      "uanNumber",
-      "pfAccountNumber"
+      "probationEndDate",
+      // "professionTax",
+      // "providentFund",
+      // "uanNumber",
+      // "pfAccountNumber"
     ];
 
     // Find the first missing field, if any
@@ -274,7 +288,6 @@ const Profile = ({ setRole }) => {
     // If a missing field is found, show an alert and return early
     if (missingField) {
       const fieldName = missingField;
-      window.alert(`Please fill ${fieldName} before proceeding.`);
       notifyField(fieldName)
       return;
     }
@@ -346,6 +359,12 @@ const Profile = ({ setRole }) => {
       onboardingDate: date,
     }));
   };
+  const handleDateChangeProb = (date) => {
+    setEmployee((prevData) => ({
+      ...prevData,
+      probationEndDate: date,
+    }));
+  };
   const handleResign = () => {
     const confirmation = window.confirm(
       "Are you sure you want to move to the resignation page?"
@@ -357,7 +376,6 @@ const Profile = ({ setRole }) => {
   };
   return (
     <div className={styles.container}>
-      <ToastContainer position="top-right" />
       <div className={styles.header}>
         <ul className={styles.links}>
           {/* <li
@@ -772,6 +790,7 @@ const Profile = ({ setRole }) => {
                 <option value="TEAM LEAD">Team Lead</option>
                 <option value="ASSOCIATE">Associate</option>
                 <option value="INTERN">Intern</option>
+                <option value="IN PROBATION">In Probation</option>
               </select>
             </label>
           </div>
@@ -1518,6 +1537,51 @@ const Profile = ({ setRole }) => {
           </div>
         </div>
         <div className={styles.heading}>
+          <HiBuildingOffice2  color="#fab437" size={15} />
+          <p>Department details</p>
+        </div>
+        <div className={styles.additionalDetails}>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Team Leader
+              {/* <span className={styles.required}>*</span> */}
+              <input
+                type="text"
+                name="teamLeaderName"
+                value={data.teamLeaderName ?? employee.teamLeaderName}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            manager
+            {/* <span className={styles.required}>*</span> */}
+              <input
+                type="text"
+                name="managerName"
+                value={data.managerName ?? employee.managerName}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              general manager
+              {/* <span className={styles.required}>*</span> */}
+              <input
+                type="text"
+                name="generalManagerName"
+                value={data.generalManagerName ?? employee.generalManagerName}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+        </div>
+        <div className={styles.heading}>
           <FaRupeeSign color="#fab437" size={15} />
           <p>pay details</p>
         </div>
@@ -1550,7 +1614,8 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              stipend (monthly)<span className={styles.required}>*</span>
+              stipend (monthly)
+              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="stipend"
@@ -1558,6 +1623,35 @@ const Profile = ({ setRole }) => {
                 onChange={handleChange}
                 className={styles.inputField}
                 disabled={data.stipend !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              House rent allowance
+              {/* <span className={styles.required}>*</span> */}
+              <input
+                type="text"
+                name="houseRentAllowance"
+                value={data.houseRentAllowance ?? employee.houseRentAllowance}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.houseRentAllowance !== null}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              special allowance
+              {/* <span className={styles.required}>*</span> */}
+              <input
+                type="text"
+                name="specialAllowance"
+                value={data.specialAllowance ?? employee.specialAllowance}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.specialAllowance !== null}
                 required
               />
             </label>
@@ -1577,6 +1671,21 @@ const Profile = ({ setRole }) => {
               />
             </label>
           </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            probation End Date
+              <span className={styles.required}>*</span>
+              <input
+                type="date"
+                name="probationEndDate"
+                value={data.probationEndDate ?? employee.probationEndDate}
+                onChange={(e) => handleDateChangeProb(e.target.value)}
+                className={styles.inputField}
+                disabled={data.probationEndDate !== null}
+                required
+              />
+            </label>
+          </div>
         </div>
         <div className={styles.heading}>
           <RiGovernmentFill  color="#fab437" size={15} />
@@ -1585,7 +1694,8 @@ const Profile = ({ setRole }) => {
         <div className={styles.additionalDetails}>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              Profession Tax<span className={styles.required}>*</span>
+              Profession Tax
+              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="professionTax"
@@ -1598,7 +1708,8 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              provident fund<span className={styles.required}>*</span>
+              provident fund
+              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="providentFund"
@@ -1611,7 +1722,8 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              uan Number<span className={styles.required}>*</span>
+              uan Number
+              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="uanNumber"
@@ -1619,14 +1731,13 @@ const Profile = ({ setRole }) => {
                 onChange={handleChange}
                 className={styles.inputField}
                 disabled={data.uanNumber !== null}
-                required
               />
             </label>
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               Pf account number
-              <span className={styles.required}>*</span>
+              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="pfAccountNumber"
@@ -1634,7 +1745,6 @@ const Profile = ({ setRole }) => {
                 onChange={handleChange}
                 className={styles.inputField}
                 disabled={data.pfAccountNumber !== null}
-                required
               />
             </label>
           </div>

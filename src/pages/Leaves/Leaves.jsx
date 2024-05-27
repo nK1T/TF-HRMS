@@ -60,15 +60,15 @@ const Leaves = () => {
       <table>
         <thead>
           <tr>
-            <th style={{width:"70px"}}>Sr No</th>
-            <th style={{width:"200px"}}>Employee ID</th>
-            <th style={{width:"200px"}}>Name</th>
-            <th style={{width:"120px"}}>Designation</th>
-            <th style={{width:"120px"}}>Applied At</th>
-            <th style={{width:"150px"}}>Leave Date</th>
+            <th>Sr No</th>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th style={{minWidth:"80px"}}>Applied At</th>
+            <th style={{minWidth:"80px"}}>Leave Date</th>
             <th>Days</th>
-            <th style={{width:"200px"}}>Leave type</th>
-            <th style={{width:"300px"}}>Reason</th>
+            <th>Leave type</th>
+            <th>Reason</th>
             <th>Attachment</th>
             <th>Status</th>
             <th colSpan={2}>Action</th>

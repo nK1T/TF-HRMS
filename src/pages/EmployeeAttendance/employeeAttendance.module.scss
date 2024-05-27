@@ -38,19 +38,68 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    .filter {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      background-color: $accent;
+      .dates {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        .dateField {
+          display: flex;
+          flex-direction: column;
+          label {
+            font-weight: bold;
+          }
+          input {
+            width: 100%;
+            padding: 10px;
+            color: $text;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 0.8rem;
+            &:focus {
+              outline: none;
+              border-color: $accent;
+              box-shadow: 0 0 5px $accent;
+            }
+          }
+        }
+      }
+      .countsInfo {
+        padding: 10px 0px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        .countInfo {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+          :nth-child(1) {
+            font-weight: 700;
+          }
+        }
+      }
+    }
     .paysInfo {
       background-color: $accent;
       padding: 10px;
       border-radius: 5px;
-      font-size: .9rem;
-      margin-bottom: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       .payInfo {
         display: flex;
+        justify-content: center;
         align-items: center;
         gap: 5px;
-        :nth-child(1){
+        :nth-child(1) {
           font-weight: 700;
         }
       }
@@ -107,4 +156,14 @@
     }
   }
 }
-/* Form.module.scss */
+@media screen and (max-width: 680px) {
+  .dates{
+    flex-direction: column;
+  }
+  .payInfo{
+    justify-content: space-between !important;
+  }
+  .countInfo{
+    justify-content: space-between !important;
+  }
+}

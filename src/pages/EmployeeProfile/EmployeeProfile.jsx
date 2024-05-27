@@ -3,7 +3,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./employeeProfile.module.scss";
 import { Link, useParams } from "react-router-dom";
 import { MdContactPhone, MdVerified } from "react-icons/md";
-import { FaPlaneDeparture, FaEdit, FaMinusCircle, FaRupeeSign } from "react-icons/fa";
+import {
+  FaPlaneDeparture,
+  FaEdit,
+  FaMinusCircle,
+  FaRupeeSign,
+  FaCopy,
+} from "react-icons/fa";
 import {
   IoIosInformationCircle,
   IoIosSchool,
@@ -13,13 +19,14 @@ import { AiFillBank } from "react-icons/ai";
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
 import { RiGovernmentFill } from "react-icons/ri";
+import { HiBuildingOffice2 } from "react-icons/hi2";
 
 const EmployeeProfile = () => {
   const { employeeId } = useParams();
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     document.title = "Emloyee Profile - TALENTFINER";
   }, []);
 
@@ -50,9 +57,7 @@ const EmployeeProfile = () => {
   };
 
   const handleVerification = async (employeeId, newVerification) => {
-    const markVerified = window.confirm(
-      "Are you sure?"
-    );
+    const markVerified = window.confirm("Are you sure?");
     if (!markVerified) {
       return; // User clicked Cancel, do not mark verified
     }
@@ -72,7 +77,6 @@ const EmployeeProfile = () => {
     }
   };
   const handleCurrentStatus = async (employeeId, newStatus) => {
-
     const markActive = window.confirm(
       "Are you sure you want to mark this employee as Inactive?"
     );
@@ -102,11 +106,14 @@ const EmployeeProfile = () => {
           <div className={styles.main}>
             <div className={styles.btns}>
               <div className={styles.leftBtns}>
-                <Link to={`/employee/${employee.employeeId}/edit`} className={styles.link}>
-                <button className={styles.editBtn}>
-                  <FaEdit />
-                  Edit
-                </button>
+                <Link
+                  to={`/employee/${employee.employeeId}/edit`}
+                  className={styles.link}
+                >
+                  <button className={styles.editBtn}>
+                    <FaEdit />
+                    Edit
+                  </button>
                 </Link>
               </div>
               <div className={styles.rightBtns}>
@@ -115,8 +122,7 @@ const EmployeeProfile = () => {
                   onClick={() =>
                     handleCurrentStatus(employee.employeeId, "inactive")
                   }
-                  disabled={employee.currentStatus==='inactive'}
-
+                  disabled={employee.currentStatus === "inactive"}
                 >
                   <FaBan />
                   Inactive
@@ -126,8 +132,7 @@ const EmployeeProfile = () => {
                   onClick={() =>
                     handleVerification(employee.employeeId, "verified")
                   }
-                  disabled={employee.verification==='verified'}
-
+                  disabled={employee.verification === "verified"}
                 >
                   <MdVerified />
                   verified
@@ -137,7 +142,7 @@ const EmployeeProfile = () => {
                   onClick={() =>
                     handleVerification(employee.employeeId, "reupload")
                   }
-                  disabled={employee.verification==='verified'}
+                  disabled={employee.verification === "verified"}
                 >
                   <FaMinusCircle />
                   reupload
@@ -151,15 +156,39 @@ const EmployeeProfile = () => {
             <div className={styles.basicDetails}>
               <div className={styles.detail}>
                 <p>Full Name:</p>
-                <p>{employee.fullName}</p>
+                <p>
+                  {employee.fullName}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.fullName);
+                    }}
+                  />
+                </p>
+              </div>
+              <div className={styles.detail}>
+                <p>Employee id:</p>
+                <p>
+                  {employee.employeeId}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.employeeId);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>Designation:</p>
                 <p>{employee.designation}</p>
               </div>
               <div className={styles.detail}>
-                <p>Employee id:</p>
-                <p>{employee.employeeId}</p>
+                <p>Role:</p>
+                <p>{employee.role}</p>
               </div>
               <div className={styles.detail}>
                 <p>department:</p>
@@ -213,15 +242,45 @@ const EmployeeProfile = () => {
             <div className={styles.basicDetails}>
               <div className={styles.detail}>
                 <p>email:</p>
-                <p>{employee.email}</p>
+                <p>
+                  {employee.email}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.email);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>official email:</p>
-                <p>{employee.officialEmail}</p>
+                <p>
+                  {employee.officialEmail}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.officialEmail);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>contact number:</p>
-                <p>{employee.contactNumber}</p>
+                <p>
+                  {employee.contactNumber}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.contactNumber);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>whatsapp number:</p>
@@ -429,15 +488,45 @@ const EmployeeProfile = () => {
             <div className={styles.basicDetails}>
               <div className={styles.detail}>
                 <p>bank name:</p>
-                <p>{employee.bankName}</p>
+                <p>
+                  {employee.bankName}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.bankName);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>account no:</p>
-                <p>{employee.accountNumber}</p>
+                <p>
+                  {employee.accountNumber}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.accountNumber);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>ifsc code:</p>
-                <p>{employee.ifsc}</p>
+                <p>
+                  {employee.ifsc}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.ifsc);
+                    }}
+                  />
+                </p>
               </div>
               <div className={styles.detail}>
                 <p>cancelled cheque:</p>
@@ -456,7 +545,7 @@ const EmployeeProfile = () => {
             </div>
             <h3 className={styles.heading}>
               <FaPlaneDeparture size={15} color="#fab437" />
-              hiring
+              Onboarding Details
             </h3>
             <div className={styles.basicDetails}>
               <div className={styles.detail}>
@@ -497,7 +586,47 @@ const EmployeeProfile = () => {
               </div>
               <div className={styles.detail}>
                 <p>hiring hr email:</p>
-                <p>{employee.hiringHrEmail}</p>
+                <p>
+                  {employee.hiringHrEmail}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.hiringHrEmail);
+                    }}
+                  />
+                </p>
+              </div>
+            </div>
+            <h3 className={styles.heading}>
+              <HiBuildingOffice2 size={15} color="#fab437" />
+              Department Details
+            </h3>
+            <div className={styles.basicDetails}>
+              <div className={styles.detail}>
+                <p>team leader name:</p>
+                <p>{employee.teamLeaderName}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>team leader Id:</p>
+                <p>{employee.teamLeaderId}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>manager name:</p>
+                <p>{employee.managerName}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>manager id:</p>
+                <p>{employee.managerId}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>general manager name:</p>
+                <p>{employee.generalManagerName}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>general manager id:</p>
+                <p>{employee.generalManagerId}</p>
               </div>
             </div>
             <h3 className={styles.heading}>
@@ -505,43 +634,71 @@ const EmployeeProfile = () => {
               pays
             </h3>
             <div className={styles.basicDetails}>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>CTC:</p>
                 <p>{employee.ctc}</p>
               </div>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>fixed compensation:</p>
                 <p>{employee.fixedCompensation}</p>
               </div>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>stipend:</p>
                 <p>{employee.stipend}</p>
               </div>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
+                <p>house rent allowance:</p>
+                <p>{employee.houseRentAllowance}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>special allowance:</p>
+                <p>{employee.specialAllowance}</p>
+              </div>
+              <div className={styles.detail}>
                 <p>probation period (days):</p>
                 <p>{employee.probationPeriod}</p>
               </div>
             </div>
             <h3 className={styles.heading}>
-              <RiGovernmentFill  size={15} color="#fab437" />
+              <RiGovernmentFill size={15} color="#fab437" />
               Additional Details
             </h3>
             <div className={styles.basicDetails}>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>Profession Tax:</p>
                 <p>{employee.professionTax}</p>
               </div>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>Provident Fund:</p>
                 <p>{employee.providentFund}</p>
               </div>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>UAN Number:</p>
-                <p>{employee.uanNumber}</p>
+                <p>
+                  {employee.uanNumber}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.uanNumber);
+                    }}
+                  />
+                </p>
               </div>
-            <div className={styles.detail}>
+              <div className={styles.detail}>
                 <p>PF Account Number:</p>
-                <p>{employee.pfAccountNumber}</p>
+                <p>
+                  {employee.pfAccountNumber}
+                  <FaCopy
+                    color="#fab437"
+                    size={15}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.pfAccountNumber);
+                    }}
+                  />
+                </p>
               </div>
             </div>
           </div>

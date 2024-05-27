@@ -1,0 +1,186 @@
+@import "../../App.scss";
+.formContainer {
+  margin: 10px;
+  border-radius: 5px;
+  .heading1 {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 10px;
+    p {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+      color: $ltext;
+    }
+    input {
+      min-width: 100px;
+      padding: 5px;
+      color: $text;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 0.8rem;
+      &:focus {
+        outline: none;
+        border-color: $accent;
+        box-shadow: 0 0 5px $accent;
+      }
+    }
+  }
+  .heading2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    p {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+      color: $ltext;
+    }
+    .selectDates {
+      margin-top: 5px;
+      display: flex;
+      justify-content: space-between;
+      input {
+        min-width: 100px;
+        padding: 5px;
+        color: $text;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 0.8rem;
+        &:focus {
+          outline: none;
+          border-color: $accent;
+          box-shadow: 0 0 5px $accent;
+        }
+      }
+    }
+  }
+  .formFieldsWrapper {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(250px, 1fr)
+    ); /* Adjust as needed */
+    gap: 1rem;
+
+    .formField {
+      /* No need to specify width for form fields */
+      span {
+        color: crimson;
+        font-size: 0.8rem;
+      }
+      .inputField {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px; /* Adjust font size */
+      }
+      label {
+        text-transform: capitalize;
+        font-weight: bold;
+      }
+    }
+  }
+  .btns {
+    display: flex;
+    justify-content: center;
+    button {
+      margin-top: 10px;
+      grid-column: span 2; /* Make the button span across two columns */
+      padding: 0.5rem 1rem;
+      background-color: $text; /* Change button color as needed */
+      color: $accent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px; /* Adjust font size */
+      font-weight: 600;
+      &:hover {
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.723
+        ); /* Change hover color as needed */
+      }
+    }
+  }
+  .dailyReport {
+    overflow-x: auto;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: $text transparent;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        border: 1px solid $accent;
+        padding: 10px;
+        text-align: center;
+      }
+      td {
+        font-size: 0.7rem;
+        font-weight: 400;
+        color: #717171;
+        button {
+          cursor: pointer;
+          font-weight: 600;
+          border-radius: 3px;
+          padding: 3px;
+          color: $accent;
+          background-color: $text;
+          border: none;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.725);
+          }
+          &:disabled {
+            background-color: $ltext;
+            cursor: not-allowed;
+          }
+        }
+      }
+      th {
+        border: 1px solid black;
+        border-top: none;
+        font-size: 0.9rem;
+        background-color: #fab437;
+        color: $text;
+        font-weight: 600;
+      }
+    }
+    .reportDetails {
+      .employeeDetail {
+        // border-bottom: 1px solid $ltext;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        // gap: 100px;
+        p:nth-child(1) {
+          font-weight: 700;
+          color: $text;
+        }
+        p:nth-child(2) {
+          color: $ltext;
+        }
+      }
+    }
+  }
+  .errorMessage{
+    font-size: .8rem;
+    color: crimson;
+  }
+}

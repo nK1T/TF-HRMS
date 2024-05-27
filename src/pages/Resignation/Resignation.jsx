@@ -97,7 +97,6 @@ const Resignation = () => {
   };
   return (
     <div className={styles.formContainer}>
-      <ToastContainer position="top-right" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formFieldsWrapper}>
           <div className={styles.formField}>

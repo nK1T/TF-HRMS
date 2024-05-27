@@ -145,7 +145,6 @@ const EmployeeEdit = () => {
         `https://talentfiner.in/backend/updateEmployeeInfo.php`,
         updatedEmployeeData
       ).then((response)=>{
-        console.log(response);
           if(response.data.success){
             notifySuccess();
           }else{
@@ -158,7 +157,6 @@ const EmployeeEdit = () => {
   };
   return (
     <div className={styles.container}>
-      <ToastContainer position="top-right" />
       {filterEmployeeData().map((employee) => (
         <form key={employee.employeeId} className={styles.details}>
           <div className={styles.formField}>
@@ -428,6 +426,7 @@ const EmployeeEdit = () => {
                 <option value="TEAM LEAD">Team Lead</option>
                 <option value="ASSOCIATE">Associate</option>
                 <option value="INTERN">Intern</option>
+                <option value="IN PROBATION">In Probation</option>
               </select>
             </label>
           </div>
@@ -1007,6 +1006,84 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
+              team leader name
+              <input
+                type="text"
+                name="teamLeaderName"
+                value={data.teamLeaderName ?? employee.teamLeaderName}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              team leader id
+              <input
+                type="text"
+                name="teamLeaderId"
+                value={data.teamLeaderId ?? employee.teamLeaderId}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              manager name
+              <input
+                type="text"
+                name="managerName"
+                value={data.managerName ?? employee.managerName}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              manager Id
+              <input
+                type="text"
+                name="managerId"
+                value={data.managerId ?? employee.managerId}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              general manager name
+              <input
+                type="text"
+                name="generalManagerName"
+                value={data.generalManagerName ?? employee.generalManagerName}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              general manager Id
+              <input
+                type="text"
+                name="generalManagerId"
+                value={data.generalManagerId ?? employee.generalManagerId}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
               ctc
               <input
                 type="text"
@@ -1038,6 +1115,32 @@ const EmployeeEdit = () => {
                 type="text"
                 name="stipend"
                 value={data.stipend ?? employee.stipend}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            house Rent Allowance
+              <input
+                type="text"
+                name="houseRentAllowance"
+                value={data.houseRentAllowance ?? employee.houseRentAllowance}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            special Allowance
+              <input
+                type="text"
+                name="specialAllowance"
+                value={data.specialAllowance ?? employee.specialAllowance}
                 className={styles.inputField}
                 onChange={handleChange}
                 required

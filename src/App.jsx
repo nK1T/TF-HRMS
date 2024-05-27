@@ -7,15 +7,20 @@ import { useEffect, useState } from "react";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import "react-tooltip/dist/react-tooltip.css";
-import Employees from "./pages/Employees/Employees";
+import EmployeesPerformance from "./pages/EmployeesPerformance/EmployeesPerformance";
 import Employeeattendance from "./pages/EmployeeAttendance/Employeeattendance";
 import EmployeeProfile from "./pages/EmployeeProfile/EmployeeProfile";
 import EmployeeEdit from "./pages/EmployeeEdit/EmployeeEdit";
 import Leaves from "./pages/Leaves/Leaves";
 import Resignation from "./pages/Resignation/Resignation";
+import SalesDailyReport from "./pages/SalesDailyReport/SalesDailyReport";
+import HrDailyReport from "./pages/HrDailyReport/HrDailyReport";
 import Resignations from "./pages/Resignations/Resignations";
 import { DataProvider } from "./components/dataProvider";
 import { RefreshDataProvider } from "./components/RefreshDataProvider";
+import Pays from "./pages/Pays/Pays";
+import { ToastContainer } from "react-toastify";
+import Employees from "./pages/Employees/Employees";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -24,6 +29,9 @@ function App() {
   });
   const [role, setRole] = useState(() => {
     return localStorage.getItem("role");
+  });
+  const [department, setDepartment] = useState(() => {
+    return localStorage.getItem("department");
   });
   // Clear sessionStorage on page refresh
   useEffect(() => {
@@ -38,9 +46,9 @@ function App() {
     };
   }, []);
   // const role = localStorage.getItem("role");
-
   return (
     <DataProvider>
+      <ToastContainer position="top-right" />
       <Router>
         <Navbar />
         <Routes>
@@ -75,8 +83,28 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/daily-report"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                {department === "SALES" ? (
+                  <SalesDailyReport />
+                ) : (
+                  <HrDailyReport />
+                )}
+              </PrivateRoute>
+            }
+          />
           {(role === "4dm1nr0le" || role === "t3aml34d") && (
             <>
+              <Route
+                path="/employee-performance"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <EmployeesPerformance />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path="/employees"
                 element={
@@ -88,9 +116,11 @@ function App() {
               <Route
                 path="/employee/:employeeId/attendance"
                 element={
-                  <PrivateRoute isAuthenticated={isAuthenticated}>
-                    <Employeeattendance />
-                  </PrivateRoute>
+                  <RefreshDataProvider>
+                    <PrivateRoute isAuthenticated={isAuthenticated}>
+                      <Employeeattendance />
+                    </PrivateRoute>
+                  </RefreshDataProvider>
                 }
               />
               <Route
@@ -126,6 +156,16 @@ function App() {
                 }
               />
             </>
+          )}
+          {role === "4dm1nr0le" && (
+            <Route
+              path="/pays"
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <Pays />
+                </PrivateRoute>
+              }
+            />
           )}
         </Routes>
       </Router>

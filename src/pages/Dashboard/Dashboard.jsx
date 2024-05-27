@@ -11,6 +11,8 @@ import Attendance from "../../components/Attendance/Attendance";
 import MonthlyReport from "../../components/MonthlyReport/MonthlyReport";
 import Leave from "../../components/Leave/Leave";
 import { useRefreshData } from "../../components/RefreshDataProvider";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +24,18 @@ const Dashboard = () => {
   const [profilePicture, setProfilePicture] = useState();
   const { refreshData, setRefreshData } = useRefreshData();
 
+  const notifySucess = (message) =>
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      color: "red",
+    });
   const handleRefreshData = () => {
     setRefreshData(!refreshData);
   };
@@ -143,8 +157,10 @@ const Dashboard = () => {
 
   const handleCheckInOut = () => {
     if (isCheckedIn) {
+      notifySucess("Checked Out");
       handleCheckout();
     } else {
+      notifySucess("Checked In");
       handleCheckin();
     }
   };
@@ -223,16 +239,21 @@ const Dashboard = () => {
             <PiHandTapDuotone size={20} color="#fab437" />
             Mark Attendance
           </p>
-          <div>
+          <div className={styles.fingerPrint}>
             <IoFingerPrintSharp color="#fab437" size={80} />
             {/* {isCheckedIn ? <p>{formatTime(countdown)}</p> : <p>00:00:00 hrs</p>} */}
           </div>
+          <div className={styles.btns}>
           <button
             className={isCheckedIn ? styles.checkOut : styles.checkIn}
             onClick={handleCheckInOut}
           >
             {isCheckedIn ? "CHECK-OUT" : "CHECK-IN"}
           </button>
+          <Link to="/daily-report" className={styles.btn}>
+            <button>EOD</button>
+          </Link>
+          </div>
         </div>
         {teams !== null && (
           <div className={styles.box3}>

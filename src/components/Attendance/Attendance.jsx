@@ -1,75 +1,86 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./attendance.module.scss";
 import axios from "axios";
 import Calendar from "react-calendar";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { useRefreshData } from "../RefreshDataProvider";
 
+const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
+
+const calculateDuration = (checkinTime, checkoutTime) => {
+  const checkin = checkinTime.split(":").map(Number);
+  const checkout = checkoutTime.split(":").map(Number);
+
+  let hoursDifference = checkout[0] - checkin[0];
+  let minutesDifference = checkout[1] - checkin[1];
+  let secondsDifference = checkout[2] - checkin[2];
+
+  if (secondsDifference < 0) {
+    secondsDifference += 60;
+    minutesDifference--;
+  }
+  if (minutesDifference < 0) {
+    minutesDifference += 60;
+    hoursDifference--;
+  }
+  if (hoursDifference < 0) {
+    hoursDifference += 24;
+  }
+
+  return [
+    String(hoursDifference).padStart(2, "0"),
+    String(minutesDifference).padStart(2, "0"),
+    String(secondsDifference).padStart(2, "0"),
+  ].join(":");
+};
+
 const Attendance = ({ employeeId }) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const  refreshData  = useRefreshData();
+  const { refreshData, setRefreshData } = useRefreshData();
+
   useEffect(() => {
+    const fetchData = async () => {
+      const currentTime = new Date().getTime();
+      const cachedData = sessionStorage.getItem("attendanceData");
+      const cachedTime = sessionStorage.getItem("attendanceDataTime");
+
+      if (
+        !refreshData &&
+        cachedData &&
+        cachedTime &&
+        currentTime - parseInt(cachedTime) < CACHE_EXPIRATION_TIME
+      ) {
+        setAttendanceData(JSON.parse(cachedData));
+      } else {
+        try {
+          const response = await axios.get(
+            "https://talentfiner.in/backend/attendance/fetchAttendance.php"
+          );
+          setAttendanceData(response.data);
+          sessionStorage.setItem("attendanceData", JSON.stringify(response.data));
+          sessionStorage.setItem("attendanceDataTime", currentTime.toString());
+          setRefreshData(false);
+        } catch (error) {
+          console.error("Error fetching attendance data:", error);
+        }
+      }
+    };
+
     fetchData();
-  }, [refreshData]);
+  }, [refreshData, setRefreshData]);
 
-  const fetchData = () => {
-    axios
-      .get("https://talentfiner.in/backend/attendance/fetchAttendance.php")
-      .then((response) => {
-        // Cache the fetched attendanceData
-        sessionStorage.setItem("attendanceData", JSON.stringify(response.data));
-        setAttendanceData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching attendance data:", error);
-      });
-  };
-
-  const filterAttendanceData = () => {
-    if (!Array.isArray(attendanceData)) {
-      return [];
-    }
+  const filteredAttendanceData = useMemo(() => {
+    if (!Array.isArray(attendanceData)) return [];
     return attendanceData.filter((attendance) => {
       const attendanceDate = new Date(attendance.date).toDateString();
       const selectedDateString = selectedDate.toDateString();
-      return attendanceDate === selectedDateString && (!employeeId || attendance.employeeId === employeeId);
+      return (
+        attendanceDate === selectedDateString &&
+        (!employeeId || attendance.employeeId === employeeId)
+      );
     });
-  };
-
-  // Define a function to calculate the duration between check-in and check-out times
-  function calculateDuration(checkinTime, checkoutTime) {
-    // Split the time strings into arrays containing hours, minutes, and seconds
-    const checkin = checkinTime.split(":").map(Number);
-    const checkout = checkoutTime.split(":").map(Number);
-
-    // Calculate the difference in hours, minutes, and seconds
-    let hoursDifference = checkout[0] - checkin[0];
-    let minutesDifference = checkout[1] - checkin[1];
-    let secondsDifference = checkout[2] - checkin[2];
-
-    // Normalize the difference
-    if (secondsDifference < 0) {
-      secondsDifference += 60;
-      minutesDifference--;
-    }
-    if (minutesDifference < 0) {
-      minutesDifference += 60;
-      hoursDifference--;
-    }
-    if (hoursDifference < 0) {
-      hoursDifference += 24;
-    }
-
-    // Format the duration as HH:MM:SS
-    const formattedDuration = [
-      String(hoursDifference).padStart(2, "0"),
-      String(minutesDifference).padStart(2, "0"),
-      String(secondsDifference).padStart(2, "0"),
-    ].join(":");
-
-    return formattedDuration;
-  }
+  }, [attendanceData, selectedDate, employeeId]);
 
   return (
     <div className={styles.container}>
@@ -90,7 +101,7 @@ const Attendance = ({ employeeId }) => {
             </tr>
           </thead>
           <tbody>
-            {filterAttendanceData().map((attendance) => (
+            {filteredAttendanceData.map((attendance) => (
               <tr key={attendance.id}>
                 <td>{attendance.checkin_time}</td>
                 <td>{attendance.checkout_time ? attendance.checkout_time : "Still checked in"}</td>

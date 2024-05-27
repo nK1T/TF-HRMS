@@ -1,0 +1,235 @@
+@import "../../App.scss";
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  .left {
+    .calendarContainer {
+      input {
+        min-width: 300px;
+        padding: 10px;
+        color: $text;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 0.8rem;
+        &:focus {
+          outline: none;
+          border-color: $accent;
+          box-shadow: 0 0 5px $accent;
+        }
+      }
+    }
+    .report {
+      margin-top: 15px;
+      // padding: 20px;
+      background-color: #f8f8f8;
+      // border-radius: 10px;
+      p {
+        width: 100%;
+        color: crimson;
+        text-align: center;
+        font-size: 0.8rem;
+        margin-top: 10px;
+      }
+      h1 {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #717171;
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+      }
+
+      table {
+        border: 1px solid $accent;
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+          padding: 5px;
+          text-align: center;
+        }
+        td {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #717171;
+        }
+        th {
+          background-color: #fab437;
+          color: rgba(0, 0, 0, 0.681);
+          font-weight: 600;
+        }
+      }
+    }
+    .daysReport{
+      padding: 5px;
+      border-radius: 4px;
+      color: $background;
+      text-align: center;
+      margin-top: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: .7rem;
+    }
+    .monthReport{
+      padding: 5px;
+      border-radius: 4px;
+      color: $background;
+      text-align: center;
+      margin-top: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: .7rem;
+      background-color: $text;
+    }
+    .dayStatus {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      p {
+        text-transform: uppercase;
+        text-align: center;
+        width: 100%;
+        border-radius: 5px;
+        color: $background;
+        font-size: 0.8rem;
+        padding: 10px;
+        font-weight: 600;
+      }
+    }
+  }
+  .formContainer {
+    width: 100%;
+    .errorMessage{
+      margin-block:15px;
+      text-align: center;
+      font-size: .8rem;
+      color: crimson;
+    }
+    .dailyReport {
+      overflow-x: auto;
+      max-width: 100%;
+      // margin-top: 10px;
+      -webkit-overflow-scrolling: touch;
+      // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      // border-bottom-left-radius: 5px;
+      // border-bottom-right-radius: 5px;
+      scrollbar-width: thin;
+      scrollbar-color: $text transparent;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+  
+        th,
+        td {
+          border: 1px solid $accent;
+          padding: 10px;
+          text-align: center;
+        }
+        td {
+          font-size: 0.7rem;
+          font-weight: 400;
+          color: #717171;
+          button {
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 3px;
+            padding: 3px;
+            color: $accent;
+            background-color: $text;
+            border: none;
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.725);
+            }
+            &:disabled {
+              background-color: $ltext;
+              cursor: not-allowed;
+            }
+          }
+        }
+        th {
+          border: 1px solid black;
+          border-top: none;
+          font-size: 0.9rem;
+          background-color: #fab437;
+          color: $text;
+          font-weight: 600;
+        }
+      }
+      .reportDetails {
+        .employeeDetail {
+          // border-bottom: 1px solid $ltext;
+          margin-bottom: 5px;
+          display: flex;
+          justify-content: space-between;
+          // gap: 100px;
+          p:nth-child(1) {
+            font-weight: 700;
+            color: $text;
+          }
+          p:nth-child(2) {
+            color: $ltext;
+          }
+        }
+      }
+    }
+  }
+}
+
+.formFieldsWrapper{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  .formField{
+    width: 100%;
+  }
+}
+.inputField {
+  margin-bottom: 11px;
+  text-align: center;
+  width: 100%;
+  padding: 11px 0px;
+  color: $text;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 0.7rem;
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 5px $accent;
+  }
+}
+.btn {
+  text-transform: uppercase;
+  // margin-top: 2px;
+  width: 100%;
+  // padding: 10px;
+  background-color: $text;
+  color: $background;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  height: 40px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.723); 
+  }
+}
+@media (max-width: 550px) {
+  .container{
+    flex-direction: column;
+  }
+  input{
+    width: 100%;
+  }
+}

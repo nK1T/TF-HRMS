@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaEdit, FaExternalLinkAlt } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
@@ -179,7 +180,6 @@ const Employees = () => {
         }
       }
     } else {
-      // Check if teamData is already cached
       const cachedData = sessionStorage.getItem("employeeData");
       if (cachedData) {
         setOriginalData(JSON.parse(cachedData));
@@ -345,6 +345,14 @@ const Employees = () => {
                       <p>EMAIL</p>
                       <p>{employee.email?.toLowerCase()}</p>
                     </div>
+                    <div className={styles.employeeDetail}>
+                      <p>TEAM LEADER</p>
+                      <p>{employee.teamLeaderName}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>JOINING DATE</p>
+                      <p>{employee.onboardingDate?.toLowerCase()}</p>
+                    </div>
                   </div>
                   <div className={styles.bottomBtn}>
                     <Link
@@ -355,7 +363,7 @@ const Employees = () => {
                     >
                       <button className={styles.btn2}>
                         <FaExternalLinkAlt color="#08080B" size={10} />
-                        More details
+                        details
                       </button>
                     </Link>
                     <Link

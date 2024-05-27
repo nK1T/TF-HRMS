@@ -118,7 +118,6 @@ const Leave = ({ isOpen, employeeId }) => {
     });
   return (
     <>
-      <ToastContainer position="top-right" />
       {isOpen && (
         <div className={styles.formContainer}>
           <form onSubmit={handleSubmit(onSubmit)}>

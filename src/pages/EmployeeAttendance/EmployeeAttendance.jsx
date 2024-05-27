@@ -15,11 +15,39 @@ import "react-toastify/dist/ReactToastify.css";
 const Employeeattendance = () => {
   const { employeeId } = useParams();
   const uppercaseEmployeeId = employeeId.toUpperCase();
+  const [form, setForm] = useState({
+    employeeId: uppercaseEmployeeId,
+    month: "",
+    fromDate: "",
+    toDate: "",
+    presentDays: "",
+    paidLeaveDays: "",
+    unpaidLeaveDays: "",
+    lossOfPay: "",
+    weeklyOffDays: "",
+    salary: "",
+    incentive: "",
+    houseRentAllowance: "",
+    specialAllowance: "",
+    totalAmount: "",
+    paySlip: "",
+    certificate: "",
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState({});
+  const [fdate, setFdate] = useState(new Date().toISOString().split("T")[0]);
+  const [tdate, setTdate] = useState(new Date().toISOString().split("T")[0]);
+  const [monthlyReport, setMonthlyReport] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [filteredReport, setFilteredReport] = useState([]);
+  const [presentCount, setPresentCount] = useState(0);
+  const [paidLeaveCount, setPaidLeaveCount] = useState(0);
+  const [unpaidLeaveCount, setUnpaidLeaveCount] = useState(0);
+  const [lossOfPayCount, setLossOfPayCount] = useState(0);
+  const [weeklyOff, setWeeklyOffCount] = useState(0);
+  const [totalDays, setTotalDays] = useState(0);
   const [refreshData, setRefreshData] = useState(false);
-
+  
   const handleRefreshData = () => {
     setRefreshData(!refreshData);
   };
@@ -34,7 +62,7 @@ const Employeeattendance = () => {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
-      closeOnClick: false,
+      closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
@@ -52,13 +80,23 @@ const Employeeattendance = () => {
       progress: undefined,
       theme: "dark",
     });
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+    // Check if the input type is "file" and handle it separately
+    if (type === "file") {
+      setForm((prevData) => ({
+        ...prevData,
+        [name]: files.length > 0 ? files[0] : null,
+      }));
+    } else {
+      // Set null for empty values, otherwise use the entered value
+      setForm((prevData) => ({
+        ...prevData,
+        [name]: value === "" ? null : value,
+      }));
+    }
+  };
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -66,27 +104,132 @@ const Employeeattendance = () => {
   const handleClose = () => {
     setIsOpen(false);
   };
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append("employeeId", uppercaseEmployeeId);
-    formData.append("month", data.month);
-    formData.append("fromDate", data.fromDate);
-    formData.append("toDate", data.toDate);
-    formData.append("paidDays", data.paidDays);
-    formData.append("presentDays", data.presentDays);
-    formData.append("absentDays", data.absentDays);
-    formData.append("leaveDays", data.leaveDays);
-    formData.append("unpaidLeaves", data.unpaidLeaves);
-    formData.append("incentive", data.incentive);
-    formData.append("salary", data.salary);
-    formData.append("lossOfPay", data.lossOfPay);
-    formData.append("houseRentAllowance", data.houseRentAllowance);
-    formData.append("specialAllowance", data.specialAllowance);
-    formData.append("paySlip", data.paySlip[0]);
-    formData.append("certificate", data.certificate[0]);
+  useEffect(() => {
+    const filterData = () => {
+      if (!Array.isArray(monthlyReport)) {
+        return;
+      }
+      const startDate = new Date(fdate);
+      const endDate = new Date(tdate);
+      const filtered = monthlyReport.filter((report) => {
+        const reportDate = new Date(report.date);
+        return reportDate >= startDate && reportDate <= endDate;
+      });
 
+      // Count occurrences of each status
+      let present = 0;
+      let paidLeave = 0;
+      let unpaidLeave = 0;
+      let lossOfPay = 0;
+      let weeklyOff = 0;
+
+      filtered.forEach((report) => {
+        switch (report.dayStatus) {
+          case "Present":
+            present++;
+            break;
+          case "Paid Leave":
+            paidLeave++;
+            break;
+          case "Unpaid Leave":
+            unpaidLeave++;
+            break;
+          case "Loss of Pay":
+            lossOfPay++;
+            break;
+          case "Weekly Off":
+            weeklyOff++;
+            break;
+          default:
+            break;
+        }
+      });
+
+      // Calculate the total number of days
+      const diffTime = Math.abs(endDate - startDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end date
+
+      setFilteredReport(filtered);
+      setPresentCount(present);
+      setPaidLeaveCount(paidLeave);
+      setUnpaidLeaveCount(unpaidLeave);
+      setLossOfPayCount(lossOfPay);
+      setWeeklyOffCount(weeklyOff);
+      setTotalDays(diffDays);
+    };
+
+    filterData();
+  }, [fdate, tdate, monthlyReport]);
+
+  const paidDays = presentCount + paidLeaveCount + weeklyOff;
+  const payPerDay = Math.round(data.fixedCompensation / totalDays);
+  const basicSalary = paidDays * payPerDay;
+  const houseRentAllowance = Math.round(
+    (data.houseRentAllowance / totalDays) * paidDays
+  );
+  const specialAllowance = Math.round(
+    (data.specialAllowance / totalDays) * paidDays
+  );
+  const totalAmount = Math.round(
+    basicSalary +
+      houseRentAllowance +
+      specialAllowance +
+      (parseFloat(form.incentive) || 0)
+  );
+
+  const notifyField = (field) =>
+    toast.warn(`Please fill ${field} before proceeding.`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const requiredFields = [
+      "month",
+      "paySlip",
+      // "professionTax",
+      // "providentFund",
+      // "uanNumber",
+      // "pfAccountNumber"
+    ];
+
+    // Find the first missing field, if any
+    const missingField = requiredFields.find((field) => !form[field]);
+
+    // If a missing field is found, show an alert and return early
+    if (missingField) {
+      const fieldName = missingField;
+      notifyField(fieldName);
+      return;
+    }
+    e.preventDefault();
     try {
       setLoading(true);
+
+      const formData = new FormData();
+      // Append each field of the form object to formData
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+        formData.append("fromDate", fdate);
+        formData.append("toDate", tdate);
+        formData.append("presentDays", presentCount);
+        formData.append("paidLeaveDays", paidLeaveCount);
+        formData.append("unpaidLeaves", unpaidLeaveCount);
+        formData.append("weeklyOffDays", weeklyOff);
+        formData.append("paidDays", paidDays);
+        formData.append("salary", basicSalary);
+        formData.append("lossOfPay", lossOfPayCount);
+        formData.append("houseRentAllowance", houseRentAllowance);
+        formData.append("specialAllowance", specialAllowance);
+        formData.append("totalAmount", totalAmount);
+      });
+
       const response = await axios.post(
         "https://talentfiner.in/backend/monthlyReport/submitMonthlyReport.php",
         formData,
@@ -98,7 +241,24 @@ const Employeeattendance = () => {
       );
       if (response.data.success) {
         notifySucess();
-        reset(); // Reset form fields
+        setForm({
+          employeeId: uppercaseEmployeeId,
+          month: "",
+          fromDate: "",
+          toDate: "",
+          presentDays: "",
+          paidLeaveDays: "",
+          unpaidLeaveDays: "",
+          lossOfPay: "",
+          weeklyOffDays: "",
+          salary: "",
+          incentive: "",
+          houseRentAllowance: "",
+          specialAllowance: "",
+          totalAmount: "",
+          paySlip: "",
+          certificate: "",
+        });
         handleRefreshData();
       }
     } catch (error) {
@@ -119,9 +279,20 @@ const Employeeattendance = () => {
       })
       .catch((err) => console.log("Error fetching data", err));
   }, [uppercaseEmployeeId]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://talentfiner.in/backend/attendance/fetchDailyStatus.php?employeeId=${uppercaseEmployeeId}`
+      )
+      .then((response) => {
+        setMonthlyReport(response.data);
+      })
+      .catch((err) => console.log("Error fetching data", err));
+  }, [uppercaseEmployeeId]);
+
   return (
     <div className={styles.container}>
-      <ToastContainer position="top-right" />
       <div className={styles.heading}>
         <i>
           <TbReportSearch color="#fab437" />
@@ -158,22 +329,91 @@ const Employeeattendance = () => {
               <p>{data.ctc}</p>
             </div>
             <div className={styles.payInfo}>
-              <p>Fixed Compensation:</p>
+              <p>Basic Salary:</p>
               <p>{data.fixedCompensation}</p>
             </div>
-            <div className={styles.payInfo}>
+            {/* <div className={styles.payInfo}>
               <p>Stipend:</p>
               <p>{data.stipend ? data.stipend : 0}</p>
+            </div> */}
+            <div className={styles.payInfo}>
+              <p>House Rent Allowance:</p>
+              <p>{data.houseRentAllowance ? data.houseRentAllowance : 0}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Special Allowance:</p>
+              <p>{data.specialAllowance ? data.specialAllowance : 0}</p>
             </div>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.filter}>
+            <div className={styles.dates}>
+              <div className={styles.dateField}>
+                <label>From Date</label>
+                <input
+                  type="date"
+                  name="fromDate"
+                  onChange={(e) => (setFdate(e.target.value), handleChange)}
+                  value={fdate}
+                />
+              </div>
+              <div className={styles.dateField}>
+                <label>To Date</label>
+                <input
+                  type="date"
+                  name="toDate"
+                  onChange={(e) => (setTdate(e.target.value), handleChange)}
+                  value={tdate}
+                />
+              </div>
+            </div>
+            <div className={styles.countsInfo}>
+              <div className={styles.countInfo}>
+                <p>Present Days:</p>
+                <p>{presentCount}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Paid Leave:</p>
+                <p>{paidLeaveCount}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Unpaid Leave:</p>
+                <p>{unpaidLeaveCount}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Loss of Pay Days:</p>
+                <p>{lossOfPayCount}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Weekly Off Days:</p>
+                <p>{weeklyOff}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Paid Days:</p>
+                <p>{paidDays}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Total Days:</p>
+                <p>{totalDays}</p>
+              </div>
+              {/* <div className={styles.countInfo}>
+                <p>Pay per Day:</p>
+                <p>{payPerDay}₹</p>
+              </div> */}
+              {/* <div className={styles.countInfo}>
+                <p>Total Amount:</p>
+                <p>{totalAmount}₹</p>
+              </div> */}
+            </div>
+          </div>
+          <form>
             <div className={styles.formFieldsWrapper}>
               <div className={styles.formField}>
                 <label>Month</label>
                 <select
-                  {...register("month", { required: true })}
+                  name="month"
+                  value={form.month}
+                  onChange={handleChange}
                   className={styles.inputField}
-                  defaultValue=""
                 >
                   <option value="" disabled>
                     -- Select Month --
@@ -192,29 +432,8 @@ const Employeeattendance = () => {
                   <option value="December">December</option>
                   <option value="Full and Final">Full and Final</option>
                 </select>
-                {errors.month && errors.month.type === "required" && (
-                  <span>This field is required</span>
-                )}
               </div>
-              <div className={styles.formField}>
-                <label htmlFor="fromDate">From Date</label>
-                <input
-                  type="date"
-                  {...register("fromDate", { required: true })}
-                  className={styles.inputField}
-                />
-                {errors.fromDate && <span>This field is required</span>}
-              </div>
-              <div className={styles.formField}>
-                <label htmlFor="toDate">To Date</label>
-                <input
-                  type="date"
-                  {...register("toDate", { required: true })}
-                  className={styles.inputField}
-                />
-                {errors.toDate && <span>This field is required</span>}
-              </div>
-              <div className={styles.formField}>
+              {/* <div className={styles.formField}>
                 <label>Paid Days</label>
                 <input
                   {...register("paidDays", { required: true, maxLength: 2 })}
@@ -227,122 +446,161 @@ const Employeeattendance = () => {
                 {errors.paidDays && errors.paidDays.type === "maxLength" && (
                   <span>Max Length is 2</span>
                 )}
+              </div> */}
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Present Days
+                  <input
+                    type="text"
+                    name="presentDays"
+                    value={presentCount}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Present Days</label>
-                <input
-                  {...register("presentDays", { required: true, maxLength: 2 })}
-                  type="number"
-                  className={styles.inputField}
-                />
-                {errors.presentDays &&
-                  errors.presentDays.type === "required" && (
-                    <span>This field is required</span>
-                  )}
-                {errors.presentDays &&
-                  errors.presentDays.type === "maxLength" && (
-                    <span>Max Length is 2</span>
-                  )}
+                <label className={styles.inputLabel}>
+                  Paid Leave Days
+                  <input
+                    type="text"
+                    name="paidLeaveDays"
+                    value={paidLeaveCount}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Absent Days</label>
-                <input
-                  {...register("absentDays", { required: true, maxLength: 2 })}
-                  type="number"
-                  className={styles.inputField}
-                />
-                {errors.absentDays && errors.absentDays.type === "required" && (
-                  <span>This field is required</span>
-                )}
-                {errors.absentDays &&
-                  errors.absentDays.type === "maxLength" && (
-                    <span>Max Length is 2</span>
-                  )}
+                <label className={styles.inputLabel}>
+                  Unpaid Leave Days
+                  <input
+                    type="text"
+                    name="unpaidLeaveDays"
+                    value={unpaidLeaveCount}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Leave Days</label>
-                <input
-                  {...register("leaveDays", { maxLength: 2 })}
-                  type="number"
-                  className={styles.inputField}
-                />
-                {errors.leaveDays && errors.leaveDays.type === "maxLength" && (
-                  <span>Max Length is 2</span>
-                )}
+                <label className={styles.inputLabel}>
+                  Loss of Pay Days
+                  <input
+                    type="text"
+                    name="lossOfPay"
+                    value={lossOfPayCount}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Unpaid Leaves</label>
-                <input
-                  {...register("unpaidLeaves")}
-                  type="number"
-                  className={styles.inputField}
-                />
+                <label className={styles.inputLabel}>
+                  Weekly Off Days
+                  <input
+                    type="text"
+                    name="weeklyOffDays"
+                    value={weeklyOff}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Basic Salary</label>
-                <input
-                  {...register("salary", { required: true })}
-                  type="number"
-                  className={styles.inputField}
-                />
-                {errors.salary && errors.salary.type === "required" && (
-                  <span>This field is required</span>
-                )}
+                <label className={styles.inputLabel}>
+                  Basic Salary
+                  <input
+                    type="text"
+                    name="salary"
+                    value={basicSalary}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Incentive</label>
-                <input
-                  {...register("incentive")}
-                  type="number"
-                  className={styles.inputField}
-                />
+                <label className={styles.inputLabel}>
+                  Incentive
+                  <input
+                    type="text"
+                    name="incentive"
+                    value={form.incentive}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Loss of Pay</label>
-                <input
-                  {...register("lossOfPay")}
-                  type="number"
-                  className={styles.inputField}
-                />
+                <label className={styles.inputLabel}>
+                  House Rent Allowance
+                  <input
+                    type="text"
+                    name="houseRentAllowance"
+                    value={houseRentAllowance}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>House Rent Allowance</label>
-                <input
-                  {...register("houseRentAllowance")}
-                  type="number"
-                  className={styles.inputField}
-                />
+                <label className={styles.inputLabel}>
+                  Special Allowance
+                  <input
+                    type="text"
+                    name="specialAllowance"
+                    value={specialAllowance}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
-                <label>Special Allowance</label>
-                <input
-                  {...register("specialAllowance")}
-                  type="number"
-                  className={styles.inputField}
-                />
+                <label className={styles.inputLabel}>
+                  Total Amount
+                  <input
+                    type="text"
+                    name="totalAmount"
+                    value={totalAmount}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
               </div>
               <div className={styles.formField}>
                 <label>Payment Proof</label>
                 <input
-                  {...register("paySlip", { required: true })}
                   type="file"
+                  name="paySlip"
+                  onChange={handleChange}
                   className={styles.inputField}
                 />
-                {errors.paySlip && errors.paySlip.type === "required" && (
-                  <span>This field is required</span>
-                )}
               </div>
               <div className={styles.formField}>
                 <label>Certificate</label>
                 <input
-                  {...register("certificate")}
                   type="file"
+                  name="certificate"
+                  onChange={handleChange}
                   className={styles.inputField}
                 />
               </div>
             </div>
             <div className={styles.btns}>
-              <button className={styles.submitBtn} type="submit">
+              <button
+                className={styles.submitBtn}
+                type="submit"
+                onClick={handleSubmit}
+              >
                 Submit
                 {loading && <ClipLoader color="#fab437" size={12} />}
               </button>
@@ -350,7 +608,12 @@ const Employeeattendance = () => {
           </form>
         </div>
       )}
-      <MonthlyReport employeeId={employeeId} action={true} refreshData={handleRefreshData} />
+      <MonthlyReport
+        employeeId={employeeId}
+        action={true}
+        refreshData={refreshData}
+        refetchData={handleRefreshData}
+      />
     </div>
   );
 };

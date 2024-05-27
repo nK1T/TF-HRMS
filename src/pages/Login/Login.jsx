@@ -159,7 +159,6 @@ const Login = ({ setAuthenticated }) => {
 
   return (
     <div className={styles.main}>
-      <ToastContainer position="top-right" />
       <div className={styles.left}>
         <h2>Login to your Account</h2>
         <p>Welcome back!</p>

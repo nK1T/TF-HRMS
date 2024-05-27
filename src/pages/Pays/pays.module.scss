@@ -1,0 +1,413 @@
+@import "../../App.scss";
+
+.tableContainer {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: $text transparent;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid $accent;
+      padding: 7px;
+      text-align: center;
+    }
+    td {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: #717171;
+      button {
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 3px;
+        padding: 3px;
+        color: $accent;
+        background-color: $text;
+        border: none;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.725);
+        }
+        &:disabled {
+          background-color: $ltext;
+          cursor: not-allowed;
+        }
+      }
+    }
+    th {
+      border: 1px solid black;
+      border-top: none;
+      font-size: 0.9rem;
+      background-color: #fab437;
+      color: $text;
+      font-weight: 600;
+    }
+  }
+  .filters{
+    background-color: $text;
+    .filter {
+      z-index: 1;
+      position: sticky;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 20px;
+      .fcatg {
+        width: 100%;
+        padding: 5px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        text-align: center;
+        font-size: 0.8rem;
+        cursor: pointer;
+        font-weight: 600;
+        color: $text;
+        line-height: 1.1;
+        border-radius: 5px;
+        background-color: $accent;
+        transition: all 0.1s ease-in;
+      }
+      .selected {
+        border: 2px solid $background;
+        transition: all 0.2s linear;
+        transform: scale(1.04);
+      }
+      
+      .errorMsg {
+        margin: 10px;
+        color: $accent;
+      }
+      .employees {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        margin: 10px;
+        gap: 20px;
+        .employee {
+          position: relative;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+          background-color: $background;
+          .verifiedIcon {
+            top: 0;
+            right: 0;
+            color: #1ea5fe;
+            position: absolute;
+          }
+          img {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            height: 200px;
+            width: 100%;
+          }
+          .employeeDetails {
+            margin-top: 10px;
+            .employeeDetail {
+              border-bottom: 1px solid $ltext;
+              margin-bottom: 10px;
+              padding-bottom: 5px;
+              font-size: 0.7rem;
+              display: flex;
+              justify-content: space-between;
+              p:nth-child(1) {
+                font-weight: 700;
+                color: $text;
+              }
+              p:nth-child(2) {
+                color: $ltext;
+              }
+            }
+          }
+          .bottomBtn {
+            display: flex;
+            justify-content: space-between;
+            .bottomLink {
+              text-decoration: none;
+              .btn2 {
+                color: $text;
+                background-color: $accent;
+              }
+              button {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+                cursor: pointer;
+                border-radius: 4px;
+                border: none;
+                background-color: $text;
+                color: $background;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                padding: 5px;
+              }
+            }
+          }
+        }
+      }
+      .shead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 10px 20px 10px;
+        .toggleBtns {
+          display: flex;
+          gap: 10px;
+          .toggleBtn1 {
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+              rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+              rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
+            border: none;
+            cursor: pointer;
+            background-color: forestgreen;
+            padding: 10px;
+            border-radius: 5px;
+            color: $background;
+            font-weight: 600;
+            font-size: 0.8rem;
+          }
+          .toggleBtn2 {
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+              rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+              rgba(0, 0, 0, 0.2) 0px -5px 0px inset;
+            border: none;
+            cursor: pointer;
+            background-color: crimson;
+            padding: 10px;
+            border-radius: 5px;
+            color: $background;
+            font-weight: 600;
+            font-size: 0.8rem;
+          }
+        }
+        .addNew {
+          .addNewBtn {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+            background-color: $text;
+            color: $background;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            padding: 5px;
+          }
+        }
+      }
+    }
+    .search {
+      margin: 0px 7px;
+      padding-bottom: 10px;
+      display: flex;
+      .searchField {
+        width: 100%;
+        border: none;
+        border-radius: 4px;
+        padding: 10px;
+        outline: none;
+      }
+      .btn {
+        cursor: pointer;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border: none;
+        background-color: $accent;
+        color: $text;
+        padding: 10px;
+      }
+    }
+  }
+}
+.btns {
+  display: flex;
+  gap: 5px;
+  border: none !important;
+  border-top: 1px solid $accent !important;
+  .approve {
+    color: $background;
+    background-color: forestgreen;
+    &:hover {
+      background-color: rgb(18, 112, 18);
+    }
+  }
+  .reject {
+    color: $background;
+    background-color: crimson;
+    &:hover {
+      background-color: rgb(172, 11, 44);
+    }
+  }
+}
+.employee {
+  gap: 10px;
+  min-width: 300px;
+  .left {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    img {
+      border-radius: 5px;
+      height: 90px;
+      width: 90px;
+    }
+    .image {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      position: relative;
+      .imgBottom {
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        border-radius: 5px;
+        color: $text;
+        width: 100%;
+        // background-color: $accent;
+        :nth-child(1) {
+          padding: 2px;
+          text-align: center;
+          color: $text;
+          border-radius: 4px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          background-color: $accent;
+        }
+        :nth-child(2) {
+          padding: 2px;
+          text-align: center;
+          color: $background;
+          border-radius: 4px;
+          font-size: 0.7rem;
+          font-weight: 500;
+          background-color: $text;
+        }
+        :nth-child(3) {
+          padding: 2px;
+          text-align: center;
+          color: $background;
+          border-radius: 4px;
+          font-size: 0.7rem;
+          font-weight: 500;
+          background-color: $text;
+        }
+      }
+    }
+    .employeeDetails {
+      min-width: 250px;
+      .employeeDetail {
+        // border-bottom: 1px solid $ltext;
+        margin-bottom: 5px;
+        font-size: 0.7rem;
+        display: flex;
+        justify-content: space-between;
+        // gap: 100px;
+        p:nth-child(1) {
+          font-weight: 700;
+          color: $text;
+        }
+        p:nth-child(2) {
+          color: $ltext;
+        }
+      }
+    }
+    .bottomBtn {
+      display: flex;
+      justify-content: space-between;
+      .bottomLink {
+        text-decoration: none;
+        .btn2 {
+          color: $text;
+          background-color: $accent;
+        }
+        button {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          cursor: pointer;
+          border-radius: 4px;
+          border: none;
+          background-color: $text;
+          color: $background;
+          font-weight: 600;
+          text-transform: uppercase;
+          font-size: 0.7rem;
+          padding: 5px;
+        }
+      }
+    }
+  }
+  .right {
+    flex: 2;
+  }
+}
+.employeeDetails {
+  min-width: 200px;
+  .employeeDetail {
+    // border-bottom: 1px solid $ltext;
+    margin-bottom: 5px;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    // gap: 100px;
+    p:nth-child(1) {
+      font-weight: 700;
+      color: $text;
+    }
+    p:nth-child(2) {
+      color: $ltext;
+    }
+  }
+}
+.monthDetails {
+  min-width: 170px;
+  .employeeDetail {
+    // border-bottom: 1px solid $ltext;
+    margin-bottom: 2px;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    // gap: 100px;
+    p:nth-child(1) {
+      font-weight: 700;
+      color: $text;
+    }
+    p:nth-child(2) {
+      color: $ltext;
+    }
+  }
+}
+.attachmentDetails {
+  min-width: 120px;
+  .employeeDetail {
+    // border-bottom: 1px solid $ltext;
+    margin-bottom: 2px;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    // gap: 100px;
+    p:nth-child(1) {
+      font-weight: 700;
+      color: $text;
+    }
+    p:nth-child(2) {
+      color: $ltext;
+    }
+  }
+}
