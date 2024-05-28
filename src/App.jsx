@@ -21,6 +21,7 @@ import { RefreshDataProvider } from "./components/RefreshDataProvider";
 import Pays from "./pages/Pays/Pays";
 import { ToastContainer } from "react-toastify";
 import Employees from "./pages/Employees/Employees";
+import ItDailyReport from "./pages/ItDailyReport/ItDailyReport";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -90,7 +91,11 @@ function App() {
                 {department === "SALES" ? (
                   <SalesDailyReport />
                 ) : (
+                  department === "HR"
+                  ?
                   <HrDailyReport />
+                  :
+                  <ItDailyReport/>
                 )}
               </PrivateRoute>
             }

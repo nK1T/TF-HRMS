@@ -226,12 +226,15 @@ const AttendanceReport = ({
 
   const leaveaggregatedData = filteredLeaveData();
   const reportaggregatedData = filteredDailyReportData();
-  
-  // Check if daily status exists for the selected date and employee
-  const dailyStatusPresent = dailyStatus.some(
-    (status) => status.date === selectedDate && status.employeeId === employee.employeeId
-  );
 
+  // Check if daily status exists for the selected date and employee
+  const dailyStatusPresent =
+    Array.isArray(dailyStatus) &&
+    dailyStatus.some(
+      (status) =>
+        status.date === selectedDate &&
+        status.employeeId === employee.employeeId
+    );
 
   return (
     <div className={styles.container}>
@@ -347,7 +350,7 @@ const AttendanceReport = ({
                 {/* <label htmlFor="leaveType">Leave type</label> */}
                 <select
                   id="dayPerformance"
-                  {...register("dayPerformance", { required: true })}
+                  {...register("dayPerformance")}
                   className={styles.inputField}
                 >
                   <option value="">--Select Performance--</option>
@@ -388,7 +391,7 @@ const AttendanceReport = ({
                 {/* <label htmlFor="leaveType">Leave type</label> */}
                 <select
                   id="dayBehaviour"
-                  {...register("dayBehaviour", { required: true })}
+                  {...register("dayBehaviour")}
                   className={styles.inputField}
                 >
                   <option value="">--Select Behaviour--</option>
@@ -436,105 +439,208 @@ const AttendanceReport = ({
           </p>
         )}
         <div className={styles.dailyReport}>
-          <table>
-            <thead>
-              {/* <tr>
+          {employee.department === "SALES" && (
+            <table>
+              <thead>
+                {/* <tr>
                 <th>LEAD DETAILS</th>
                 <th>SESSION DETAILS</th>
                 <th>AMOUNT DETAILS</th>
               </tr> */}
-            </thead>
-            {!reportaggregatedData.length == 0 ? (
-              <tbody>
-                {reportaggregatedData.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div className={styles.reportDetails}>
-                        <div>
-                          <div className={styles.employeeDetail}>
-                            <p>LEADS GOT</p>
-                            <p>{item.leadsGot}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>DIALLED CALLS</p>
-                            <p>{item.dialledCalls}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>CALL PICKED</p>
-                            <p>{item.callPicked}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>CALL NOT PICKED</p>
-                            <p>{item.callNotPicked}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>SESSION BOOKED</p>
-                            <p>{item.sessionBooked}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className={styles.reportDetails}>
-                        <div>
-                          <div className={styles.employeeDetail}>
-                            <p>SESSION CONDUCTED</p>
-                            <p>{item.sessionConducted}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>SESSION ABSENT</p>
-                            <p>{item.sessionAbsent}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>SESSION RESCHEDULE</p>
-                            <p>{item.sessionReschedule}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>SESSION COMPLETED</p>
-                            <p>{item.sessionCompleted}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>HOT FOLLOW UPS</p>
-                            <p>{item.hotFollowUps}</p>
+              </thead>
+              {!reportaggregatedData.length == 0 ? (
+                <tbody>
+                  {reportaggregatedData.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <div className={styles.reportDetails}>
+                          <div>
+                            <div className={styles.employeeDetail}>
+                              <p>LEADS GOT</p>
+                              <p>{item.leadsGot}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>DIALLED CALLS</p>
+                              <p>{item.dialledCalls}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>CALL PICKED</p>
+                              <p>{item.callPicked}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>CALL NOT PICKED</p>
+                              <p>{item.callNotPicked}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>SESSION BOOKED</p>
+                              <p>{item.sessionBooked}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className={styles.reportDetails}>
-                        <div>
-                          <div className={styles.employeeDetail}>
-                            <p>REGISTRATION FEE COLLECTED AMOUNT</p>
-                            <p>{item.registrationFeeCollectedAmount}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>DOWNPAYMENT COLLECTED AMOUNT</p>
-                            <p>{item.downPaymentCollectedAmount}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>FULL COURSE AMOUNT COLLECTED</p>
-                            <p>{item.fullCourseAmountCollected}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>STUDENT ENROLLED</p>
-                            <p>{item.studentEnrolled}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>FOLLOW UP AMOUNT</p>
-                            <p>{item.followUpAmount}</p>
+                      </td>
+                      <td>
+                        <div className={styles.reportDetails}>
+                          <div>
+                            <div className={styles.employeeDetail}>
+                              <p>SESSION CONDUCTED</p>
+                              <p>{item.sessionConducted}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>SESSION ABSENT</p>
+                              <p>{item.sessionAbsent}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>SESSION RESCHEDULE</p>
+                              <p>{item.sessionReschedule}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>SESSION COMPLETED</p>
+                              <p>{item.sessionCompleted}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>HOT FOLLOW UPS</p>
+                              <p>{item.hotFollowUps}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            ) : (
-              <p className={styles.errorMessage}>
-                EOD report for {selectedDate} is not Submitted by employee
-              </p>
-            )}
-          </table>
+                      </td>
+                      <td>
+                        <div className={styles.reportDetails}>
+                          <div>
+                            <div className={styles.employeeDetail}>
+                              <p>REGISTRATION FEE COLLECTED AMOUNT</p>
+                              <p>{item.registrationFeeCollectedAmount}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>DOWNPAYMENT COLLECTED AMOUNT</p>
+                              <p>{item.downPaymentCollectedAmount}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>FULL COURSE AMOUNT COLLECTED</p>
+                              <p>{item.fullCourseAmountCollected}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>STUDENT ENROLLED</p>
+                              <p>{item.studentEnrolled}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>FOLLOW UP AMOUNT</p>
+                              <p>{item.followUpAmount}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <p className={styles.errorMessage}>
+                  EOD report for {selectedDate} is not Submitted by employee
+                </p>
+              )}
+            </table>
+          )}
+          {employee.department === "HR" && (
+            <table>
+              <thead>
+                {/* <tr>
+                <th>LEAD DETAILS</th>
+                <th>SESSION DETAILS</th>
+                <th>AMOUNT DETAILS</th>
+              </tr> */}
+              </thead>
+              {!reportaggregatedData.length == 0 ? (
+                <tbody>
+                  {reportaggregatedData.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <div className={styles.reportDetails}>
+                          <div>
+                            <div className={styles.employeeDetail}>
+                              <p>HIRING DEPT</p>
+                              <p>{item.hiringDepartment}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>HIRING DESG</p>
+                              <p>{item.hiringDesignation}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>JOB POSTED IN</p>
+                              <p>{item.jobPostedIn}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>TOTAL JOB POSTS</p>
+                              <p>{item.totalJobPosts}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>RESUME GOT SELF</p>
+                              <p>{item.resumeGotSelf}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className={styles.reportDetails}>
+                          <div>
+                            <div className={styles.employeeDetail}>
+                              <p>RESUME GOT TEAM</p>
+                              <p>{item.resumeGotTeam}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>DIALLED CALLS</p>
+                              <p>{item.dialledCalls}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>PHONE CALL INTR</p>
+                              <p>{item.phoneCallInterview}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>VI INTR SCHEDULE</p>
+                              <p>{item.virtualInterviewSchedule}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>VI INTR CONDUCTED</p>
+                              <p>{item.virtualInterviewConducted}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className={styles.reportDetails}>
+                          <div>
+                            <div className={styles.employeeDetail}>
+                              <p>ABS CAND IN INTR</p>
+                              <p>{item.absentCandidateInInterview}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>DIALLED CALLS DUR</p>
+                              <p>{item.dialledCallsDuration}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>VI INTR DUR</p>
+                              <p>{item.virtualInterviewDuration}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>OFR LTR FORM FILLED</p>
+                              <p>{item.offerLetterFormFilled}</p>
+                            </div>
+                            <div className={styles.employeeDetail}>
+                              <p>WORKED IN PROJECT</p>
+                              <p>{item.workedInProject}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <p className={styles.errorMessage}>
+                  EOD report for {selectedDate} is not Submitted by employee
+                </p>
+              )}
+            </table>
+          )}
         </div>
       </div>
     </div>

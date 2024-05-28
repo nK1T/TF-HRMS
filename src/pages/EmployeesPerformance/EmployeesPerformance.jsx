@@ -146,12 +146,12 @@ const EmployeesPerformance = () => {
           setDailyReport(dailyReportData);
         } else {
           const dailyReportResponse = await axios.get(
-            "https://talentfiner.in/backend/dailyReport/fetchSalesDailyReport.php"
+            "https://talentfiner.in/backend/dailyReport/fetchAllDailyReport.php"
           );
           dailyReportData = dailyReportResponse.data;
           setDailyReport(dailyReportData);
           sessionStorage.setItem(
-            "dailyStatus",
+            "dailyReport",
             JSON.stringify(dailyReportData)
           );
           sessionStorage.setItem("dailyReportTime", currentTime);
