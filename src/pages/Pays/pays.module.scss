@@ -1,7 +1,6 @@
 @import "../../App.scss";
 
 .tableContainer {
-  overflow-x: auto;
   max-width: 100%;
   margin-bottom: 1rem;
   -webkit-overflow-scrolling: touch;
@@ -51,11 +50,15 @@
     }
   }
   .filters{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     background-color: $text;
+    z-index: 1;
+    position: sticky;
+    top: 60px;
+    padding: 10px;
     .filter {
-      z-index: 1;
-      position: sticky;
-      padding: 10px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       gap: 20px;
@@ -209,8 +212,6 @@
       }
     }
     .search {
-      margin: 0px 7px;
-      padding-bottom: 10px;
       display: flex;
       .searchField {
         width: 100%;

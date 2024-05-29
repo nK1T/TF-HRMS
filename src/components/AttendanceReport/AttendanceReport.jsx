@@ -624,10 +624,10 @@ const AttendanceReport = ({
                               <p>OFR LTR FORM FILLED</p>
                               <p>{item.offerLetterFormFilled}</p>
                             </div>
-                            <div className={styles.employeeDetail}>
+                            {/* <div className={styles.employeeDetail}>
                               <p>WORKED IN PROJECT</p>
                               <p>{item.workedInProject}</p>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </td>

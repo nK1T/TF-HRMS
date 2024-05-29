@@ -22,6 +22,7 @@ import Pays from "./pages/Pays/Pays";
 import { ToastContainer } from "react-toastify";
 import Employees from "./pages/Employees/Employees";
 import ItDailyReport from "./pages/ItDailyReport/ItDailyReport";
+import EodReports from "./pages/EodReports/EodReports";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -133,6 +134,14 @@ function App() {
                 element={
                   <PrivateRoute isAuthenticated={isAuthenticated}>
                     <EmployeeProfile />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/employee/:employeeId/eod-report"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <EodReports />
                   </PrivateRoute>
                 }
               />

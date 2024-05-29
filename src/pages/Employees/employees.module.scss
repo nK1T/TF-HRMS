@@ -4,7 +4,7 @@
   .top {
     .filters {
       .filter {
-        z-index: 1;
+        z-index:1;
         position: sticky;
         top: 60px;
         background-color: $text;
@@ -110,6 +110,9 @@
                 background-color: $accent;
               }
               button {
+                display: flex;
+                justify-content: center;
+                min-width: 70px;
                 display: flex;
                 align-items: center;
                 gap: 3px;

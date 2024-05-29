@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaEdit, FaExternalLinkAlt } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
@@ -364,6 +363,15 @@ const Employees = () => {
                       <button className={styles.btn2}>
                         <FaExternalLinkAlt color="#08080B" size={10} />
                         details
+                      </button>
+                    </Link>
+                    <Link
+                      to={`/employee/${employee.employeeId}/eod-report`}
+                      className={styles.bottomLink}
+                    >
+                      <button>
+                        <TbReportSearch color="#fab437" />
+                        EOD
                       </button>
                     </Link>
                     <Link

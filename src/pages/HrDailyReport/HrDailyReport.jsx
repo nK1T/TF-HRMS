@@ -177,7 +177,6 @@ const HrDailyReport = () => {
                   value={form.hiringDepartment}
                   onChange={handleChange}
                   className={styles.inputField}
-                  required
                 >
                   <option value="" disabled>
                     --Select--
@@ -205,7 +204,6 @@ const HrDailyReport = () => {
                   value={form.hiringDesignation}
                   onChange={handleChange}
                   className={styles.inputField}
-                  required
                 >
                   <option value="" disabled>
                     --Select--
@@ -223,7 +221,6 @@ const HrDailyReport = () => {
                   value={form.jobPostedIn}
                   onChange={handleChange}
                   className={styles.inputField}
-                  required
                 >
                   <option value="" disabled>
                     --Select--
@@ -245,7 +242,6 @@ const HrDailyReport = () => {
                   value={form.totalJobPosts}
                   onChange={handleChange}
                   className={styles.inputField}
-                  required
                 >
                   <option value="" disabled>
                     --Select--

@@ -13,6 +13,10 @@ $accent: #fab437;
   box-sizing: border-box;
   font-family: Roboto;
 }
+a {
+  // color: $text;
+  text-decoration: none;
+}
 html,
 body {
   scroll-behavior: smooth !important;

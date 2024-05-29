@@ -1110,19 +1110,6 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              stipend
-              <input
-                type="text"
-                name="stipend"
-                value={data.stipend ?? employee.stipend}
-                className={styles.inputField}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.inputLabel}>
             house Rent Allowance
               <input
                 type="text"

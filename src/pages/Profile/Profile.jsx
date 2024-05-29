@@ -130,7 +130,6 @@ const Profile = ({ setRole }) => {
     hiringHrEmail: "",
     ctc: "",
     fixedCompensation: "",
-    stipend: "",
     houseRentAllowance:"",
     specialAllowance:"",
     probationPeriod: "",
@@ -140,22 +139,6 @@ const Profile = ({ setRole }) => {
     uanNumber:"",
     pfAccountNumber:""
   });
-  const handleLogout = () => {
-    const confirmation = window.confirm("Are you sure you want to logout?");
-    if (confirmation) {
-      localStorage.removeItem("isAuthenticated");
-      localStorage.removeItem("email");
-      localStorage.removeItem("employeeId");
-      localStorage.removeItem("profilePicture");
-      localStorage.removeItem("team");
-      localStorage.removeItem("role");
-      localStorage.removeItem("countdown");
-      localStorage.removeItem("isCheckedIn");
-      localStorage.removeItem("designation");
-      localStorage.removeItem("fullName");
-      window.location.href = "/login";
-    }
-  };
   useEffect(() => {
     document.title = "Profile - TALENTFINER HRMS";
     window.scrollTo(0, 0);
@@ -224,7 +207,6 @@ const Profile = ({ setRole }) => {
         signedNonDisclosureAgreement: data.signedNonDisclosureAgreement || "",
         ctc: data.ctc || "",
         fixedCompensation: data.fixedCompensation || "",
-        stipend: data.stipend || "",
         probationPeriod: data.probationPeriod || "",
         probationEndDate: data.probationEndDate || "",
         professionTax: data.professionTax || "",
@@ -376,85 +358,6 @@ const Profile = ({ setRole }) => {
   };
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <ul className={styles.links}>
-          {/* <li
-            className={`${styles.link} ${
-              activeSection === "basicDetails" && styles.selected
-            }`}
-            onClick={() => setActiveSection("basicDetails")}
-          >
-            <FaUser color="#fab437" size={10} />
-            <p>Basic details</p>
-          </li>
-          <li
-            className={`${styles.link} ${
-              activeSection === "qualifications" && styles.selected
-            }`}
-            onClick={() => setActiveSection("qualifications")}
-          >
-            <IoMdSchool color="#fab437" size={15} />
-            <p>Qualification</p>
-          </li>
-          <li
-            className={`${styles.link} ${
-              activeSection === "workExperience" && styles.selected
-            }`}
-            onClick={() => setActiveSection("workExperience")}
-          >
-            <BsBuildingsFill color="#fab437" />
-            <p>Work Experience</p>
-          </li>
-          <li
-            className={`${styles.link} ${
-              activeSection === "documents" && styles.selected
-            }`}
-            onClick={() => setActiveSection("documents")}
-          >
-            <IoIosDocument color="#fab437" size={15} />
-            <p>Documents</p>
-          </li>
-          <li
-            className={`${styles.link} ${
-              activeSection === "bankDetails" && styles.selected
-            }`}
-            onClick={() => setActiveSection("bankDetails")}
-          >
-            <BsBank2 color="#fab437" />
-            <p>Bank details</p>
-          </li>
-          <li
-            className={`${styles.link} ${
-              activeSection === "onboarding" && styles.selected
-            }`}
-            onClick={() => setActiveSection("onboarding")}
-          >
-            <MdAttachFile color="#fab437" size={15} />
-            <p>onboarding</p>
-          </li>
-          <li
-            className={`${styles.link} ${
-              activeSection === "pays" && styles.selected
-            }`}
-            onClick={() => setActiveSection("pays")}
-          >
-            <FaRupeeSign color="#fab437" size={15} />
-            <p>pays</p>
-          </li> */}
-          <li className={styles.link}>
-            <button onClick={handleResign}>
-              <ImExit />
-              <p>Self Resignation</p>
-            </button>
-          </li>
-        </ul>
-        <div className={styles.logout}>
-          <button onClick={handleLogout}>
-            <IoLogOut />
-            Logout
-          </button>
-        </div>
-      </div>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         {data.verification === "pending" && (
           <p className={styles.pending}>
@@ -1612,10 +1515,9 @@ const Profile = ({ setRole }) => {
               />
             </label>
           </div>
-          <div className={styles.formField}>
+          {/* <div className={styles.formField}>
             <label className={styles.inputLabel}>
               stipend (monthly)
-              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="stipend"
@@ -1625,7 +1527,7 @@ const Profile = ({ setRole }) => {
                 disabled={data.stipend !== null}
               />
             </label>
-          </div>
+          </div> */}
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               House rent allowance

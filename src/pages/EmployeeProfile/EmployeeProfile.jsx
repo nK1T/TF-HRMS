@@ -643,10 +643,6 @@ const EmployeeProfile = () => {
                 <p>{employee.fixedCompensation}</p>
               </div>
               <div className={styles.detail}>
-                <p>stipend:</p>
-                <p>{employee.stipend}</p>
-              </div>
-              <div className={styles.detail}>
                 <p>house rent allowance:</p>
                 <p>{employee.houseRentAllowance}</p>
               </div>
