@@ -296,14 +296,14 @@ const Pays = () => {
                       <p>FIXED COMPENSATION</p>
                       <p>{item.employeeInfo?.fixedCompensation}</p>
                     </div>
-                    <div className={styles.employeeDetail}>
+                    {/* <div className={styles.employeeDetail}>
                       <p>STIPEND</p>
                       <p>
                         {item.employeeInfo?.stipend
                           ? item.employeeInfo?.stipend
                           : "-"}
                       </p>
-                    </div>
+                    </div> */}
                     <div className={styles.employeeDetail}>
                       <p>HOUSE RENT ALLOWANCE</p>
                       <p>

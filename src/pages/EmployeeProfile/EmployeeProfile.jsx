@@ -2,31 +2,58 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styles from "./employeeProfile.module.scss";
 import { Link, useParams } from "react-router-dom";
-import { MdContactPhone, MdVerified } from "react-icons/md";
+import { MdAddBox, MdContactPhone, MdVerified } from "react-icons/md";
 import {
   FaPlaneDeparture,
   FaEdit,
   FaMinusCircle,
   FaRupeeSign,
   FaCopy,
+  FaWindowClose,
 } from "react-icons/fa";
 import {
   IoIosInformationCircle,
   IoIosSchool,
   IoMdDocument,
 } from "react-icons/io";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AiFillBank } from "react-icons/ai";
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
 import { RiGovernmentFill } from "react-icons/ri";
 import { HiBuildingOffice2 } from "react-icons/hi2";
+import { ClipLoader } from "react-spinners";
 
 const EmployeeProfile = () => {
   const { employeeId } = useParams();
+  const [isOpenArray, setIsOpenArray] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [incrementData, setIncrementData] = useState(false);
   const [data, setData] = useState([]);
+  const [form, setForm] = useState({
+    name: name,
+    employeeId: "",
+    fromDate: "",
+    toDate: "",
+    ctc: "",
+    fixedCompensation: "",
+    houseRentAllowance: "",
+    specialAllowance: "",
+    probationDays: "",
+  });
+
+  const openModal = () => {
+    setIsOpenArray(true);
+    document.body.classList.add("modal-open");
+  };
+
+  const closeModal = () => {
+    setIsOpenArray(false);
+    document.body.classList.remove("modal-open");
+  };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     document.title = "Emloyee Profile - TALENTFINER";
   }, []);
 
@@ -39,7 +66,6 @@ const EmployeeProfile = () => {
       axios
         .get("https://talentfiner.in/backend/getEmpDaTa.php")
         .then((response) => {
-          console.log("called");
           // Cache the fetched teamData
           sessionStorage.setItem("employeeData", JSON.stringify(response.data));
           setData(response.data);
@@ -96,6 +122,147 @@ const EmployeeProfile = () => {
       window.location.reload();
     } catch (error) {
       console.log("Error Updating status", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  useEffect(() => {
+    const filteredEmployee = filterEmployeeData()[0];
+    if (filteredEmployee) {
+      setForm({
+        name: filteredEmployee.fullName || "",
+        employeeId: filteredEmployee.employeeId || "",
+        fromDate: "",
+        toDate: "",
+        ctc: "",
+        fixedCompensation: "",
+        houseRentAllowance: "",
+        specialAllowance: "",
+        probationDays: "",
+      });
+    }
+  }, [data, employeeId]);
+
+  const fetchData = async () => {
+    // Moved fetchData outside useEffect
+    try {
+      const response = await axios.get(
+        "https://talentfiner.in/backend/monthlyReport/fetchIncrementData.php"
+      );
+      setIncrementData(response.data);
+      sessionStorage.setItem("incrementData", JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error fetching monthly report data:", error);
+    }
+  };
+  useEffect(() => {
+    const cachedData = sessionStorage.getItem("incrementData");
+    if (cachedData) {
+      setIncrementData(JSON.parse(cachedData));
+    } else {
+      fetchData();
+    }
+  }, []);
+  const filterIncrementById = () => {
+    if (!Array.isArray(incrementData)) {
+      return null;
+    }
+    const filteredEmployee = filterEmployeeData()[0];
+    return incrementData.filter(
+      (item) => item.employeeId === filteredEmployee?.employeeId
+    );
+  };
+  const notifySucess = () =>
+    toast.success("Increment Updated", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+  const notifyFail = () =>
+    toast.error("Try again after sometime", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const notifyField = (field) =>
+    toast.warn(`Please fill ${field} before proceeding.`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const requiredFields = [
+      "fromDate",
+      "toDate",
+      "ctc",
+      "fixedCompensation",
+      "houseRentAllowance",
+      "specialAllowance",
+      "probationDays",
+    ];
+
+    // Find the first missing field, if any
+    const missingField = requiredFields.find((field) => !form[field]);
+
+    // If a missing field is found, show an alert and return early
+    if (missingField) {
+      const fieldName = missingField;
+      notifyField(fieldName);
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "https://talentfiner.in/backend/monthlyReport/submitIncrement.php",
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.data.success) {
+        notifySucess();
+        setForm({
+          fromDate: "",
+          toDate: "",
+          ctc: "",
+          fixedCompensation: "",
+          houseRentAllowance: "",
+          specialAllowance: "",
+          probationDays: "",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      notifyFail();
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -600,62 +767,6 @@ const EmployeeProfile = () => {
               </div>
             </div>
             <h3 className={styles.heading}>
-              <HiBuildingOffice2 size={15} color="#fab437" />
-              Department Details
-            </h3>
-            <div className={styles.basicDetails}>
-              <div className={styles.detail}>
-                <p>team leader name:</p>
-                <p>{employee.teamLeaderName}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>team leader Id:</p>
-                <p>{employee.teamLeaderId}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>manager name:</p>
-                <p>{employee.managerName}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>manager id:</p>
-                <p>{employee.managerId}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>general manager name:</p>
-                <p>{employee.generalManagerName}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>general manager id:</p>
-                <p>{employee.generalManagerId}</p>
-              </div>
-            </div>
-            <h3 className={styles.heading}>
-              <FaRupeeSign size={15} color="#fab437" />
-              pays
-            </h3>
-            <div className={styles.basicDetails}>
-              <div className={styles.detail}>
-                <p>CTC:</p>
-                <p>{employee.ctc}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>fixed compensation:</p>
-                <p>{employee.fixedCompensation}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>house rent allowance:</p>
-                <p>{employee.houseRentAllowance}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>special allowance:</p>
-                <p>{employee.specialAllowance}</p>
-              </div>
-              <div className={styles.detail}>
-                <p>probation period (days):</p>
-                <p>{employee.probationPeriod}</p>
-              </div>
-            </div>
-            <h3 className={styles.heading}>
               <RiGovernmentFill size={15} color="#fab437" />
               Additional Details
             </h3>
@@ -695,6 +806,242 @@ const EmployeeProfile = () => {
                     }}
                   />
                 </p>
+              </div>
+            </div>
+            <h3 className={styles.heading}>
+              <HiBuildingOffice2 size={15} color="#fab437" />
+              Department Details
+            </h3>
+            <div className={styles.basicDetails}>
+              <div className={styles.detail}>
+                <p>team leader name:</p>
+                <p>{employee.teamLeaderName}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>team leader Id:</p>
+                <p>{employee.teamLeaderId}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>manager name:</p>
+                <p>{employee.managerName}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>manager id:</p>
+                <p>{employee.managerId}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>general manager name:</p>
+                <p>{employee.generalManagerName}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>general manager id:</p>
+                <p>{employee.generalManagerId}</p>
+              </div>
+            </div>
+            <h3 className={styles.heading}>
+              <FaRupeeSign size={15} color="#fab437" />
+              pays
+              {!isOpenArray ? (
+                <button onClick={openModal} className={styles.addNewBtn}>
+                  <MdAddBox color="#fab437" size={15} />
+                  Add
+                </button>
+              ) : (
+                <button onClick={closeModal} className={styles.addNewBtn}>
+                  <FaWindowClose color="#fab437" size={12} />
+                  close
+                </button>
+              )}
+            </h3>
+            {isOpenArray && (
+              <>
+                <div className={styles.formContainer}>
+                  <form>
+                    <div className={styles.formFieldsWrapper}>
+                      <div className={styles.formField}>
+                        <label>From Date</label>
+                        <input
+                          type="date"
+                          name="fromDate"
+                          value={form.fromDate}
+                          onChange={handleChange}
+                          className={styles.inputField}
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>To Date</label>
+                        <input
+                          type="date"
+                          value={form.toDate}
+                          name="toDate"
+                          onChange={handleChange}
+                          required
+                          className={styles.inputField}
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
+                          CTC
+                          <input
+                            type="number"
+                            name="ctc"
+                            value={form.ctc}
+                            onChange={handleChange}
+                            className={styles.inputField}
+                            required
+                          />
+                        </label>
+                      </div>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
+                          Fixed Compensation
+                          <input
+                            type="number"
+                            name="fixedCompensation"
+                            value={form.fixedCompensation}
+                            onChange={handleChange}
+                            className={styles.inputField}
+                            required
+                          />
+                        </label>
+                      </div>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
+                          House Rent Allowance
+                          <input
+                            type="number"
+                            name="houseRentAllowance"
+                            value={form.houseRentAllowance}
+                            onChange={handleChange}
+                            className={styles.inputField}
+                            required
+                          />
+                        </label>
+                      </div>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
+                          Special Allowance
+                          <input
+                            type="number"
+                            name="specialAllowance"
+                            value={form.specialAllowance}
+                            onChange={handleChange}
+                            className={styles.inputField}
+                            required
+                          />
+                        </label>
+                      </div>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
+                          Probation Days
+                          <input
+                            type="number"
+                            name="probationDays"
+                            value={form.probationDays}
+                            onChange={handleChange}
+                            className={styles.inputField}
+                            required
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    <div className={styles.btns}>
+                      <button
+                        className={styles.addNewBtn}
+                        type="submit"
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                        {loading && <ClipLoader color="#fab437" size={12} />}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div className={styles.dailyReport}>
+                  <table>
+                    <thead>
+                      {/* <tr>
+                        <th>Date</th>
+                        <th>HIRING DETAILS</th>
+                        <th>INTERVIEW DETAILS</th>
+                        <th>CONCLUSION</th>
+                      </tr> */}
+                    </thead>
+                    <tbody>
+                      {filterIncrementById()?.map((item, index) => (
+                        <tr key={index}>
+                          <td>
+                            <div className={styles.reportDetails}>
+                              <div>
+                                <div className={styles.employeeDetail}>
+                                  <p>Date</p>
+                                  <p>{item.currentDate}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
+                                  <p>From Date</p>
+                                  <p>{item.fromDate}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
+                                  <p>To Date</p>
+                                  <p>{item.toDate}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div className={styles.reportDetails}>
+                              <div>
+                                <div className={styles.employeeDetail}>
+                                  <p>CTC</p>
+                                  <p>{item.ctc}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
+                                  <p>Fixed Compensation</p>
+                                  <p>{item.fixedCompensation}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
+                                  <p>House Rent Allowance</p>
+                                  <p>{item.houseRentAllowance}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
+                                  <p>Special Allowance</p>
+                                  <p>{item.specialAllowance}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
+                                  <p>Probation Days</p>
+                                  <p>{item.probationDays}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+            <div className={styles.basicDetails}>
+              <div className={styles.detail}>
+                <p>CTC:</p>
+                <p>{employee.ctc}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>fixed compensation:</p>
+                <p>{employee.fixedCompensation}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>house rent allowance:</p>
+                <p>{employee.houseRentAllowance}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>special allowance:</p>
+                <p>{employee.specialAllowance}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>probation period (days):</p>
+                <p>{employee.probationPeriod}</p>
               </div>
             </div>
           </div>

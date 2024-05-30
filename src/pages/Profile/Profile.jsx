@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./profile.module.scss";
 import { FaUser, FaCircleCheck } from "react-icons/fa6";
-import { FaRupeeSign } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaRupeeSign, FaWindowClose } from "react-icons/fa";
 import { IoMdSchool, IoIosDocument } from "react-icons/io";
 import { BsBuildingsFill, BsBank2 } from "react-icons/bs";
-import { MdAttachFile } from "react-icons/md";
+import { MdAddBox, MdAttachFile } from "react-icons/md";
 import axios from "axios";
 import Loader from "../../components/Loader/loader";
 import { IoLogOut } from "react-icons/io5";
@@ -30,20 +30,30 @@ const fetchData = async (uemail, setData, setRole) => {
     localStorage.setItem("designation", response.data.designation);
     localStorage.setItem("department", response.data.department);
     setRole(response.data.secretRole);
-    sessionStorage.setItem("selfProfileData",JSON.stringify(response.data));
-    console.log("calledddddd");
+    sessionStorage.setItem("selfProfileData", JSON.stringify(response.data));
   } catch (error) {
     console.error("Error fetching data", error);
   }
 };
 
 const Profile = ({ setRole }) => {
+  const [incrementData, setIncrementData] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState(null);
   const [uemail, setUemail] = useState();
   const [employeeId, setEmpId] = useState();
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState("basicDetails");
   const navigate = useNavigate();
+  const openModal = () => {
+    setIsOpen(true);
+    document.body.classList.add("modal-open");
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    document.body.classList.remove("modal-open");
+  };
   const notifySuccess = () =>
     toast.success("Profile Updated", {
       position: "top-right",
@@ -55,28 +65,56 @@ const Profile = ({ setRole }) => {
       progress: undefined,
       theme: "dark",
     });
-    const notifyFail = () =>
-      toast.error("Try again after sometime", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    const notifyField = (field) =>
-      toast.warn(`Please fill ${field} before proceeding.`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+  const notifyFail = () =>
+    toast.error("Try again after sometime", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const fetchIncData = async () => {
+    // Moved fetchData outside useEffect
+    try {
+      const response = await axios.get(
+        "https://talentfiner.in/backend/monthlyReport/fetchIncrementData.php"
+      );
+      setIncrementData(response.data);
+      sessionStorage.setItem("incrementData", JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error fetching monthly report data:", error);
+    }
+  };
+  useEffect(() => {
+    const cachedData = sessionStorage.getItem("incrementData");
+    if (cachedData) {
+      setIncrementData(JSON.parse(cachedData));
+    } else {
+      fetchIncData();
+    }
+  }, []);
+  const filterIncrementById = () => {
+    if (!Array.isArray(incrementData)) {
+      return null;
+    }
+    return incrementData.filter(
+      (item) => item.employeeId === localStorage.getItem("employeeId")
+    );
+  };
+  const notifyField = (field) =>
+    toast.warn(`Please fill ${field} before proceeding.`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   const [employee, setEmployee] = useState({
     fullName: "",
     gender: "",
@@ -130,14 +168,14 @@ const Profile = ({ setRole }) => {
     hiringHrEmail: "",
     ctc: "",
     fixedCompensation: "",
-    houseRentAllowance:"",
-    specialAllowance:"",
+    houseRentAllowance: "",
+    specialAllowance: "",
     probationPeriod: "",
-    probationEndDate:"",
-    professionTax:"",
-    providentFund:"",
-    uanNumber:"",
-    pfAccountNumber:""
+    probationEndDate: "",
+    professionTax: "",
+    providentFund: "",
+    uanNumber: "",
+    pfAccountNumber: "",
   });
   useEffect(() => {
     document.title = "Profile - TALENTFINER HRMS";
@@ -148,9 +186,9 @@ const Profile = ({ setRole }) => {
 
   useEffect(() => {
     const cachedData = sessionStorage.getItem("selfProfileData");
-    if(cachedData){
+    if (cachedData) {
       setData(JSON.parse(cachedData));
-    }else{
+    } else {
       if (uemail) {
         fetchData(uemail, setData, setRole);
       }
@@ -270,7 +308,7 @@ const Profile = ({ setRole }) => {
     // If a missing field is found, show an alert and return early
     if (missingField) {
       const fieldName = missingField;
-      notifyField(fieldName)
+      notifyField(fieldName);
       return;
     }
 
@@ -1440,7 +1478,7 @@ const Profile = ({ setRole }) => {
           </div>
         </div>
         <div className={styles.heading}>
-          <HiBuildingOffice2  color="#fab437" size={15} />
+          <HiBuildingOffice2 color="#fab437" size={15} />
           <p>Department details</p>
         </div>
         <div className={styles.additionalDetails}>
@@ -1459,8 +1497,8 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-            manager
-            {/* <span className={styles.required}>*</span> */}
+              manager
+              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="managerName"
@@ -1488,6 +1526,81 @@ const Profile = ({ setRole }) => {
           <FaRupeeSign color="#fab437" size={15} />
           <p>pay details</p>
         </div>
+        {!isOpen ? (
+          <p onClick={openModal} className={styles.addNewBtn}>
+            View Increments
+            <FaChevronDown color="#fab437" />
+          </p>
+        ) : (
+          <p onClick={closeModal} className={styles.addNewBtn}>
+            View Increments
+            <FaChevronUp color="#fab437" size={12} />
+          </p>
+        )}
+        {isOpen && (
+          <div className={styles.dailyReport}>
+            <table>
+              <thead>
+                {/* <tr>
+                        <th>Date</th>
+                        <th>HIRING DETAILS</th>
+                        <th>INTERVIEW DETAILS</th>
+                        <th>CONCLUSION</th>
+                      </tr> */}
+              </thead>
+              <tbody>
+                {filterIncrementById()?.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <div className={styles.reportDetails}>
+                        <div>
+                          <div className={styles.employeeDetail}>
+                            <p>Date</p>
+                            <p>{item.currentDate}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>From Date</p>
+                            <p>{item.fromDate}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>To Date</p>
+                            <p>{item.toDate}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className={styles.reportDetails}>
+                        <div>
+                          <div className={styles.employeeDetail}>
+                            <p>CTC</p>
+                            <p>{item.ctc}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>Fixed Compensation</p>
+                            <p>{item.fixedCompensation}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>House Rent Allowance</p>
+                            <p>{item.houseRentAllowance}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>Special Allowance</p>
+                            <p>{item.specialAllowance}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>Probation Days</p>
+                            <p>{item.probationDays}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         <div className={styles.pays}>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
@@ -1575,7 +1688,7 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-            probation End Date
+              probation End Date
               <span className={styles.required}>*</span>
               <input
                 type="date"
@@ -1590,7 +1703,7 @@ const Profile = ({ setRole }) => {
           </div>
         </div>
         <div className={styles.heading}>
-          <RiGovernmentFill  color="#fab437" size={15} />
+          <RiGovernmentFill color="#fab437" size={15} />
           <p>Additional details</p>
         </div>
         <div className={styles.additionalDetails}>

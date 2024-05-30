@@ -161,9 +161,15 @@ const Employeeattendance = () => {
     filterData();
   }, [fdate, tdate, monthlyReport]);
 
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
   const paidDays = presentCount + paidLeaveCount + weeklyOff;
-  const payPerDay = Math.round(data.fixedCompensation / totalDays);
-  const basicSalary = paidDays * payPerDay;
+  const payPerDayByMonth= data.fixedCompensation / daysInMonth; //total days in current month
+  // const payPerDay = payPerDayByMonth * paidDays;
+  const basicSalary = Math.round(payPerDayByMonth * paidDays);
+  // const basicSalary = paidDays * payPerDay;
   const houseRentAllowance = Math.round(
     (data.houseRentAllowance / totalDays) * paidDays
   );

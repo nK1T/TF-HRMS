@@ -101,6 +101,20 @@
       text-transform: uppercase;
       color: $ltext;
     }
+    .addNewBtn {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      background-color: $text;
+      color: $background;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      padding: 5px;
+    }
     .basicDetails {
       margin-bottom: 20px;
       display: grid;
@@ -141,6 +155,100 @@
             cursor: not-allowed;
           }
         }
+      }
+    }
+  }
+}
+
+.formFieldsWrapper {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* Adjust as needed */
+  gap: 1rem;
+
+  .formField {
+    /* No need to specify width for form fields */
+    span {
+      color: crimson;
+      font-size: 0.8rem;
+    }
+    .inputField {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px; /* Adjust font size */
+    }
+    label {
+      font-weight: bold;
+    }
+  }
+}
+.dailyReport {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: $text transparent;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid $accent;
+      padding: 10px;
+      text-align: center;
+    }
+    td {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #717171;
+      button {
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 3px;
+        padding: 3px;
+        color: $accent;
+        background-color: $text;
+        border: none;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.725);
+        }
+        &:disabled {
+          background-color: $ltext;
+          cursor: not-allowed;
+        }
+      }
+    }
+    th {
+      border: 1px solid black;
+      border-top: none;
+      font-size: 0.9rem;
+      background-color: #fab437;
+      color: $text;
+      font-weight: 600;
+    }
+  }
+  .reportDetails {
+    .employeeDetail {
+      // border-bottom: 1px solid $ltext;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      // gap: 100px;
+      p:nth-child(1) {
+        font-weight: 700;
+        color: $text;
+      }
+      p:nth-child(2) {
+        color: $ltext;
       }
     }
   }
