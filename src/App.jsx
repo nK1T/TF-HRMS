@@ -23,6 +23,9 @@ import { ToastContainer } from "react-toastify";
 import Employees from "./pages/Employees/Employees";
 import ItDailyReport from "./pages/ItDailyReport/ItDailyReport";
 import EodReports from "./pages/EodReports/EodReports";
+import Support from "./pages/Support/Support";
+import LogoutHandler from "./components/LogoutHandler";
+import Supports from "./pages/Supports/supports";
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(() => {
@@ -53,6 +56,7 @@ function App() {
       <ToastContainer position="top-right" />
       <Router>
         <Navbar />
+        <LogoutHandler />
         <Routes>
           <Route
             path="/login"
@@ -86,17 +90,23 @@ function App() {
             }
           />
           <Route
+            path="/support"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Support />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/daily-report"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 {department === "SALES" ? (
                   <SalesDailyReport />
-                ) : (
-                  department === "HR"
-                  ?
+                ) : department === "HR" ? (
                   <HrDailyReport />
-                  :
-                  <ItDailyReport/>
+                ) : (
+                  <ItDailyReport />
                 )}
               </PrivateRoute>
             }
@@ -172,14 +182,24 @@ function App() {
             </>
           )}
           {role === "4dm1nr0le" && (
-            <Route
-              path="/pays"
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Pays />
-                </PrivateRoute>
-              }
-            />
+            <>
+              <Route
+                path="/pays"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <Pays />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/supports"
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated}>
+                    <Supports />
+                  </PrivateRoute>
+                }
+              />
+            </>
           )}
         </Routes>
       </Router>

@@ -30,7 +30,7 @@
     .links {
       list-style: none;
       display: flex;
-      gap: 22px;
+      gap: 20px;
       .link {
         text-decoration: none;
         text-transform: uppercase;
@@ -166,6 +166,9 @@
         font-weight: 700;
         font-size: .9rem;
         margin-bottom: 3px;
+      }
+      &:hover{
+        color: $accent;
       }
     }
   }

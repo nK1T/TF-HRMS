@@ -1,0 +1,139 @@
+@import "../../App.scss";
+
+.container {
+  .search {
+    border: 1px solid $ltext;
+    border-radius: 5px;
+    margin: 10px;
+    display: flex;
+    .searchField {
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+      padding: 10px;
+      outline: none;
+    }
+    .btn {
+      cursor: pointer;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      border: none;
+      background-color: $accent;
+      color: $text;
+      padding: 10px;
+    }
+  }
+  .tickets {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: $text transparent;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      th,
+      td {
+        border: 1px solid $accent;
+        padding: 7px;
+        text-align: center;
+      }
+      td {
+        font-size: 0.7rem;
+        font-weight: 400;
+        color: #717171;
+        .viewBtn {
+          cursor: pointer;
+          font-weight: 600;
+          border-radius: 3px;
+          padding: 3px;
+          color: $accent;
+          background-color: $text;
+          border: none;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.725);
+          }
+          &:disabled {
+            background-color: $ltext;
+            cursor: not-allowed;
+          }
+        }
+        .btns{
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          .btn1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: .7rem;
+            font-weight: 500;
+            border-radius: 3px;
+            padding: 7px 3px;
+            color: $background;
+            background-color: orange;
+            border: none;
+            &:hover {
+              background-color: rgb(203, 133, 3);
+            }
+            &:disabled {
+              background-color: $ltext;
+              cursor: not-allowed;
+            }
+          }
+          .btn2{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: .7rem;
+            font-weight: 500;
+            border-radius: 3px;
+            padding: 7px 3px;
+            color: $background;
+            background-color: forestgreen;
+            border: none;
+            &:hover {
+              background-color: rgb(17, 93, 17);
+            }
+            &:disabled {
+              background-color: $ltext;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+      th {
+        border-top: none;
+        font-size: 0.9rem;
+        background-color: #fab437;
+        color: $text;
+        font-weight: 600;
+      }
+    }
+  }
+}
+.employeeDetails {
+  min-width: 200px;
+  .employeeDetail {
+    // border-bottom: 1px solid $ltext;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    // gap: 100px;
+    p:nth-child(1) {
+      font-weight: 700;
+      color: $text;
+    }
+    p:nth-child(2) {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      color: $ltext;
+    }
+  }
+}

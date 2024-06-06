@@ -62,6 +62,7 @@ const MonthlyReport = ({ employeeId, action, refreshData, refetchData }) => {
 
   const handleDelete = async (reportId) => {
     setLoadingReports((prev) => ({ ...prev, [reportId]: true }));
+    console.log(loadingReports);
     try {
       await axios.delete(
         `https://talentfiner.in/backend/monthlyReport/deleteMonthlyReport.php?id=${reportId}`

@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../dataProvider";
 import { IoGiftSharp } from "react-icons/io5";
 import { ImExit } from "react-icons/im";
+import { BiSupport } from "react-icons/bi";
 
 const Navbar = () => {
   const [profile, setProfile] = useState(false);
@@ -99,6 +100,14 @@ const Navbar = () => {
                   </li>
                 </Link>
               )}
+              {role === "4dm1nr0le" && (
+                <Link className={styles.link} to="/supports">
+                  <li>
+                    <BiSupport size={15} color="#fab437" />
+                    <p>Supports</p>
+                  </li>
+                </Link>
+              )}
             </ul>
           )}
         </div>
@@ -114,18 +123,21 @@ const Navbar = () => {
             </Link>
           )}
         </div> */}
-        <i
-          onMouseEnter={() => setProfile(true)}
-          onMouseLeave={() => setProfile(false)}
-          onFocus={() => setProfile(true)}
-          onBlur={() => setProfile(false)}
-          className={styles.icon}
-        >
-          <img
-            src={`https://talentfiner.in/backend/${profilePicture}`}
-            alt="Profile Picture"
-          />
-        </i>
+        {isAuthenticated && (
+          <i
+            onMouseEnter={() => setProfile(true)}
+            onMouseLeave={() => setProfile(false)}
+            onFocus={() => setProfile(true)}
+            onBlur={() => setProfile(false)}
+            className={styles.icon}
+          >
+            <img
+              src={`https://talentfiner.in/backend/${profilePicture}`}
+              alt="Profile Picture"
+            />
+          </i>
+        )}
+
         {profile && (
           <ul
             className={styles.profile}
@@ -158,9 +170,21 @@ const Navbar = () => {
                 </div>
               </li>
             </Link>
+            <Link to="/support">
+              <li className={styles.box}>
+                <i>
+                  <BiSupport />
+                </i>
+                <div className={styles.itemBox}>
+                  <p>Support</p>
+                </div>
+              </li>
+            </Link>
             {isAuthenticated && (
               <div className={styles.logout}>
-                <button  onClick={handleLogout} className={styles.btn1}>Logout</button>
+                <button onClick={handleLogout} className={styles.btn1}>
+                  Logout
+                </button>
               </div>
             )}
           </ul>

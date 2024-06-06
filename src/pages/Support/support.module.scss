@@ -1,0 +1,169 @@
+@import "../../App.scss";
+
+.container {
+  margin: 20px 10px;
+  .tickets{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+    scrollbar-width: thin;
+  scrollbar-color: $text transparent;
+    table {
+      margin-top: 20px;
+      width: 100%;
+      border-collapse: collapse;
+      th,
+      td {
+        border: 1px solid $accent;
+        padding: 7px;
+        text-align: center;
+      }
+      td {
+        font-size: 0.7rem;
+        font-weight: 400;
+        color: #717171;
+        button {
+          cursor: pointer;
+          font-weight: 600;
+          border-radius: 3px;
+          padding: 3px;
+          color: $accent;
+          background-color: $text;
+          border: none;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.725);
+          }
+          &:disabled {
+            background-color: $ltext;
+            cursor: not-allowed;
+          }
+        }
+      }
+      th {
+        border-top: none;
+        font-size: 0.9rem;
+        background-color: #fab437;
+        color: $text;
+        font-weight: 600;
+      }
+    }
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      h3 {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
+      p {
+        font-size: 0.85rem;
+        color: $ltext;
+      }
+    }
+    .right {
+      button {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: $text;
+        color: $background;
+        font-weight: 400;
+        font-size: 0.8rem;
+        // text-transform: uppercase;
+      }
+    }
+  }
+  .formContainer {
+    margin-top: 30px;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 2px 8px 2px;
+    .formHeading {
+      h3 {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 5px;
+      }
+      p {
+        font-size: 0.85rem;
+        color: $ltext;
+      }
+    }
+    .formFieldsWrapper {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(250px, 1fr)
+      ); /* Adjust as needed */
+      gap: 1rem;
+
+      .formField {
+        /* No need to specify width for form fields */
+        span {
+          color: crimson;
+          font-size: 0.8rem;
+        }
+        .inputField {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 16px; /* Adjust font size */
+        }
+        label {
+          font-weight: bold;
+        }
+      }
+    }
+    .btns {
+      display: flex;
+      justify-content: center;
+      button {
+        margin-top: 10px;
+        grid-column: span 2; /* Make the button span across two columns */
+        padding: 0.5rem 1rem;
+        background-color: $text; /* Change button color as needed */
+        color: $accent;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px; /* Adjust font size */
+        font-weight: 600;
+        &:hover {
+          background-color: rgba(
+            0,
+            0,
+            0,
+            0.723
+          ); /* Change hover color as needed */
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width:450px){
+  .container{
+    .top{
+      .left{
+        p{
+          display: none;
+        }
+      }
+    }
+    .formContainer{
+      border-radius: 5px;
+      padding: 20px;
+    }
+  }
+}

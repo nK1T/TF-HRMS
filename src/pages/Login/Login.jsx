@@ -140,6 +140,8 @@ const Login = ({ setAuthenticated }) => {
         setAuthenticated(true);
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("email", email);
+        const logoutTime = new Date().getTime() + 24 * 60 * 60 * 1000;
+        localStorage.setItem("logoutTimestamp", logoutTime);
         // Reset state after successful login
         setEmail("");
         setOtp("");
