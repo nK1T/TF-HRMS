@@ -28,6 +28,7 @@ import { ClipLoader } from "react-spinners";
 const EmployeeProfile = () => {
   const { employeeId } = useParams();
   const [isOpenArray, setIsOpenArray] = useState(false);
+  const [isOpenArrayIn, setIsOpenArrayIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [incrementData, setIncrementData] = useState(false);
   const [data, setData] = useState([]);
@@ -37,12 +38,15 @@ const EmployeeProfile = () => {
     fromDate: "",
     toDate: "",
     ctc: "",
+    afc: "",
     fixedCompensation: "",
-    houseRentAllowance: "",
-    specialAllowance: "",
     probationDays: "",
   });
-
+  const [inactiveForm, setInactiveForm] = useState({
+    inactiveStatus: "",
+    lastWorkingDay: "",
+    reasonForInactive: "",
+  });
   const openModal = () => {
     setIsOpenArray(true);
     document.body.classList.add("modal-open");
@@ -50,6 +54,15 @@ const EmployeeProfile = () => {
 
   const closeModal = () => {
     setIsOpenArray(false);
+    document.body.classList.remove("modal-open");
+  };
+  const openInactiveModal = () => {
+    setIsOpenArrayIn(true);
+    document.body.classList.add("modal-open");
+  };
+
+  const closeInactiveModal = () => {
+    setIsOpenArrayIn(false);
     document.body.classList.remove("modal-open");
   };
 
@@ -103,31 +116,58 @@ const EmployeeProfile = () => {
     }
   };
   const handleCurrentStatus = async (employeeId, newStatus) => {
-    const markActive = window.confirm(
+    // Validate form fields before submission
+    if (
+      !inactiveForm.inactiveStatus ||
+      !inactiveForm.lastWorkingDay ||
+      !inactiveForm.reasonForInactive
+    ) {
+      alert("Please fill in all the required fields before submitting.");
+      return;
+    }
+
+    const confirmInactive = window.confirm(
       "Are you sure you want to mark this employee as Inactive?"
     );
-    if (!markActive) {
-      return; // User clicked Cancel, do not mark set as Active
-    }
+    if (!confirmInactive) return;
+
     try {
+      setLoading(true);
       await axios.put(
         `https://talentfiner.in/backend/updateStatus.php?employeeId=${employeeId}`,
-        { currentStatus: newStatus },
+        {
+          currentStatus: newStatus,
+          inactiveStatus: inactiveForm.inactiveStatus,
+          lastWorkingDay: inactiveForm.lastWorkingDay,
+          reasonForInactive: inactiveForm.reasonForInactive,
+        },
         {
           headers: {
-            "Content-Type": "application/json", // Use application/json here
+            "Content-Type": "application/json",
           },
         }
       );
-      window.location.reload();
+
+      alert("Employee status updated successfully.");
+      window.location.reload(); // Reload only after successful update
     } catch (error) {
-      console.log("Error Updating status", error);
+      console.error("Error updating status:", error);
+      alert("Failed to update status. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleChangeIn = (e) => {
+    const { name, value } = e.target;
+    setInactiveForm((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -141,9 +181,8 @@ const EmployeeProfile = () => {
         fromDate: "",
         toDate: "",
         ctc: "",
+        afc: "",
         fixedCompensation: "",
-        houseRentAllowance: "",
-        specialAllowance: "",
         probationDays: "",
       });
     }
@@ -219,9 +258,8 @@ const EmployeeProfile = () => {
       "fromDate",
       "toDate",
       "ctc",
+      "afc",
       "fixedCompensation",
-      "houseRentAllowance",
-      "specialAllowance",
       "probationDays",
     ];
 
@@ -251,9 +289,8 @@ const EmployeeProfile = () => {
           fromDate: "",
           toDate: "",
           ctc: "",
+          afc: "",
           fixedCompensation: "",
-          houseRentAllowance: "",
-          specialAllowance: "",
           probationDays: "",
         });
         fetchData();
@@ -284,16 +321,24 @@ const EmployeeProfile = () => {
                 </Link>
               </div>
               <div className={styles.rightBtns}>
-                <button
-                  className={styles.inactiveBtn}
-                  onClick={() =>
-                    handleCurrentStatus(employee.employeeId, "inactive")
-                  }
-                  disabled={employee.currentStatus === "inactive"}
-                >
-                  <FaBan />
-                  Inactive
-                </button>
+                {!isOpenArrayIn ? (
+                  <button
+                    className={styles.inactiveBtn}
+                    onClick={openInactiveModal}
+                    disabled={employee.currentStatus === "inactive"}
+                  >
+                    <FaBan />
+                    Inactive
+                  </button>
+                ) : (
+                  <button
+                    onClick={closeInactiveModal}
+                    className={styles.addNewBtn}
+                  >
+                    <FaWindowClose color="#fab437" size={12} />
+                    close
+                  </button>
+                )}
                 <button
                   className={styles.verifyBtn}
                   onClick={() =>
@@ -316,6 +361,97 @@ const EmployeeProfile = () => {
                 </button>
               </div>
             </div>
+            {isOpenArrayIn && (
+              <>
+                <div
+                  className={styles.formContainer}
+                  style={{
+                    marginBlock: "20px",
+                    padding: "20px",
+                    boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+                  }}
+                >
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault(); // Prevent default form submission
+                      handleCurrentStatus(employee.employeeId, "inactive");
+                    }}
+                  >
+                    <div className={styles.formFieldsWrapper}>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
+                          Inactive reason
+                          <select
+                            name="inactiveStatus"
+                            value={inactiveForm.inactiveStatus}
+                            onChange={handleChangeIn}
+                            className={styles.inputField}
+                            required
+                          >
+                            <option value="" disabled>
+                              --Select--
+                            </option>
+                            <option value="terminate">Terminate</option>
+                            <option value="resigned">Resigned</option>
+                          </select>
+                        </label>
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Last working day</label>
+                        <input
+                          type="date"
+                          value={inactiveForm.lastWorkingDay}
+                          name="lastWorkingDay"
+                          onChange={handleChangeIn}
+                          required
+                          className={styles.inputField}
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Reason</label>
+                        <input
+                          type="text"
+                          name="reasonForInactive"
+                          value={inactiveForm.reasonForInactive}
+                          onChange={handleChangeIn}
+                          className={styles.inputField}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.btns}>
+                      <button className={styles.addNewBtn} type="submit">
+                        Submit
+                        {loading && <ClipLoader color="#fab437" size={12} />}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </>
+            )}
+            {employee.inactiveStatus && (
+              <>
+                <h3 className={styles.heading}>
+                  <FaBan size={15} color="#fab437" />
+                  Inactive Details
+                </h3>
+                <div className={styles.basicDetails}>
+                  <div className={styles.detail}>
+                    <p>Inactive status:</p>
+                    <p>{employee.inactiveStatus}</p>
+                  </div>
+                  <div className={styles.detail}>
+                    <p>Last working day:</p>
+                    <p>{employee.lastWorkingDay}</p>
+                  </div>
+                  <div className={styles.detail}>
+                    <p>Reason:</p>
+                    <p style={{textTransform:'lowercase'}}>{employee.reasonForInactive}</p>
+                  </div>
+                </div>
+              </>
+            )}
+
             <h3 className={styles.heading}>
               <IoIosInformationCircle color="#fab437" />
               General Information
@@ -840,7 +976,7 @@ const EmployeeProfile = () => {
             </div>
             <h3 className={styles.heading}>
               <FaRupeeSign size={15} color="#fab437" />
-              pays
+              pays (INR)
               {!isOpenArray ? (
                 <button onClick={openModal} className={styles.addNewBtn}>
                   <MdAddBox color="#fab437" size={15} />
@@ -895,37 +1031,24 @@ const EmployeeProfile = () => {
                       </div>
                       <div className={styles.formField}>
                         <label className={styles.inputLabel}>
+                          Annual fixed compensation
+                          <input
+                            type="number"
+                            name="afc"
+                            value={form.afc}
+                            onChange={handleChange}
+                            className={styles.inputField}
+                            required
+                          />
+                        </label>
+                      </div>
+                      <div className={styles.formField}>
+                        <label className={styles.inputLabel}>
                           Fixed Compensation
                           <input
                             type="number"
                             name="fixedCompensation"
                             value={form.fixedCompensation}
-                            onChange={handleChange}
-                            className={styles.inputField}
-                            required
-                          />
-                        </label>
-                      </div>
-                      <div className={styles.formField}>
-                        <label className={styles.inputLabel}>
-                          House Rent Allowance
-                          <input
-                            type="number"
-                            name="houseRentAllowance"
-                            value={form.houseRentAllowance}
-                            onChange={handleChange}
-                            className={styles.inputField}
-                            required
-                          />
-                        </label>
-                      </div>
-                      <div className={styles.formField}>
-                        <label className={styles.inputLabel}>
-                          Special Allowance
-                          <input
-                            type="number"
-                            name="specialAllowance"
-                            value={form.specialAllowance}
                             onChange={handleChange}
                             className={styles.inputField}
                             required
@@ -997,16 +1120,12 @@ const EmployeeProfile = () => {
                                   <p>{item.ctc}</p>
                                 </div>
                                 <div className={styles.employeeDetail}>
+                                  <p>annual fixed compensation</p>
+                                  <p>{item.afc}</p>
+                                </div>
+                                <div className={styles.employeeDetail}>
                                   <p>Fixed Compensation</p>
                                   <p>{item.fixedCompensation}</p>
-                                </div>
-                                <div className={styles.employeeDetail}>
-                                  <p>House Rent Allowance</p>
-                                  <p>{item.houseRentAllowance}</p>
-                                </div>
-                                <div className={styles.employeeDetail}>
-                                  <p>Special Allowance</p>
-                                  <p>{item.specialAllowance}</p>
                                 </div>
                                 <div className={styles.employeeDetail}>
                                   <p>Probation Days</p>
@@ -1028,16 +1147,44 @@ const EmployeeProfile = () => {
                 <p>{employee.ctc}</p>
               </div>
               <div className={styles.detail}>
+                <p>Annual fixed compensation:</p>
+                <p>{employee.afc}</p>
+              </div>
+              <div className={styles.detail}>
                 <p>fixed compensation:</p>
                 <p>{employee.fixedCompensation}</p>
               </div>
               <div className={styles.detail}>
-                <p>house rent allowance:</p>
-                <p>{employee.houseRentAllowance}</p>
+                <p>Basic pay:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.4)}</p>
               </div>
               <div className={styles.detail}>
-                <p>special allowance:</p>
-                <p>{employee.specialAllowance}</p>
+                <p>house rent allowance:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.2)}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>Internet & Mobile Reimbursement:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.03)}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>Electricity & Utility Allowance:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.02)}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>Fitness Allowance:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.03)}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>Travel Allowance:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.2)}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>Medical Allowance:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.05)}</p>
+              </div>
+              <div className={styles.detail}>
+                <p>Conveyance Allowance:</p>
+                <p>{Math.round(employee.fixedCompensation * 0.07)}</p>
               </div>
               <div className={styles.detail}>
                 <p>probation period (days):</p>

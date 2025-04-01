@@ -20,17 +20,17 @@ const EmployeeEdit = () => {
       progress: undefined,
       theme: "dark",
     });
-    const notifyFail = () =>
-      toast.error("Try again after sometime", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+  const notifyFail = () =>
+    toast.error("Try again after sometime", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -141,16 +141,18 @@ const EmployeeEdit = () => {
 
     try {
       // Send the updatedEmployeeData to the backend
-      const response = await axios.post(
-        `https://talentfiner.in/backend/updateEmployeeInfo.php`,
-        updatedEmployeeData
-      ).then((response)=>{
-          if(response.data.success){
+      const response = await axios
+        .post(
+          `https://talentfiner.in/backend/updateEmployeeInfo.php`,
+          updatedEmployeeData
+        )
+        .then((response) => {
+          if (response.data.success) {
             notifySuccess();
-          }else{
-            notifyFail()
+          } else {
+            notifyFail();
           }
-      })
+        });
     } catch (error) {
       console.error("Error updating employee data:", error);
     }
@@ -307,78 +309,136 @@ const EmployeeEdit = () => {
                   --Select Designation--
                 </option>
                 <option value="DIRECTOR">Director</option>
-                <option value="HR ADMIN">HR Admin</option>
-                <option value="HR OPERATIONS">HR Operations</option>
-                <option value="HR RECRUITER">HR Recruiter</option>
-                <option value="HR RECRUITER TL">HR Recruiter TL</option>
-                <option value="HR RECRUITER ASSOCIATE">
-                  HR Recruiter Associate
+                <option value="CEO">CEO</option>
+                <option value="CFO">CFO</option>
+                <option value="COO">COO</option>
+                <option value="HR RECRUITMENT ASSOCIATE">
+                  HR Recruitment Associate (HRRA)
                 </option>
-                <option value="HR BUSINESS PARTNER">HR Business Partner</option>
-                <option value="HR-PLACEMENT-ASSOCIATE">
-                  HR Placement Associate
+                <option value="JUNIOR BUSINESS DEVELOPMENT ASSOCIATE">
+                  Junior Business Development Associate (Jr. BDA)
                 </option>
-                <option value="HR-PLACEMENT-TL">HR Placement TL</option>
-                <option value="HR GENERALIST - TL">HR Generalist TL</option>
-                <option value="HR GENERALIST">HR Generalist</option>
-                <option value="GRAPHIC DESIGNER ASSOCIATE">
-                  Graphic Designer Associate
+                <option value="SENIOR BUSINESS DEVELOPMENT ASSOCIATE">
+                  Senior Business Development Associate (Sr. BDA)
                 </option>
-                <option value="FSD">FSD</option>
-                <option value="FSD TL">FSD TL</option>
-                <option value="BLOCKCHAIN DEVELOPER ASSOCIATE">
-                  Blockchain Developer Associate
+                <option value="LEAD GENERATION ASSOCIATE">
+                  Lead Generation Associate
                 </option>
-                <option value="ANDROID DEVELOPER">Android Developer</option>
-                <option value="ANDROID DEVELOPER INTERN">
-                  Android Developer Intern
+                <option value="PLACEMENT OFFICER">Placement Officer</option>
+                <option value="CORPORATE RELATIONS MANAGER">
+                  Corporate Relations Manager
                 </option>
-                <option value="PRODUCT MANAGER">Product Manager</option>
-                <option value="INSTRUCTIONAL DESIGNER">
-                  Instructional Designer
+                <option value="SUBJECT MATTER EXPERT">
+                  Subject Matter Expert
                 </option>
-                <option value="CONTENT WRITER">Content Writer</option>
+                <option value="VIDEO EDITOR MOTION GRAPHICS DESIGNER">
+                  Video Editor & Motion Graphics Designer
+                </option>
+                <option value="AI VIDEO CREATOR">AI Video Creator</option>
+                <option value="HR MENTOR PHD">
+                  Human Resources Mentor (Ph.D.)
+                </option>
+                <option value="FULL STACK DEVELOPER MENTOR PHD">
+                  Full Stack Developer Mentor (Ph.D.)
+                </option>
+                <option value="WEB DEVELOPER INTERN">
+                  Web Developer Intern
+                </option>
+                <option value="HUMAN RESOURCES INTERN">
+                  Human Resources Intern
+                </option>
+                <option value="ANDROID DEVELOPER FULL STACK">
+                  Android Developer (Full-Stack)
+                </option>
+                <option value="FULL STACK DEVELOPER">
+                  Full Stack Developer
+                </option>
+                <option value="HR BUSINESS PARTNER">
+                  HR Business Partner (HRBP)
+                </option>
+                <option value="SENIOR BUSINESS DEVELOPMENT MANAGER">
+                  Senior Business Development Manager (Sales)
+                </option>
+                <option value="BUSINESS DEVELOPMENT MANAGER">
+                  Business Development Manager
+                </option>
+                <option value="DIRECTOR OF SALES">Director of Sales</option>
+                <option value="GENERAL MANAGER">General Manager</option>
+                <option value="CUSTOMER SUPPORT EXECUTIVE">
+                  Customer Support Executive
+                </option>
+                <option value="CLASS COORDINATOR">Class Coordinator</option>
+                <option value="SOCIAL MEDIA MANAGER">
+                  Social Media Manager
+                </option>
+                <option value="NEWS REPORTER VLOGGER">
+                  News Reporter/Vlogger
+                </option>
+                <option value="HR MENTOR">HR Mentor</option>
+                <option value="FULL STACK DEVELOPER MENTOR">
+                  Full Stack Developer Mentor
+                </option>
+                <option value="DATA ANALYTICS MENTOR">
+                  Data Analytics Mentor
+                </option>
+                <option value="DATA SCIENCE AI MENTOR">
+                  Data Science & AI Mentor
+                </option>
+                <option value="DIGITAL MARKETING MENTOR">
+                  Digital Marketing Mentor
+                </option>
+                <option value="GRAPHIC DESIGNING MENTOR">
+                  Graphic Designing Mentor
+                </option>
+                <option value="CYBER SECURITY ETHICAL HACKING MENTOR">
+                  Cyber Security & Ethical Hacking Mentor
+                </option>
+                <option value="BUSINESS ENGLISH MENTOR">
+                  Business English Mentor
+                </option>
 
-                <option value="LEAD GENERATION INTERN">
-                  Lead Generation Intern
+                <option value="CURRICULUM DESIGNER">Curriculum Designer</option>
+                <option value="GRAPHIC DESIGNER">Graphic Designer</option>
+                <option value="B2C LEAD GENERATION MANAGER">
+                  B2C Lead Generation Manager
                 </option>
-                <option value="CONTENT CREATOR">Content Creator</option>
-                <option value="DIGITAL MARKETING INTERN">
-                  Digital Marketing Intern
+                <option value="FINANCE MANAGER">Finance Manager</option>
+                <option value="ACCOUNTANT">Accountant</option>
+                <option value="BLOG WRITER">Blog Writer</option>
+                <option value="FRONTEND UI UX DEVELOPER">
+                  Frontend UI/UX Developer
                 </option>
-                <option value="DIGITAL MARKETING ASSOCIATE">
-                  Digital Marketing Associate
+                <option value="BRAND MARKETING MANAGER">
+                  Brand Marketing Manager
                 </option>
-                <option value="SOCIAL MEDIA MARKETING EXECUTIVE">
-                  Social Media Marketing Executive
+                <option value="OPERATIONS MANAGER">Operations Manager</option>
+                <option value="SENIOR SALES QUALITY CHECK ASSOCIATE">
+                  Senior Sales Quality Check Associate
                 </option>
-                <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
-                <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
-                <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
-                <option value="BDA - DIRECT SALES TL">
-                  BDA - Direct Sales TL
+                <option value="SENIOR HR QUALITY CHECK ASSOCIATE">
+                  Senior HR Quality Check Associate
                 </option>
-                <option value="BDA - INSIDE SALES TL">
-                  BDA - Inside Sales TL
+                <option value="DATA ANALYST">Data Analyst</option>
+                <option value="ACTOR MODEL">Actor/Model</option>
+                <option value="FIELD LEAD GENERATION ASSOCIATE">
+                  Field Lead Generation Associate
                 </option>
-
-                <option value="CUSTOMER SUPPORT ASSOCIATE">
-                  Customer Support Associate
+                <option value="PARTNERSHIP DEVELOPMENT EXECUTIVE">
+                  Partnership Development Executive / Institutional Partnership
+                  Manager
                 </option>
-                <option value="PRODUCT DELIVERY INTERN">
-                  Product Delivery Intern
+                <option value="FIELD PARTNERSHIP ASSOCIATE">
+                  Field Partnership Associate
                 </option>
-                <option value="EMPLOYEE WORKFLOW AND SCREENING">
-                  Employee Workflow & Screening
+                <option value="WORDPRESS DEVELOPER">WordPress Developer</option>
+                <option value="PROGRAM COORDINATOR">Program Coordinator</option>
+                <option value="HEAD OF ACADEMICS">Head of Academics</option>
+                <option value="STUDENT SUCCESS MANAGER">
+                  Student Success Manager
                 </option>
-                <option value="BUSINESS ENGLISH TRAINER">
-                  Business English Trainer
-                </option>
-                <option value="BRAND COLLABORATION INTERN">
-                  Brand Collaboration Intern
-                </option>
-                <option value="MARKETING BRAND COLLABORATION - TL">
-                  Marketing Brand Collaboration - TL
+                <option value="ADMIN ASSOCIATE">Admin Associate</option>
+                <option value="DATA ENTRY ASSOCIATE">
+                  Data Entry Associate
                 </option>
               </select>
             </label>
@@ -1097,37 +1157,24 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
+              Annual fixed compensation
+              <input
+                type="text"
+                name="afc"
+                value={data.afc ?? employee.afc}
+                className={styles.inputField}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
               fixed compensation
               <input
                 type="text"
                 name="fixedCompensation"
                 value={data.fixedCompensation ?? employee.fixedCompensation}
-                className={styles.inputField}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.inputLabel}>
-            house Rent Allowance
-              <input
-                type="text"
-                name="houseRentAllowance"
-                value={data.houseRentAllowance ?? employee.houseRentAllowance}
-                className={styles.inputField}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div className={styles.formField}>
-            <label className={styles.inputLabel}>
-            special Allowance
-              <input
-                type="text"
-                name="specialAllowance"
-                value={data.specialAllowance ?? employee.specialAllowance}
                 className={styles.inputField}
                 onChange={handleChange}
                 required
@@ -1161,7 +1208,7 @@ const EmployeeEdit = () => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-            provident fund<span className={styles.required}>*</span>
+              provident fund<span className={styles.required}>*</span>
               <input
                 type="text"
                 name="providentFund"
@@ -1198,7 +1245,6 @@ const EmployeeEdit = () => {
               />
             </label>
           </div>
-
         </form>
       ))}
       <button onClick={handleSubmit}>update</button>

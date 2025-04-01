@@ -104,6 +104,9 @@ const Pays = () => {
     fetchData();
   }, []);
   const filterEmployee = () => {
+    if (!Array.isArray(monthlyPayReportData)) {
+      return null;
+    }
     if (selectedCategory === "All") {
       return monthlyPayReportData;
     }
@@ -241,13 +244,12 @@ const Pays = () => {
             <th>Salary Details</th>
             <th>Month Status</th>
             <th>Pay Status</th>
-            <th>Attachments</th>
             <th>Mail</th>
             <th colSpan={2}>Action</th>
           </tr>
         </thead>
         <tbody>
-          {filterEmployee().map((item, index) => (
+          {filterEmployee()?.map((item, index) => (
             <tr key={index}>
               <td>{monthlyPayReportData.length - index}</td>
               <td>
@@ -293,6 +295,10 @@ const Pays = () => {
                       <p>{item.employeeInfo?.ctc}</p>
                     </div>
                     <div className={styles.employeeDetail}>
+                      <p>ANNUAL FIXED COMPENSATION</p>
+                      <p>{item.employeeInfo?.afc}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
                       <p>FIXED COMPENSATION</p>
                       <p>{item.employeeInfo?.fixedCompensation}</p>
                     </div>
@@ -304,22 +310,6 @@ const Pays = () => {
                           : "-"}
                       </p>
                     </div> */}
-                    <div className={styles.employeeDetail}>
-                      <p>HOUSE RENT ALLOWANCE</p>
-                      <p>
-                        {item.employeeInfo?.houseRentAllowance
-                          ? item.employeeInfo?.houseRentAllowance
-                          : "-"}
-                      </p>
-                    </div>
-                    <div className={styles.employeeDetail}>
-                      <p>SPECIAL ALLOWANCE</p>
-                      <p>
-                        {item.employeeInfo?.specialAllowance
-                          ? item.employeeInfo?.specialAllowance
-                          : "-"}
-                      </p>
-                    </div>
                   </div>
                 </div>
               </td>
@@ -358,33 +348,9 @@ const Pays = () => {
                       <p>WEEKLY OFF DAYS</p>
                       <p>{item.weeklyOffDays ? item.weeklyOffDays : "-"}</p>
                     </div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div className={styles.monthDetails}>
-                  <div>
                     <div className={styles.employeeDetail}>
-                      <p>SALARY</p>
-                      <p>{item.salary}</p>
-                    </div>
-                    <div className={styles.employeeDetail}>
-                      <p>INCENTIVE</p>
-                      <p>{item.incentive ? item.incentive : "-"}</p>
-                    </div>
-                    <div className={styles.employeeDetail}>
-                      <p>HOUSE RENT ALLOWANCE</p>
-                      <p>
-                        {item.houseRentAllowance
-                          ? item.houseRentAllowance
-                          : "-"}
-                      </p>
-                    </div>
-                    <div className={styles.employeeDetail}>
-                      <p>SPECIAL ALLOWANCE</p>
-                      <p>
-                        {item.specialAllowance ? item.specialAllowance : "-"}
-                      </p>
+                      <p>HOLIDAYS</p>
+                      <p>{item.holidays ? item.holidays : "-"}</p>
                     </div>
                     <div className={styles.employeeDetail}>
                       <p>LOSS OF PAY</p>
@@ -394,34 +360,55 @@ const Pays = () => {
                 </div>
               </td>
               <td>
-                <div className={styles.attachmentDetails}>
+                <div className={styles.monthDetails}>
                   <div>
-                    <div className={styles.employeeDetail}>
-                      <p>PAYMENT PROOF</p>
-                      <button
-                        onClick={() =>
-                          window.open(
-                            `https://talentfiner.in/backend/monthlyReport/${item.paySlip}`,
-                            "_blank"
-                          )
-                        }
-                      >
-                        <FaExternalLinkAlt />
-                      </button>
+                    <div className={styles.employeeDetail} style={{borderBottom: "1px solid black"}}>
+                      <p>SALARY</p>
+                      <p>{item.salary}</p>
                     </div>
                     <div className={styles.employeeDetail}>
-                      <p>CERTICIATE</p>
-                      <button
-                        onClick={() =>
-                          window.open(
-                            `https://talentfiner.in/backend/monthlyReport/${item.certificate}`,
-                            "_blank"
-                          )
-                        }
-                        disabled={!item.certificate}
-                      >
-                        <FaExternalLinkAlt />
-                      </button>
+                      <p>BASIC PAY</p>
+                      <p>{item.basicPay ? item.basicPay : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>HRA</p>
+                      <p>{item.hra ? item.hra : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>Internet & Mobile Reimbursement</p>
+                      <p>{item.imr ? item.imr : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>Electricity & Utility Allowance</p>
+                      <p>{item.eua ? item.eua : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>Fitness Allowance</p>
+                      <p>{item.fa ? item.fa : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>TRAVEL Allowance</p>
+                      <p>{item.ta ? item.ta : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>MEDICAL Allowance</p>
+                      <p>{item.ma ? item.ma : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>Conveyance  Allowance</p>
+                      <p>{item.ca ? item.ca : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p>Provident fund</p>
+                      <p>{item.providentFund ? item.providentFund : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail} style={{borderBottom: "1px solid black"}}>
+                      <p>Professional tax</p>
+                      <p>{item.professionalTax ? item.professionalTax : "-"}</p>
+                    </div>
+                    <div className={styles.employeeDetail}>
+                      <p style={{fontSize:"14px"}}>Total amount after deductions</p>
+                      <p style={{fontWeight:"800", fontSize:"14px"}}>{item.totalAmount ? item.totalAmount : "-"}</p>
                     </div>
                   </div>
                 </div>

@@ -343,6 +343,7 @@ const AttendanceReport = ({
                   <option value="Unpaid Leave">Unpaid Leave</option>
                   <option value="Loss of Pay">Loss of Pay</option>
                   <option value="Weekly Off">Weekly Off</option>
+                  <option value="Holiday">Holiday</option>
                 </select>
                 {errors.dayStatus && <span>This field is required</span>}
               </div>

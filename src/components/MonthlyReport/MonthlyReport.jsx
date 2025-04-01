@@ -101,13 +101,18 @@ const MonthlyReport = ({ employeeId, action, refreshData, refetchData }) => {
             <th>Unpaid Leaves</th>
             <th>Loss of Pay</th>
             <th>Weekly Off</th>
+            <th>Holiday</th>
             <th>Salary</th>
-            <th>Incentive</th>
             <th>House Rent Allowance</th>
-            <th>Special Allowance</th>
-            <th>Total Amount</th>
-            <th>Payment Proof</th>
-            <th>Certificate</th>
+            <th>Internet & Mobile Reimbursement</th>
+            <th>Electricity & Utility Allowance</th>
+            <th>Fitness Allowance</th>
+            <th>Travel Allowance</th>
+            <th>Medical Allowance</th>
+            <th>Conveyance Allowance</th>
+            <th>Provident Fund</th>
+            <th>Professional Tax</th>
+            <th>Net Salary</th>
             {action && <th>Action</th>}
           </tr>
         </thead>
@@ -124,36 +129,18 @@ const MonthlyReport = ({ employeeId, action, refreshData, refetchData }) => {
               <td>{item.unpaidLeaves}</td>
               <td>{item.lossOfPay}</td>
               <td>{item.weeklyOffDays}</td>
+              <td>{item.holidays}</td>
               <td>{item.salary}</td>
-              <td>{item.incentive}</td>
-              <td>{item.houseRentAllowance}</td>
-              <td>{item.specialAllowance}</td>
+              <td>{item.hra}</td>
+              <td>{item.imr}</td>
+              <td>{item.eua}</td>
+              <td>{item.fa}</td>
+              <td>{item.ta}</td>
+              <td>{item.ma}</td>
+              <td>{item.ca}</td>
+              <td>{item.providentFund}</td>
+              <td>{item.professionalTax}</td>
               <td>{item.totalAmount}</td>
-              <td>
-                <button
-                  onClick={() =>
-                    window.open(
-                      `https://talentfiner.in/backend/monthlyReport/${item.paySlip}`,
-                      "_blank"
-                    )
-                  }
-                >
-                  view
-                </button>
-              </td>
-              <td>
-                <button
-                  onClick={() =>
-                    window.open(
-                      `https://talentfiner.in/backend/monthlyReport/${item.certificate}`,
-                      "_blank"
-                    )
-                  }
-                  disabled={!item.certificate}
-                >
-                  view
-                </button>
-              </td>
               {action && (
                 <td>
                   <button

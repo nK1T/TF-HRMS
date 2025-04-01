@@ -49,7 +49,7 @@ const EmployeesPerformance = () => {
     },
   ];
   const [data, setData] = useState([]);
-  const [activeToggle, setActiveToggle] = useState();
+  const [activeToggle, setActiveToggle] = useState('active');
   const [originalData, setOriginalData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -247,6 +247,10 @@ const EmployeesPerformance = () => {
 
     return data.filter((employee) => employee.department === selectedCategory);
   };
+
+  useEffect(() => {
+    setData(originalData.filter((employee) => employee.currentStatus === "active"));
+  }, [originalData]); 
 
   const handleToggle = (task) => {
     setData(originalData.filter((employee) => employee.currentStatus === task));

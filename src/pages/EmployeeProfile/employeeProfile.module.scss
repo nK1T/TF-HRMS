@@ -131,6 +131,7 @@
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         text-transform: uppercase;
         display: flex;
+        align-items: center;
         gap: 10px;
         p:nth-child(1) {
           font-weight: 500;

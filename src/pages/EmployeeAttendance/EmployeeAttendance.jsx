@@ -15,6 +15,9 @@ import "react-toastify/dist/ReactToastify.css";
 const Employeeattendance = () => {
   const { employeeId } = useParams();
   const uppercaseEmployeeId = employeeId.toUpperCase();
+  const [showProvidentFund, setShowProvidentFund] = useState(false);
+  const [showProfessionalTax, setShowProfessionalTax] = useState(false);
+
   const [form, setForm] = useState({
     employeeId: uppercaseEmployeeId,
     month: "",
@@ -25,10 +28,16 @@ const Employeeattendance = () => {
     unpaidLeaveDays: "",
     lossOfPay: "",
     weeklyOffDays: "",
+    holidays: "",
     salary: "",
-    incentive: "",
-    houseRentAllowance: "",
-    specialAllowance: "",
+    basicPay: "",
+    hra: "",
+    imr: "",
+    eua: "",
+    fa: "",
+    ta: "",
+    ma: "",
+    ca: "",
     totalAmount: "",
     paySlip: "",
     certificate: "",
@@ -45,9 +54,10 @@ const Employeeattendance = () => {
   const [unpaidLeaveCount, setUnpaidLeaveCount] = useState(0);
   const [lossOfPayCount, setLossOfPayCount] = useState(0);
   const [weeklyOff, setWeeklyOffCount] = useState(0);
+  const [holiday, setHolidayCount] = useState(0);
   const [totalDays, setTotalDays] = useState(0);
   const [refreshData, setRefreshData] = useState(false);
-  
+
   const handleRefreshData = () => {
     setRefreshData(!refreshData);
   };
@@ -122,6 +132,7 @@ const Employeeattendance = () => {
       let unpaidLeave = 0;
       let lossOfPay = 0;
       let weeklyOff = 0;
+      let holiday = 0;
 
       filtered.forEach((report) => {
         switch (report.dayStatus) {
@@ -140,6 +151,9 @@ const Employeeattendance = () => {
           case "Weekly Off":
             weeklyOff++;
             break;
+          case "Holiday":
+            holiday++;
+            break;
           default:
             break;
         }
@@ -155,6 +169,7 @@ const Employeeattendance = () => {
       setUnpaidLeaveCount(unpaidLeave);
       setLossOfPayCount(lossOfPay);
       setWeeklyOffCount(weeklyOff);
+      setHolidayCount(holiday);
       setTotalDays(diffDays);
     };
 
@@ -165,24 +180,21 @@ const Employeeattendance = () => {
   const year = now.getFullYear();
   const month = now.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const paidDays = presentCount + paidLeaveCount + weeklyOff;
-  const payPerDayByMonth= data.fixedCompensation / daysInMonth; //total days in current month
+  const paidDays = presentCount + paidLeaveCount + weeklyOff + holiday;
+  const payPerDayByMonth = data.fixedCompensation / daysInMonth; 
+  const pfPerDayByMonth = 3600 / daysInMonth; 
   // const payPerDay = payPerDayByMonth * paidDays;
   const basicSalary = Math.round(payPerDayByMonth * paidDays);
   // const basicSalary = paidDays * payPerDay;
-  const houseRentAllowance = Math.round(
-    (data.houseRentAllowance / totalDays) * paidDays
+  // Calculate deductions
+  const providentFundAmount = Math.round(
+    showProvidentFund ? pfPerDayByMonth * paidDays : 0
   );
-  const specialAllowance = Math.round(
-    (data.specialAllowance / totalDays) * paidDays
-  );
+  const professionalTaxAmount = showProfessionalTax ? 200 : 0;
+  // Total after deductions
   const totalAmount = Math.round(
-    basicSalary +
-      houseRentAllowance +
-      specialAllowance +
-      (parseFloat(form.incentive) || 0)
+    basicSalary - (providentFundAmount + professionalTaxAmount)
   );
-
   const notifyField = (field) =>
     toast.warn(`Please fill ${field} before proceeding.`, {
       position: "top-right",
@@ -196,17 +208,11 @@ const Employeeattendance = () => {
     });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const requiredFields = [
-      "month",
-      "paySlip",
-      // "professionTax",
-      // "providentFund",
-      // "uanNumber",
-      // "pfAccountNumber"
-    ];
+    const requiredFields = ["month"];
 
     // Find the first missing field, if any
     const missingField = requiredFields.find((field) => !form[field]);
+    console.log(providentFundAmount);
 
     // If a missing field is found, show an alert and return early
     if (missingField) {
@@ -228,11 +234,20 @@ const Employeeattendance = () => {
         formData.append("paidLeaveDays", paidLeaveCount);
         formData.append("unpaidLeaves", unpaidLeaveCount);
         formData.append("weeklyOffDays", weeklyOff);
+        formData.append("holidays", holiday);
         formData.append("paidDays", paidDays);
-        formData.append("salary", basicSalary);
         formData.append("lossOfPay", lossOfPayCount);
-        formData.append("houseRentAllowance", houseRentAllowance);
-        formData.append("specialAllowance", specialAllowance);
+        formData.append("salary", basicSalary);
+        formData.append("basicPay", Math.round(basicSalary * 0.4));
+        formData.append("hra", Math.round(basicSalary * 0.2));
+        formData.append("imr", Math.round(basicSalary * 0.03));
+        formData.append("eua", Math.round(basicSalary * 0.02));
+        formData.append("fa", Math.round(basicSalary * 0.03));
+        formData.append("ta", Math.round(basicSalary * 0.2));
+        formData.append("ma", Math.round(basicSalary * 0.05));
+        formData.append("ca", Math.round(basicSalary * 0.07));
+        formData.append("providentFund", providentFundAmount);
+        formData.append("professionalTax", professionalTaxAmount);
         formData.append("totalAmount", totalAmount);
       });
 
@@ -257,13 +272,16 @@ const Employeeattendance = () => {
           unpaidLeaveDays: "",
           lossOfPay: "",
           weeklyOffDays: "",
-          salary: "",
-          incentive: "",
-          houseRentAllowance: "",
-          specialAllowance: "",
+          holidays: "",
+          basicPay: "",
+          hra: "",
+          imr: "",
+          eua: "",
+          fa: "",
+          ta: "",
+          ma: "",
+          ca: "",
           totalAmount: "",
-          paySlip: "",
-          certificate: "",
         });
         handleRefreshData();
       }
@@ -335,20 +353,44 @@ const Employeeattendance = () => {
               <p>{data.ctc}</p>
             </div>
             <div className={styles.payInfo}>
-              <p>Basic Salary:</p>
+              <p>Annual fixed compensation:</p>
+              <p>{data.afc}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Monthly fixed salary:</p>
               <p>{data.fixedCompensation}</p>
             </div>
-            {/* <div className={styles.payInfo}>
-              <p>Stipend:</p>
-              <p>{data.stipend ? data.stipend : 0}</p>
-            </div> */}
             <div className={styles.payInfo}>
-              <p>House Rent Allowance:</p>
-              <p>{data.houseRentAllowance ? data.houseRentAllowance : 0}</p>
+              <p>Basic pay:</p>
+              <p>{Math.round(data.fixedCompensation * 0.4)}</p>
             </div>
             <div className={styles.payInfo}>
-              <p>Special Allowance:</p>
-              <p>{data.specialAllowance ? data.specialAllowance : 0}</p>
+              <p>house rent allowance:</p>
+              <p>{Math.round(data.fixedCompensation * 0.2)}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Internet & Mobile Reimbursement:</p>
+              <p>{Math.round(data.fixedCompensation * 0.03)}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Electricity & Utility Allowance:</p>
+              <p>{Math.round(data.fixedCompensation * 0.02)}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Fitness Allowance:</p>
+              <p>{Math.round(data.fixedCompensation * 0.03)}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Travel Allowance:</p>
+              <p>{Math.round(data.fixedCompensation * 0.2)}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Medical Allowance:</p>
+              <p>{Math.round(data.fixedCompensation * 0.05)}</p>
+            </div>
+            <div className={styles.payInfo}>
+              <p>Conveyance Allowance:</p>
+              <p>{Math.round(data.fixedCompensation * 0.07)}</p>
             </div>
           </div>
           <div className={styles.filter}>
@@ -392,6 +434,10 @@ const Employeeattendance = () => {
               <div className={styles.countInfo}>
                 <p>Weekly Off Days:</p>
                 <p>{weeklyOff}</p>
+              </div>
+              <div className={styles.countInfo}>
+                <p>Holiday:</p>
+                <p>{holiday}</p>
               </div>
               <div className={styles.countInfo}>
                 <p>Paid Days:</p>
@@ -520,7 +566,20 @@ const Employeeattendance = () => {
               </div>
               <div className={styles.formField}>
                 <label className={styles.inputLabel}>
-                  Basic Salary
+                  Holidays
+                  <input
+                    type="text"
+                    name="holidays"
+                    value={holiday}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
+              </div>
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Monthly fixed salary
                   <input
                     type="text"
                     name="salary"
@@ -533,13 +592,14 @@ const Employeeattendance = () => {
               </div>
               <div className={styles.formField}>
                 <label className={styles.inputLabel}>
-                  Incentive
+                  Basic pay
                   <input
                     type="text"
-                    name="incentive"
-                    value={form.incentive}
+                    name="basicPay"
+                    value={Math.round(basicSalary * 0.4)}
                     onChange={handleChange}
                     className={styles.inputField}
+                    disabled
                   />
                 </label>
               </div>
@@ -548,8 +608,8 @@ const Employeeattendance = () => {
                   House Rent Allowance
                   <input
                     type="text"
-                    name="houseRentAllowance"
-                    value={houseRentAllowance}
+                    name="hra"
+                    value={Math.round(basicSalary * 0.2)}
                     onChange={handleChange}
                     className={styles.inputField}
                     disabled
@@ -558,11 +618,11 @@ const Employeeattendance = () => {
               </div>
               <div className={styles.formField}>
                 <label className={styles.inputLabel}>
-                  Special Allowance
+                  Internet & Mobile Reimbursement
                   <input
                     type="text"
-                    name="specialAllowance"
-                    value={specialAllowance}
+                    name="imr"
+                    value={Math.round(basicSalary * 0.03)}
                     onChange={handleChange}
                     className={styles.inputField}
                     disabled
@@ -571,7 +631,113 @@ const Employeeattendance = () => {
               </div>
               <div className={styles.formField}>
                 <label className={styles.inputLabel}>
-                  Total Amount
+                  Electricity & Utility Allowance
+                  <input
+                    type="text"
+                    name="eua"
+                    value={Math.round(basicSalary * 0.02)}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
+              </div>
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Fitness Allowance
+                  <input
+                    type="text"
+                    name="fa"
+                    value={Math.round(basicSalary * 0.03)}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
+              </div>
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Travel Allowance
+                  <input
+                    type="text"
+                    name="ta"
+                    value={Math.round(basicSalary * 0.2)}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
+              </div>
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Medical Allowance
+                  <input
+                    type="text"
+                    name="ma"
+                    value={Math.round(basicSalary * 0.05)}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
+              </div>
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Conveyance Allowance
+                  <input
+                    type="text"
+                    name="caa"
+                    value={Math.round(basicSalary * 0.07)}
+                    onChange={handleChange}
+                    className={styles.inputField}
+                    disabled
+                  />
+                </label>
+              </div>
+              {/* Provident Fund Checkbox */}
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  <input
+                    type="checkbox"
+                    checked={showProvidentFund}
+                    onChange={() => setShowProvidentFund(!showProvidentFund)}
+                  />
+                  Provident Fund
+                </label>
+                {showProvidentFund && (
+                  <input
+                    type="text"
+                    value={Math.round(providentFundAmount)}
+                    className={styles.inputField}
+                    disabled
+                  />
+                )}
+              </div>
+
+              {/* Provident Tax Checkbox */}
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  <input
+                    type="checkbox"
+                    checked={showProfessionalTax}
+                    onChange={() =>
+                      setShowProfessionalTax(!showProfessionalTax)
+                    }
+                  />
+                  Professional Tax
+                </label>
+                {showProfessionalTax && (
+                  <input
+                    type="text"
+                    value="200"
+                    className={styles.inputField}
+                    disabled
+                  />
+                )}
+              </div>
+              <div className={styles.formField}>
+                <label className={styles.inputLabel}>
+                  Total Amount after deductions (if any)
                   <input
                     type="text"
                     name="totalAmount"
@@ -581,24 +747,6 @@ const Employeeattendance = () => {
                     disabled
                   />
                 </label>
-              </div>
-              <div className={styles.formField}>
-                <label>Payment Proof</label>
-                <input
-                  type="file"
-                  name="paySlip"
-                  onChange={handleChange}
-                  className={styles.inputField}
-                />
-              </div>
-              <div className={styles.formField}>
-                <label>Certificate</label>
-                <input
-                  type="file"
-                  name="certificate"
-                  onChange={handleChange}
-                  className={styles.inputField}
-                />
               </div>
             </div>
             <div className={styles.btns}>

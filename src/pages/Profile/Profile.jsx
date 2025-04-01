@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./profile.module.scss";
 import { FaUser, FaCircleCheck } from "react-icons/fa6";
-import { FaChevronDown, FaChevronUp, FaRupeeSign, FaWindowClose } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaRupeeSign,
+  FaWindowClose,
+} from "react-icons/fa";
 import { IoMdSchool, IoIosDocument } from "react-icons/io";
 import { BsBuildingsFill, BsBank2 } from "react-icons/bs";
 import { MdAddBox, MdAttachFile } from "react-icons/md";
@@ -167,13 +172,14 @@ const Profile = ({ setRole }) => {
     olsCode: "",
     hiringHrEmail: "",
     ctc: "",
+    afc: "",
     fixedCompensation: "",
-    houseRentAllowance: "",
-    specialAllowance: "",
+    // houseRentAllowance: "",
+    // specialAllowance: "",
     probationPeriod: "",
     probationEndDate: "",
-    professionTax: "",
-    providentFund: "",
+    // professionTax: "",
+    // providentFund: "",
     uanNumber: "",
     pfAccountNumber: "",
   });
@@ -244,11 +250,12 @@ const Profile = ({ setRole }) => {
         signedOfferLetter: data.signedOfferLetter || "",
         signedNonDisclosureAgreement: data.signedNonDisclosureAgreement || "",
         ctc: data.ctc || "",
+        afc: data.afc || "",
         fixedCompensation: data.fixedCompensation || "",
         probationPeriod: data.probationPeriod || "",
         probationEndDate: data.probationEndDate || "",
-        professionTax: data.professionTax || "",
-        providentFund: data.providentFund || "",
+        // professionTax: data.professionTax || "",
+        // providentFund: data.providentFund || "",
         uanNumber: data.uanNumber || "",
         pfAccountNumber: data.pfAccountNumber || "",
       });
@@ -635,81 +642,136 @@ const Profile = ({ setRole }) => {
                   --Select Designation--
                 </option>
                 <option value="DIRECTOR">Director</option>
-                <option value="HR ADMIN">HR Admin</option>
-                <option value="HR OPERATIONS">HR Operations</option>
-                <option value="HR RECRUITER">HR Recruiter</option>
-                <option value="HR RECRUITER TL">HR Recruiter TL</option>
-                <option value="HR RECRUITER ASSOCIATE">
-                  HR Recruiter Associate
+                <option value="CEO">CEO</option>
+                <option value="CFO">CFO</option>
+                <option value="COO">COO</option>
+                <option value="HR RECRUITMENT ASSOCIATE">
+                  HR Recruitment Associate (HRRA)
                 </option>
-                <option value="HR BUSINESS PARTNER">HR Business Partner</option>
-                <option value="HR-PLACEMENT-ASSOCIATE">
-                  HR Placement Associate
+                <option value="JUNIOR BUSINESS DEVELOPMENT ASSOCIATE">
+                  Junior Business Development Associate (Jr. BDA)
                 </option>
-                <option value="HR-PLACEMENT-TL">HR Placement TL</option>
-                <option value="HR GENERALIST - TL">HR Generalist TL</option>
-                <option value="HR GENERALIST">HR Generalist</option>
+                <option value="SENIOR BUSINESS DEVELOPMENT ASSOCIATE">
+                  Senior Business Development Associate (Sr. BDA)
+                </option>
+                <option value="LEAD GENERATION ASSOCIATE">
+                  Lead Generation Associate
+                </option>
+                <option value="PLACEMENT OFFICER">Placement Officer</option>
+                <option value="CORPORATE RELATIONS MANAGER">
+                  Corporate Relations Manager
+                </option>
+                <option value="SUBJECT MATTER EXPERT">
+                  Subject Matter Expert
+                </option>
+                <option value="VIDEO EDITOR MOTION GRAPHICS DESIGNER">
+                  Video Editor & Motion Graphics Designer
+                </option>
+                <option value="AI VIDEO CREATOR">AI Video Creator</option>
+                <option value="HR MENTOR PHD">
+                  Human Resources Mentor (Ph.D.)
+                </option>
+                <option value="FULL STACK DEVELOPER MENTOR PHD">
+                  Full Stack Developer Mentor (Ph.D.)
+                </option>
+                <option value="WEB DEVELOPER INTERN">
+                  Web Developer Intern
+                </option>
+                <option value="HUMAN RESOURCES INTERN">
+                  Human Resources Intern
+                </option>
+                <option value="ANDROID DEVELOPER FULL STACK">
+                  Android Developer (Full-Stack)
+                </option>
+                <option value="FULL STACK DEVELOPER">
+                  Full Stack Developer
+                </option>
+                <option value="HR BUSINESS PARTNER">
+                  HR Business Partner (HRBP)
+                </option>
+                <option value="SENIOR BUSINESS DEVELOPMENT MANAGER">
+                  Senior Business Development Manager (Sales)
+                </option>
+                <option value="BUSINESS DEVELOPMENT MANAGER">
+                  Business Development Manager
+                </option>
+                <option value="DIRECTOR OF SALES">Director of Sales</option>
+                <option value="GENERAL MANAGER">General Manager</option>
+                <option value="CUSTOMER SUPPORT EXECUTIVE">
+                  Customer Support Executive
+                </option>
+                <option value="CLASS COORDINATOR">Class Coordinator</option>
+                <option value="SOCIAL MEDIA MANAGER">
+                  Social Media Manager
+                </option>
+                <option value="NEWS REPORTER VLOGGER">
+                  News Reporter/Vlogger
+                </option>
+                <option value="HR MENTOR">HR Mentor</option>
+                <option value="FULL STACK DEVELOPER MENTOR">
+                  Full Stack Developer Mentor
+                </option>
+                <option value="DATA ANALYTICS MENTOR">
+                  Data Analytics Mentor
+                </option>
+                <option value="DATA SCIENCE AI MENTOR">
+                  Data Science & AI Mentor
+                </option>
+                <option value="DIGITAL MARKETING MENTOR">
+                  Digital Marketing Mentor
+                </option>
+                <option value="GRAPHIC DESIGNING MENTOR">
+                  Graphic Designing Mentor
+                </option>
+                <option value="CYBER SECURITY ETHICAL HACKING MENTOR">
+                  Cyber Security & Ethical Hacking Mentor
+                </option>
+                <option value="BUSINESS ENGLISH MENTOR">
+                  Business English Mentor
+                </option>
 
-                <option value="GRAPHIC DESIGNER ASSOCIATE">
-                  Graphic Designer Associate
+                <option value="CURRICULUM DESIGNER">Curriculum Designer</option>
+                <option value="GRAPHIC DESIGNER">Graphic Designer</option>
+                <option value="B2C LEAD GENERATION MANAGER">
+                  B2C Lead Generation Manager
                 </option>
-                <option value="FSD">FSD</option>
-                <option value="FSD TL">FSD TL</option>
-                <option value="BLOCKCHAIN DEVELOPER ASSOCIATE">
-                  Blockchain Developer Associate
+                <option value="FINANCE MANAGER">Finance Manager</option>
+                <option value="ACCOUNTANT">Accountant</option>
+                <option value="BLOG WRITER">Blog Writer</option>
+                <option value="FRONTEND UI UX DEVELOPER">
+                  Frontend UI/UX Developer
                 </option>
-                <option value="ANDROID DEVELOPER">Android Developer</option>
-                <option value="ANDROID DEVELOPER INTERN">
-                  Android Developer Intern
+                <option value="BRAND MARKETING MANAGER">
+                  Brand Marketing Manager
                 </option>
-
-                <option value="PRODUCT MANAGER">Product Manager</option>
-                <option value="INSTRUCTIONAL DESIGNER">
-                  Instructional Designer
+                <option value="OPERATIONS MANAGER">Operations Manager</option>
+                <option value="SENIOR SALES QUALITY CHECK ASSOCIATE">
+                  Senior Sales Quality Check Associate
                 </option>
-                <option value="CONTENT WRITER">Content Writer</option>
-
-                <option value="LEAD GENERATION INTERN">
-                  Lead Generation Intern
+                <option value="SENIOR HR QUALITY CHECK ASSOCIATE">
+                  Senior HR Quality Check Associate
                 </option>
-                <option value="CONTENT CREATOR">Content Creator</option>
-                <option value="DIGITAL MARKETING INTERN">
-                  Digital Marketing Intern
+                <option value="DATA ANALYST">Data Analyst</option>
+                <option value="ACTOR MODEL">Actor/Model</option>
+                <option value="FIELD LEAD GENERATION ASSOCIATE">
+                  Field Lead Generation Associate
                 </option>
-                <option value="DIGITAL MARKETING ASSOCIATE">
-                  Digital Marketing Associate
+                <option value="PARTNERSHIP DEVELOPMENT EXECUTIVE">
+                  Partnership Development Executive / Institutional Partnership
+                  Manager
                 </option>
-                <option value="SOCIAL MEDIA MARKETING EXECUTIVE">
-                  Social Media Marketing Executive
+                <option value="FIELD PARTNERSHIP ASSOCIATE">
+                  Field Partnership Associate
                 </option>
-                <option value="INSIDE SALES INTERN">Inside Sales Intern</option>
-                <option value="BDA - DIRECT SALES">BDA - Direct Sales</option>
-                <option value="BDA - INSIDE SALES">BDA - Inside Sales</option>
-                <option value="BDA - DIRECT SALES TL">
-                  BDA - Direct Sales TL
+                <option value="WORDPRESS DEVELOPER">WordPress Developer</option>
+                <option value="PROGRAM COORDINATOR">Program Coordinator</option>
+                <option value="HEAD OF ACADEMICS">Head of Academics</option>
+                <option value="STUDENT SUCCESS MANAGER">
+                  Student Success Manager
                 </option>
-                <option value="BDA - INSIDE SALES TL">
-                  BDA - Inside Sales TL
-                </option>
-
-                <option value="CUSTOMER SUPPORT ASSOCIATE">
-                  Customer Support Associate
-                </option>
-                <option value="PRODUCT DELIVERY INTERN">
-                  Product Delivery Intern
-                </option>
-                <option value="EMPLOYEE WORKFLOW AND SCREENING">
-                  Employee Workflow & Screening
-                </option>
-
-                <option value="BUSINESS ENGLISH TRAINER">
-                  Business English Trainer
-                </option>
-                <option value="BRAND COLLABORATION INTERN">
-                  Brand Collaboration Intern
-                </option>
-                <option value="MARKETING BRAND COLLABORATION - TL">
-                  Marketing Brand Collaboration - TL
+                <option value="ADMIN ASSOCIATE">Admin Associate</option>
+                <option value="DATA ENTRY ASSOCIATE">
+                  Data Entry Associate
                 </option>
               </select>
             </label>
@@ -1524,7 +1586,7 @@ const Profile = ({ setRole }) => {
         </div>
         <div className={styles.heading}>
           <FaRupeeSign color="#fab437" size={15} />
-          <p>pay details</p>
+          <p>pay details (INR)</p>
         </div>
         {!isOpen ? (
           <p onClick={openModal} className={styles.addNewBtn}>
@@ -1577,16 +1639,12 @@ const Profile = ({ setRole }) => {
                             <p>{item.ctc}</p>
                           </div>
                           <div className={styles.employeeDetail}>
-                            <p>Fixed Compensation</p>
+                            <p>Annual fixed compensation</p>
+                            <p>{item.afc}</p>
+                          </div>
+                          <div className={styles.employeeDetail}>
+                            <p>Monthly Fixed Salary</p>
                             <p>{item.fixedCompensation}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>House Rent Allowance</p>
-                            <p>{item.houseRentAllowance}</p>
-                          </div>
-                          <div className={styles.employeeDetail}>
-                            <p>Special Allowance</p>
-                            <p>{item.specialAllowance}</p>
                           </div>
                           <div className={styles.employeeDetail}>
                             <p>Probation Days</p>
@@ -1617,7 +1675,20 @@ const Profile = ({ setRole }) => {
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              fixed compensation
+              Annual Fixed compensation 
+              <input
+                type="text"
+                name="afc"
+                value={data.afc ?? employee.afc}
+                onChange={handleChange}
+                className={styles.inputField}
+                disabled={data.afc !== null}
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+              Monthly fixed Salary
               <input
                 type="text"
                 name="fixedCompensation"
@@ -1628,46 +1699,91 @@ const Profile = ({ setRole }) => {
               />
             </label>
           </div>
-          {/* <div className={styles.formField}>
-            <label className={styles.inputLabel}>
-              stipend (monthly)
-              <input
-                type="text"
-                name="stipend"
-                value={data.stipend ?? employee.stipend}
-                onChange={handleChange}
-                className={styles.inputField}
-                disabled={data.stipend !== null}
-              />
-            </label>
-          </div> */}
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              House rent allowance
-              {/* <span className={styles.required}>*</span> */}
+              Basic pay
               <input
                 type="text"
-                name="houseRentAllowance"
-                value={data.houseRentAllowance ?? employee.houseRentAllowance}
-                onChange={handleChange}
+                value={Math.round(data.fixedCompensation * 0.4) || ""}
                 className={styles.inputField}
-                disabled={data.houseRentAllowance !== null}
-                required
+                disabled
               />
             </label>
           </div>
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
-              special allowance
-              {/* <span className={styles.required}>*</span> */}
+              House rent allowance
               <input
                 type="text"
-                name="specialAllowance"
-                value={data.specialAllowance ?? employee.specialAllowance}
-                onChange={handleChange}
+                value={Math.round(data.fixedCompensation * 0.2) || ""}
                 className={styles.inputField}
-                disabled={data.specialAllowance !== null}
-                required
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            Internet & Mobile Reimbursement
+              <input
+                type="text"
+                value={Math.round(data.fixedCompensation * 0.03) || ""}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            Electricity & Utility Allowance
+              <input
+                type="text"
+                value={Math.round(data.fixedCompensation * 0.02) || ""}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            Fitness Allowance
+              <input
+                type="text"
+                value={Math.round(data.fixedCompensation * 0.03) || ""}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            Travel Allowance
+              <input
+                type="text"
+                value={Math.round(data.fixedCompensation * 0.2) || ""}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            Medical Allowance
+              <input
+                type="text"
+                value={Math.round(data.fixedCompensation * 0.05) || ""}
+                className={styles.inputField}
+                disabled
+              />
+            </label>
+          </div>
+          <div className={styles.formField}>
+            <label className={styles.inputLabel}>
+            Conveyance Allowance
+              <input
+                type="text"
+                value={Math.round(data.fixedCompensation * 0.07) || ""}
+                className={styles.inputField}
+                disabled
               />
             </label>
           </div>
@@ -1707,10 +1823,9 @@ const Profile = ({ setRole }) => {
           <p>Additional details</p>
         </div>
         <div className={styles.additionalDetails}>
-          <div className={styles.formField}>
+          {/* <div className={styles.formField}>
             <label className={styles.inputLabel}>
               Profession Tax
-              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="professionTax"
@@ -1720,11 +1835,10 @@ const Profile = ({ setRole }) => {
                 disabled={data.professionTax !== null}
               />
             </label>
-          </div>
-          <div className={styles.formField}>
+          </div> */}
+          {/* <div className={styles.formField}>
             <label className={styles.inputLabel}>
               provident fund
-              {/* <span className={styles.required}>*</span> */}
               <input
                 type="text"
                 name="providentFund"
@@ -1734,7 +1848,7 @@ const Profile = ({ setRole }) => {
                 disabled={data.providentFund !== null}
               />
             </label>
-          </div>
+          </div> */}
           <div className={styles.formField}>
             <label className={styles.inputLabel}>
               uan Number
